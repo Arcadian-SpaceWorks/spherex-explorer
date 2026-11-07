@@ -131,12 +131,16 @@ def target_info(path, ra, dec, max_pixels):
     return result
 
 
-def stretch_pixels(data, invalid):
-    """Return RGBA display pixels (still in FITS row order), never modify input data."""
+def stretch_pixels(data, invalid, limits=None):
+    """Return RGBA display pixels (still in FITS row order), never modify input data.
+
+    `limits` (low, high) lets several images share one brightness scale; by default each image
+    uses its own 1st and 99th percentiles.
+    """
     valid = ~invalid
     if not valid.any():
         raise ImageError('No valid science pixels remain after masking.', 422, 'no_valid_pixels')
-    low, high = np.percentile(data[valid], [1, 99])
+    low, high = np.percentile(data[valid], [1, 99]) if limits is None else (float(limits[0]), float(limits[1]))
     gray = np.zeros(data.shape, dtype=np.uint8)
     if high > low:
         values = np.clip((data[valid].astype(np.float64) - low) / (high - low), 0, 1)

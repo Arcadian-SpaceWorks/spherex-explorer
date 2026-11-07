@@ -29,3 +29,24 @@ typing_extensions==4.16.0
 urllib3==2.8.0
 uvicorn==0.54.0
 Pillow==13.0.0
+# Image comparison (backend/app/analysis): reproject + scipy and their pinned dependencies
+astropy_healpix==2.0.1
+cloudpickle==3.1.2
+dask==2026.8.0
+dask-image==2026.5.0
+donfig==0.8.1.post1
+fsspec==2026.9.0
+google-crc32c==1.9.0
+ImageIO==2.38.1
+locket==1.0.0
+msgspec==0.22.0
+numcodecs==0.17.1
+partd==1.4.2
+PIMS==0.7
+PyAVM==0.9.9
+reproject==0.21.0
+scipy==1.18.1
+slicerator==1.1.0
+tifffile==2026.10.15
+toolz==1.2.0
+zarr==3.4.2

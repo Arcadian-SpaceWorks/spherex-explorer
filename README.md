@@ -197,3 +197,12 @@ polling is introduced. Cutouts now have a separate configurable retention limit:
 continues to limit full-detector files. See the
 [integration review](docs/image-progress-wavelength-integration.md) for scientific
 limitations, validation results and exact integration scope.
+
+### Expanded real-data demo showcase
+
+The dedicated target showcase preserves the M101 fallback and uses selected real QR2 cutouts for additional targets. The target selector reports unavailable candidates explicitly; preview animation is not a validated measurement of motion or variability. Frame-specific tracking coordinates, release/calibration, actual UTC coverage and provenance accompany the images. See [target discovery, bounded acquisition and offline reproduction](docs/demo-target-showcase.md).
+
+```bash
+.venv/bin/python scripts/prepare_demo.py --validate frontend/public/demo
+.venv/bin/python scripts/validate_demo_science.py frontend/public/demo
+```

@@ -39,7 +39,12 @@ def main():
     operation = arguments.pop('operation')
     try:
         with contextlib.redirect_stdout(sys.stderr):
-            result = {'render': render_fits, 'target': target_info, 'pixel': read_pixel}[operation](**arguments)
+            if operation == 'compare':
+                # Imported only here: reproject/scipy are not needed for the other operations.
+                from .analysis.pipeline import compare_files
+                result = compare_files(**arguments)
+            else:
+                result = {'render': render_fits, 'target': target_info, 'pixel': read_pixel}[operation](**arguments)
         output = {'result': result}
     except ImageError as exc:
         output = {'error': {'message': str(exc), 'status': exc.status, 'code': exc.code}}

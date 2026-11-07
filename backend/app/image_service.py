@@ -143,6 +143,21 @@ class ImageService:
             # Open under the lock. POSIX open handles survive later cache eviction.
             return (path / ('original.fits' if kind == 'original' else 'preview.png')).open('rb')
 
+    def metadata(self, image_id):
+        """Metadata of a cached image (404 if it is not, or no longer, cached)."""
+        with self.transaction():
+            self._prune()
+            _, metadata = self._entry(image_id)
+            return metadata
+
+    def copy_original(self, image_id, destination):
+        """Copy a cached original FITS under the cache lock, so eviction cannot remove it mid-read."""
+        with self.transaction():
+            self._prune()
+            path, metadata = self._entry(image_id)
+            shutil.copyfile(path / 'original.fits', destination)
+            return metadata
+
     def pixel(self, image_id, x, y):
         with self.transaction():
             self._prune()
