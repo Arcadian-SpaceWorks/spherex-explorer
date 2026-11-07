@@ -75,3 +75,95 @@ export function chronologicalFrames(observations) {
     undatedCount: frames.filter(frame => parseUtc(frame.observed_at_utc) == null).length,
   };
 }
+
+/**
+ * Parse boundary date strings (e.g. YYYY-MM-DD from date inputs) to UTC epoch ms.
+ * When isEnd=true and format is YYYY-MM-DD, encompasses the full end-of-day (23:59:59.999Z).
+ */
+export function parseBoundaryDate(value, isEnd = false) {
+  if (value == null) return null;
+  const text = String(value).trim();
+  if (!text) return null;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(text)) {
+    const iso = isEnd ? `${text}T23:59:59.999Z` : `${text}T00:00:00.000Z`;
+    const time = Date.parse(iso);
+    return Number.isFinite(time) ? time : null;
+  }
+  const time = parseUtc(text) ?? Date.parse(text);
+  return Number.isFinite(time) ? time : null;
+}
+
+/**
+ * Convert user-specified cadence period value and unit into milliseconds.
+ * Supports hours, days, weeks, months, years. Returns 0 if disabled/invalid.
+ */
+export function parsePeriodMs(value, unit = 'days') {
+  const num = Number(value);
+  if (!Number.isFinite(num) || num <= 0) return 0;
+  switch (unit) {
+    case 'hours': return Math.round(num * 3600 * 1000);
+    case 'days': return Math.round(num * 86400 * 1000);
+    case 'weeks': return Math.round(num * 7 * 86400 * 1000);
+    case 'months': return Math.round(num * 30.4375 * 86400 * 1000);
+    case 'years': return Math.round(num * 365.25 * 86400 * 1000);
+    default: return Math.round(num * 86400 * 1000);
+  }
+}
+
+/**
+ * Filter and sample chronological frames by date window [startDate, endDate]
+ * and minimum time cadence periodMs.
+ */
+export function filterTimelineFrames(frames, options = {}) {
+  const { startDate, endDate, periodMs = 0 } = options;
+  const startMs = parseBoundaryDate(startDate, false);
+  const endMs = parseBoundaryDate(endDate, true);
+  const isDateFiltered = startMs != null || endMs != null;
+  const isPeriodFiltered = Number.isFinite(periodMs) && periodMs > 0;
+
+  if (!isDateFiltered && !isPeriodFiltered) {
+    return {
+      frames: frames || [],
+      totalArchiveFrames: (frames || []).length,
+      isFiltered: false,
+    };
+  }
+
+  // 1. Date window filtering
+  const inWindow = (frames || []).filter(frame => {
+    const time = parseUtc(frame.observed_at_utc);
+    if (time == null) {
+      return !isDateFiltered && !isPeriodFiltered;
+    }
+    if (startMs != null && time < startMs) return false;
+    if (endMs != null && time > endMs) return false;
+    return true;
+  });
+
+  // 2. Period / cadence sampling (greedy minimum interval)
+  if (!isPeriodFiltered || inWindow.length <= 1) {
+    return {
+      frames: inWindow,
+      totalArchiveFrames: (frames || []).length,
+      isFiltered: true,
+    };
+  }
+
+  const sampled = [];
+  let nextThreshold = -Infinity;
+
+  for (const frame of inWindow) {
+    const time = parseUtc(frame.observed_at_utc);
+    if (time == null) continue;
+    if (time >= nextThreshold) {
+      sampled.push(frame);
+      nextThreshold = time + periodMs;
+    }
+  }
+
+  return {
+    frames: sampled,
+    totalArchiveFrames: (frames || []).length,
+    isFiltered: true,
+  };
+}
