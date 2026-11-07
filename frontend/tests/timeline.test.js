@@ -59,7 +59,7 @@ test('posts the existing image endpoint and refuses a missing preview', async ()
   assert.equal(calls[0].endpoint, '/api/images');
   assert.equal(calls[0].options.method, 'POST');
   assert.equal(calls[0].options.headers['X-SkyTracker-Client'], 'time-slider');
-  assert.deepEqual(JSON.parse(calls[0].options.body), {access_url: observation.access_url, ra: 210.5, dec: 54.25});
+  assert.deepEqual(JSON.parse(calls[0].options.body), {access_url: observation.access_url, ra: 210.5, dec: 54.25, cutout_deg: 0.3});
   assert.equal(data.preview_url, '/api/images/obs-7/preview');
 
   await assert.rejects(

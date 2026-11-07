@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { chronologicalFrames } from '../../src/timeline.js';
 
-test('live original FITS renders with per-pixel WCS through the inspector', async ({page}) => {
-  test.skip(process.env.SKYTRACKER_LIVE_FITS !== '1', 'Opt-in: may download a full ~70 MB IRSA product.');
+test('live cutout FITS renders with per-pixel WCS through the inspector', async ({page}) => {
+  test.skip(process.env.SKYTRACKER_LIVE_FITS !== '1', 'Opt-in: downloads a real IRSA cutout.');
   test.setTimeout(780000);
   await page.goto('/',{waitUntil:'domcontentloaded'});
   await page.getByRole('button',{name:'Search SPHEREx Observations'}).click();
@@ -13,7 +13,8 @@ test('live original FITS renders with per-pixel WCS through the inspector', asyn
   expect(response.status()).toBe(200);
   const metadata=await response.json();
   expect(metadata.science_hdu).toBeGreaterThan(0);
-  expect(metadata.width).toBe(2040);expect(metadata.height).toBe(2040);
+  expect(metadata.cutout.size_deg).toBe(0.3);
+  expect(metadata.width).toBeGreaterThan(0);expect(metadata.height).toBeGreaterThan(0);
   expect(metadata.spatial_wcs).toBe('available');expect(metadata.spectral_wcs).toBe('available');
   expect(metadata.sha256).toMatch(/^[a-f0-9]{64}$/);
   await expect(page.getByTestId('fits-target')).toBeVisible();
@@ -27,7 +28,7 @@ test('live original FITS renders with per-pixel WCS through the inspector', asyn
 });
 
 test('live timeline switches real FITS images while the viewer shares preparation', async ({page}) => {
-  test.skip(process.env.SKYTRACKER_LIVE_FITS !== '1', 'Opt-in: downloads two real IRSA FITS products.');
+  test.skip(process.env.SKYTRACKER_LIVE_FITS !== '1', 'Opt-in: downloads two real IRSA FITS cutouts.');
   test.setTimeout(1500000);
   const busy = [];
   page.on('response', response => {

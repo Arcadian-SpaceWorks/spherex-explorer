@@ -2,11 +2,12 @@
 from dataclasses import dataclass
 from io import BytesIO
 import ipaddress
+import math
 import os
 from pathlib import Path
 import socket
 import time
-from urllib.parse import unquote, urljoin, urlsplit
+from urllib.parse import unquote, urljoin, urlsplit, urlunsplit, parse_qs
 
 from astropy.io.votable import parse_single_table
 import numpy as np
@@ -65,6 +66,28 @@ def validate_url(url):
     return url
 
 
+def validate_cutout(ra, dec, size_deg):
+    values = (ra, dec, size_deg)
+    if (not all(type(v) in (int, float) and math.isfinite(v) for v in values)
+            or not 0 <= ra < 360 or not -90 <= dec <= 90 or not 0.02 <= size_deg <= 1):
+        raise ImageError('Invalid cutout parameters.', 400, 'invalid_cutout')
+
+
+def add_cutout_query(url, ra, dec, size_deg):
+    """IRSA image-server cutout: append center/size to a SPHEREx product URL.
+
+    This is the cutout method in IRSA's SPHEREx data-access documentation. Only validated
+    finite numbers are formatted into the query, and the result is re-validated.
+    """
+    validate_url(url)
+    parts = urlsplit(url)
+    if parts.query or not unquote(parts.path).startswith('/ibe/data/spherex/'):
+        raise ImageError('Cutouts are only available for IRSA SPHEREx image-server products.', 422, 'cutout_unsupported')
+    validate_cutout(ra, dec, size_deg)
+    query = f'center={ra:.6f},{dec:.6f}&size={size_deg:.4f}deg'
+    return validate_url(urlunsplit(parts._replace(query=query)))
+
+
 def check_public_dns(url):
     try:
         addresses = socket.getaddrinfo(urlsplit(url).hostname, 443, type=socket.SOCK_STREAM)
@@ -78,9 +101,14 @@ class IRSAImageDownloader:
     def __init__(self, settings):
         self.settings = settings
 
-    def _stream(self, session, url, sink, limit, deadline):
+    def _stream(self, session, url, sink, limit, deadline, *, cutout_query=None):
         for _ in range(5):
             validate_url(url)
+            if cutout_query is not None and (
+                    not unquote(urlsplit(url).path).startswith('/ibe/data/spherex/')
+                    or parse_qs(urlsplit(url).query) != parse_qs(cutout_query)):
+                raise ImageError('IRSA redirected away from the requested cutout; full-file fallback blocked.',
+                                 502, 'cutout_unsupported')
             check_public_dns(url)
             remaining = deadline - time.monotonic()
             if remaining <= 0:
@@ -123,8 +151,12 @@ class IRSAImageDownloader:
                 raise ImageError('IRSA could not deliver this image. Please retry.') from exc
         raise ImageError('Too many IRSA redirects.')
 
-    def download(self, access_url, destination):
+    def download(self, access_url, destination, cutout=None):
+        """cutout=(ra, dec, size_deg) requests a small IRSA cutout instead of the full file."""
         validate_url(access_url)
+        if cutout is not None:
+            # Validate before making even a metadata request.
+            validate_cutout(*cutout)
         deadline = time.monotonic() + self.settings.download_seconds
         # Disable environment proxies and .netrc credentials for this public-data client.
         with requests.Session() as session:
@@ -133,10 +165,13 @@ class IRSAImageDownloader:
             if urlsplit(access_url).path == '/datalink/links/spherex':
                 payload = BytesIO()
                 self._stream(session, access_url, payload, 2 * 1024 * 1024, deadline)
-                fits_url = self.resolve_datalink(payload.getvalue())
+                fits_url = self.resolve_datalink(payload.getvalue(), cutout=cutout is not None)
+            if cutout is not None:
+                fits_url = add_cutout_query(fits_url, *cutout)
             try:
                 with Path(destination).open('wb') as output:
-                    resolved_url = self._stream(session, fits_url, output, self.settings.max_bytes, deadline)
+                    resolved_url = self._stream(session, fits_url, output, self.settings.max_bytes, deadline,
+                                                cutout_query=urlsplit(fits_url).query if cutout is not None else None)
                 with Path(destination).open('rb') as source:
                     if not source.read(80).startswith(b'SIMPLE  ='):
                         raise ImageError('The product is not an uncompressed FITS file.', 422, 'invalid_fits')
@@ -145,7 +180,7 @@ class IRSAImageDownloader:
                 Path(destination).unlink(missing_ok=True)
                 raise
 
-    def resolve_datalink(self, payload):
+    def resolve_datalink(self, payload, *, cutout=False):
         try:
             table = parse_single_table(BytesIO(payload)).to_table(use_names_over_ids=True)
             required = {'semantics', 'access_url', 'content_type'}
@@ -169,7 +204,7 @@ class IRSAImageDownloader:
                     continue
                 validate_url(link)
                 length = value('content_length')
-                if length and int(length) > self.settings.max_bytes:
+                if not cutout and length and int(length) > self.settings.max_bytes:
                     raise ImageError('This FITS product exceeds the configured maximum download size.', 413, 'file_too_large')
                 candidates.append(link)
             if len(set(candidates)) != 1:

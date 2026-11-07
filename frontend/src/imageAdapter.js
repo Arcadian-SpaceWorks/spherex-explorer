@@ -6,7 +6,7 @@
  * archive observation currently selected on the slider.
  *
  * Request: POST /api/images
- * Body: { access_url: string, ra: number, dec: number }
+ * Body: { access_url: string, ra: number, dec: number, cutout_deg: number }
  *   access_url, obs_id, observed_at_utc, energy_bandpassname, obs_collection,
  *   em_min and em_max come from GET /api/observations (IRSA spherex.obscore).
  *   ra and dec are the selected ICRS target already stored by the app.
@@ -25,6 +25,8 @@
  * match synthetic|fixture|test-only|demo so the slider can label them.
  */
 
+export const CUTOUT_DEG = 0.3;
+
 export async function loadObservationImage(observation, target, {signal, fetchImpl = fetch} = {}) {
   let response;
   try {
@@ -39,6 +41,7 @@ export async function loadObservationImage(observation, target, {signal, fetchIm
         access_url: observation.access_url,
         ra: target.ra,
         dec: target.dec,
+        cutout_deg: CUTOUT_DEG,
       }),
     });
   } catch (err) {

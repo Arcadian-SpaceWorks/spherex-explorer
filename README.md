@@ -99,9 +99,21 @@ Search the archive as before, then click **View Image** or select a row (Enter/S
 
 The existing setup and launch commands still apply. Re-run `./scripts/setup.sh` after updating to install the added Pillow dependency.
 
+### Quick cutouts (default) and full detector images
+
+The inspector and Time Slider request the same **0.3 degree cutout** around the selected target, allowing identical requests to reuse one cached FITS and preview. The inspector also provides an explicit **Full detector image (slow)** option. Existing API callers that omit `cutout_deg` retain full-image behavior.
+
+The backend resolves the archive DataLink product URL and appends `?center=RA,DEC&size=0.3000deg` only to an allowlisted `/ibe/data/spherex/` product. This follows the [official IRSA cutout documentation](https://irsa.ipac.caltech.edu/ibe/cutouts.html). Unsupported product URLs fail explicitly; there is no automatic full-file fallback. Large parent-file size metadata does not block a cutout, but the downloaded response still has byte, pixel and time limits.
+
+Cutout cache keys include the product URL, target (six decimal places) and size (four decimal places). Full images have separate entries. Main's bounded request queue serializes download/render work and lets duplicate requests reuse the result. Cache limits apply jointly to full images and cutouts.
+
+The returned MEF bytes are stored unchanged, including all returned HDUs, headers, masks and WCS tables. Only the PNG uses display stretching and masking. The requested angular size follows detector axes and can be clipped at detector edges; it is not guaranteed to be north-up or exactly square on the sky. Wavelength readouts use available alternate WCS tables and remain approximate; missing spectral metadata is reported as unavailable.
+
+Tests mock the network. Run `.venv/bin/python scripts/smoke_cutout.py` for one live 0.02 degree cutout with a 16 MiB transfer limit, a 90 second download budget and temporary cache. Network and IRSA processing time vary; no fixed loading-time claim is made.
+
 ### Image endpoints and limits
 
-`POST /api/images` accepts `{ "access_url": "<actual IRSA metadata URL>", "ra": 210.80227, "dec": 54.34895 }`. RA/Dec are optional as a pair and used only for locating the selected target. The response contains the image identifier, preview/original URLs, HDU inventory, scaling, WCS metadata, image-center readout and target position.
+`POST /api/images` accepts `{ "access_url": "<actual IRSA metadata URL>", "ra": 210.80227, "dec": 54.34895 }`. RA/Dec are optional as a pair and used only for locating the selected target. Add `"cutout_deg": 0.3` (0.02 to 1.0, requires RA/Dec) to request an IRSA cutout of that width instead of the full file. The response contains the image identifier, preview/original URLs, HDU inventory, scaling, WCS metadata, image-center readout and target position.
 
 - `GET /api/images/{id}/preview`: derived RGBA PNG.
 - `GET /api/images/{id}/original`: original FITS attachment, streamed from disk.

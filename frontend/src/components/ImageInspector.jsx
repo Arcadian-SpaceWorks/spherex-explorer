@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { CUTOUT_DEG } from '../imageAdapter';
 
 const number = (value, digits = 5) => value == null ? '—' : Number(value).toFixed(digits);
 const wavelength = spectral => spectral ? `${number(spectral.wavelength_um)} µm · bandwidth ${number(spectral.bandwidth_um)} µm (approx.)` : 'Unavailable for this pixel';
@@ -67,6 +68,7 @@ function ImageCanvas({metadata, onPixel}) {
 export default function ImageInspector({observation, target}) {
   const [metadata, setMetadata] = useState(null), [error, setError] = useState('');
   const [loading, setLoading] = useState(false), [retry, setRetry] = useState(0);
+  const [full, setFull] = useState(false);  // false: quick IRSA cutout; true: whole detector image
   const [pixel, setPixel] = useState(null), [pixelError, setPixelError] = useState(''), [pixelLoading, setPixelLoading] = useState(false);
   const pixelRequest = useRef(null);
   useEffect(() => {
@@ -79,8 +81,8 @@ export default function ImageInspector({observation, target}) {
     const timeout = setTimeout(() => controller.abort(), 720000);
     async function load() {
       try {
-        const response = await fetch('/api/images', {method:'POST', headers:{'Content-Type':'application/json'}, signal:controller.signal,
-          body:JSON.stringify({access_url:observation.access_url, ra:target.ra, dec:target.dec})});
+        const body = {access_url:observation.access_url, ra:target.ra, dec:target.dec, ...(full ? {} : {cutout_deg:CUTOUT_DEG})};
+        const response = await fetch('/api/images', {method:'POST', headers:{'Content-Type':'application/json'}, signal:controller.signal, body:JSON.stringify(body)});
         const data = await response.json();
         if (!response.ok) throw new Error(data.message || 'This FITS image could not be loaded.');
         if (!cancelled) setMetadata(data);
@@ -90,7 +92,7 @@ export default function ImageInspector({observation, target}) {
     }
     load();
     return () => {cancelled=true; clearTimeout(timeout); controller.abort(); pixelRequest.current?.abort();};
-  }, [observation, target.ra, target.dec, retry]);
+  }, [observation, target.ra, target.dec, retry, full]);
 
   async function inspectPixel(x,y) {
     pixelRequest.current?.abort();
@@ -108,7 +110,11 @@ export default function ImageInspector({observation, target}) {
     <div className="section-heading"><div><div className="eyebrow">SPHEREx SCIENCE IMAGE</div><h2>FITS image inspector</h2></div><span className={`tag ${metadata ? 'live' : ''}`}>{loading ? 'Downloading FITS' : error ? 'Unavailable' : metadata ? metadata.cache_hit ? 'Cached IRSA file' : 'IRSA file' : 'Select an observation'}</span></div>
     {!observation ? <p className="empty">Choose View Image on an observation to inspect its original science image.</p> : <>
       <p className="result-note">Selected observation {observation.obs_id} · {observation.energy_bandpassname} · {observation.obs_collection}</p>
-      {loading && <p className="empty" role="status">Downloading and inspecting the original FITS from IRSA. Full detector images can be tens of megabytes; this may take a few minutes.</p>}
+      <div className="image-mode" role="group" aria-label="Image size">
+        <button type="button" className={full ? 'secondary' : ''} aria-pressed={!full} onClick={() => setFull(false)}>Quick cutout ({CUTOUT_DEG}° around target)</button>
+        <button type="button" className={full ? '' : 'secondary'} aria-pressed={full} onClick={() => setFull(true)}>Full detector image (slow)</button>
+      </div>
+      {loading && <p className="empty" role="status">{full ? 'Downloading and inspecting the original FITS from IRSA. Full detector images can be tens of megabytes; this may take a few minutes.' : 'Downloading and inspecting a small cutout around your target from IRSA. The FITS data and available metadata are preserved.'}</p>}
       {error && <p className="error" role="alert">{error}</p>}
       {metadata && <>
         <div className="image-facts">
@@ -119,7 +125,8 @@ export default function ImageInspector({observation, target}) {
           <div><span>Archive wavelength bounds</span><strong>{number(observation.em_min == null ? null : observation.em_min*1e6,3)} – {number(observation.em_max == null ? null : observation.em_max*1e6,3)} µm</strong></div>
           <div><span>Wavelength at image center</span><strong>{wavelength(metadata.center.spectral)}</strong></div>
         </div>
-        <p className="image-science-note">{metadata.orientation} The full detector image is shown without recentering on your selected target.</p>
+        <p className="image-science-note">{metadata.cutout ? `IRSA cutout, ${metadata.cutout.size_deg}° requested around your selected target (clipped at detector edges). ${metadata.orientation}` : `${metadata.orientation} The full detector image is shown without recentering on your selected target.`}</p>
+        {metadata.cutout && <p className="result-note">Source: IRSA image-server cutout of {metadata.fits_url}</p>}
         <p className="result-note">{metadata.target?.status === 'inside' ? `Mint cross: target mapped through the FITS WCS at pixel x=${number(metadata.target.x,2)}, y=${number(metadata.target.y,2)}.` : metadata.target?.status === 'outside' ? 'Your selected target falls outside this science image according to its WCS; no target marker is drawn.' : 'Target placement unavailable: this file has no usable celestial WCS.'}</p>
         <ImageCanvas key={`${metadata.image_id}-${retry}`} metadata={metadata} onPixel={inspectPixel}/>
         <div className="pixel-readout" aria-live="polite">{pixelLoading ? 'Reading pixel…' : pixelError ? pixelError : pixel ? <>
@@ -128,7 +135,7 @@ export default function ImageInspector({observation, target}) {
         <p className="image-science-note">{metadata.wavelength_note}</p>
         <p className="result-note">Display only: asinh stretch (a={metadata.scaling.asinh_a}), {metadata.scaling.percentiles.join('–')}th percentiles, limits {number(metadata.scaling.low,6)} to {number(metadata.scaling.high,6)} {metadata.unit || ''}. {metadata.scaling.constant ? 'Constant image shown in neutral gray. ' : ''}{metadata.scaling.masked_pixels.toLocaleString()} pixels masked. {metadata.scaling.mask_policy} Preview {metadata.preview_width} × {metadata.preview_height}, nearest-neighbor sampling. Original FITS values are unchanged.</p>
         {metadata.notes.map(note => <p className="result-note" key={note}>{note}</p>)}
-        <div className="image-actions"><a className="download-fits" href={metadata.original_url} target="_blank" rel="noreferrer">Download original FITS ↗ ({(metadata.bytes/1024/1024).toFixed(1)} MiB)</a><span className="result-note">If the local cache expires, reload this image.</span></div>
+        <div className="image-actions"><a className="download-fits" href={metadata.original_url} target="_blank" rel="noreferrer">{metadata.cutout ? 'Download FITS cutout' : 'Download original FITS'} ↗ ({(metadata.bytes/1024/1024).toFixed(metadata.bytes < 1048576 ? 2 : 1)} MiB)</a><span className="result-note">If the local cache expires, reload this image.</span></div>
         <details><summary>FITS HDUs and WCS metadata</summary><div className="table-scroll"><table><thead><tr><th>HDU</th><th>Extension</th><th>Type</th><th>Array shape / columns</th></tr></thead><tbody>{metadata.hdus.map(hdu => <tr key={hdu.index}><td>{hdu.index}</td><td>{hdu.name}</td><td>{hdu.type}</td><td>{hdu.shape?.join(' × ') || hdu.columns?.join(', ') || 'No image array'}</td></tr>)}</tbody></table></div><p className="result-note">Spatial WCS: {metadata.spatial_wcs} · Spectral WCS: {metadata.spectral_wcs}. Complete headers and lookup tables remain in the downloadable original.</p><pre>{metadata.science_header}</pre>{metadata.wavelength_header && <pre>{metadata.wavelength_header}</pre>}</details>
       </>}
       {!loading && <button type="button" className="secondary reload-image" onClick={() => setRetry(n => n+1)}>{error ? 'Retry image' : 'Reload image'}</button>}

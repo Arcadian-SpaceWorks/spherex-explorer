@@ -75,3 +75,26 @@ test('row keyboard selection and mobile inspector fit the viewport',async ({page
   await expect(row).toHaveAttribute('aria-selected','true');
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
+
+test('viewer and slider request matching cutouts; full mode is explicit and reversible', async ({page}) => {
+  const requests = [];
+  await page.route('**/api/images', route => {
+    const body = route.request().postDataJSON();
+    requests.push({client: route.request().headers()['x-skytracker-client'], body});
+    return route.fulfill({json: {...fixture, cutout: body.cutout_deg ? {ra: body.ra, dec: body.dec, size_deg: body.cutout_deg} : null}});
+  });
+  await setup(page);
+  await page.getByRole('button', {name: 'View Image'}).first().click();
+  const inspector = page.getByRole('region', {name: 'FITS image inspector'});
+  await expect(inspector.getByRole('link', {name: /Download FITS cutout/})).toBeVisible();
+  const slider = requests.find(item => item.client === 'time-slider');
+  const viewer = requests.find(item => item.client !== 'time-slider');
+  expect(slider.body).toEqual(viewer.body);
+  expect(viewer.body.cutout_deg).toBe(0.3);
+  await inspector.getByRole('button', {name: 'Full detector image (slow)', exact: true}).click();
+  await expect(inspector.getByRole('link', {name: /Download original FITS/})).toBeVisible();
+  expect(requests.at(-1).body).not.toHaveProperty('cutout_deg');
+  await inspector.getByRole('button', {name: /Quick cutout/}).click();
+  await expect(inspector.getByRole('link', {name: /Download FITS cutout/})).toBeVisible();
+  expect(requests.at(-1).body.cutout_deg).toBe(0.3);
+});

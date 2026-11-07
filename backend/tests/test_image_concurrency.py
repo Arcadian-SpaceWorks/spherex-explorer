@@ -21,7 +21,7 @@ class GatedDownloader:
         self.calls = 0
         self.fail = False
 
-    def download(self, url, destination):
+    def download(self, url, destination, cutout=None):
         self.calls += 1
         self.entered.set()
         assert self.release.wait(10), 'test did not release download'
@@ -32,18 +32,19 @@ class GatedDownloader:
         return FITS_URL
 
 
+@pytest.mark.parametrize('cutout_deg', [None, 0.3])
 @pytest.mark.parametrize('same_observation', [True, False])
-def test_concurrent_slider_and_viewer_wait_and_reuse_cache(settings, tmp_path, same_observation):
+def test_concurrent_slider_and_viewer_wait_and_reuse_cache(settings, tmp_path, same_observation, cutout_deg):
     downloader = GatedDownloader(make_mef(tmp_path / 'synthetic.fits'))
     service = ImageService(settings, downloader)
     app.dependency_overrides[get_image_service] = lambda: service
     try:
         with TestClient(app) as client, ThreadPoolExecutor(max_workers=2) as pool:
-            first = pool.submit(client.post, '/api/images', json={'access_url': ACCESS},
+            first = pool.submit(client.post, '/api/images', json={'access_url': ACCESS, 'ra': 210, 'dec': 54, 'cutout_deg': cutout_deg},
                                 headers={'X-SkyTracker-Client': 'time-slider'})
             assert downloader.entered.wait(5)
             second = pool.submit(client.post, '/api/images', json={
-                'access_url': ACCESS if same_observation else ACCESS + '-other', 'ra': 210, 'dec': 54})
+                'access_url': ACCESS if same_observation else ACCESS + '-other', 'ra': 210, 'dec': 54, 'cutout_deg': cutout_deg})
             try:
                 # Before the fix this returns 503 immediately instead of waiting.
                 with pytest.raises(TimeoutError):
