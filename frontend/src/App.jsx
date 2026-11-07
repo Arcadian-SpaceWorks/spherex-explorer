@@ -7,6 +7,10 @@ import TemporalImageExplorer from './components/TemporalImageExplorer';
 import { demoResult, loadDemoManifest } from './demoAdapter';
 import WavelengthFilter from './components/WavelengthFilter';
 import { ALL_FILTER, filterParams, filterDemoResult } from './wavelengths';
+const MODES = [
+  {id:'live', icon:'◉', badge:'Needs internet', title:'Live Mode', tagline:'Query NASA/IPAC IRSA in real time', points:['Pick any point on the interactive sky atlas','Fresh SPHEREx observation search & cutouts'], best:'exploring your own targets'},
+  {id:'demo', icon:'▶', badge:'Works offline', title:'Demo Mode', tagline:'Instant tour of preloaded real observations', points:['Curated targets, ready immediately','No network or IRSA queries required'], best:'presentations & a quick first look'},
+];
 export default function App() {
   const [mode, setMode] = useState(() => new URLSearchParams(window.location.search).get('mode') === 'demo' ? 'demo' : 'live');
   const [manifest, setManifest] = useState(null), [demoTargetId, setDemoTargetId] = useState('');
@@ -73,11 +77,18 @@ export default function App() {
   return <div className="app"><header><a className="brand" href="/" aria-label="Arcadian SkyTracker home"><span className="brand-icon">✳</span><span>ARCADIAN<span className="brand-sub">SKYTRACKER</span></span></a><div className="header-context">NASA SPACE APPS CHALLENGE 2026 <span>Planet X & SPHEREx · Team prototype</span></div><span className="milestone">02 / FITS EXPLORER</span></header>
     <main>
     <section className="panel mode-panel" aria-label="Data mode">
-      <label htmlFor="data-mode">Data mode</label>
-      <select id="data-mode" value={mode} onChange={event => changeMode(event.target.value)}>
-        <option value="live">Live Mode — query IRSA</option><option value="demo">Demo Mode — preloaded real observations</option>
-      </select>
-      <p role="note">{mode === 'demo' ? 'DEMO MODE · Local, preloaded real SPHEREx data. No live IRSA query. PNGs are display previews, not scientific arrays.' : 'LIVE MODE · Observation searches and new cutouts require NASA/IPAC IRSA network access.'}</p>
+      <fieldset className="mode-choice" role="radiogroup" aria-label="Data mode">
+        <legend>Choose how to explore</legend>
+        {MODES.map(option => <label key={option.id} className={`mode-card mode-${option.id}${mode === option.id ? ' is-active' : ''}`}>
+          <input type="radio" name="data-mode" value={option.id} checked={mode === option.id} onChange={() => changeMode(option.id)}/>
+          <span className="mode-card-top"><span className="mode-icon" aria-hidden="true">{option.icon}</span><span className="mode-badge">{option.badge}</span><span className="mode-check" aria-hidden="true"/></span>
+          <strong>{option.title}</strong>
+          <span className="mode-tagline">{option.tagline}</span>
+          <ul>{option.points.map(point => <li key={point}>{point}</li>)}</ul>
+          <span className="mode-best">Best for: {option.best}</span>
+        </label>)}
+      </fieldset>
+      <p role="note" className="mode-note">{mode === 'demo' ? 'DEMO MODE · Local, preloaded real SPHEREx data. No live IRSA query. PNGs are display previews, not scientific arrays.' : 'LIVE MODE · Observation searches and new cutouts require NASA/IPAC IRSA network access.'}</p>
       {mode === 'demo' && <>
         {loading && <p role="status">Loading preloaded target manifest…</p>}
         {manifest && <><label htmlFor="demo-target">Preloaded target</label><select id="demo-target" value={demoTargetId} onChange={event => chooseDemoTarget(manifest.targets.find(target => target.id === event.target.value), manifest.science_note)}>
