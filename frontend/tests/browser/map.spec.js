@@ -44,7 +44,7 @@ test('unavailable API is explicit and mobile layout fits', async ({page}) => {
   await page.setViewportSize({width:390,height:844});
   await page.goto('/', {waitUntil:'domcontentloaded'});
   await page.getByRole('button',{name:'Search SPHEREx Observations'}).click();
-  await expect(page.getByRole('alert')).toContainText('IRSA unavailable');
+  await expect(page.locator('.observations').getByRole('alert')).toContainText('IRSA unavailable');
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
 

@@ -17,31 +17,45 @@ TOKEN = re.compile(r'^[a-f0-9]{64}$')
 
 
 class ImageService:
-    def __init__(self, settings=None, downloader=None):
+    def __init__(self, settings=None, downloader=None, *, max_waiters=4, wait_seconds=720):
         self.settings = settings or ImageSettings.from_env()
         self.downloader = downloader or IRSAImageDownloader(self.settings)
         self.lock = threading.Lock()
+        # Bound waiting API threads as well as active FITS memory/download work.
+        self.slots = threading.BoundedSemaphore(max_waiters + 1)
+        self.wait_seconds = wait_seconds
 
     @contextmanager
     def transaction(self):
-        # One bounded download/render at a time; no unbounded queue of large jobs.
-        if not self.lock.acquire(blocking=False):
-            raise ImageError('The image viewer is processing another file. Please retry shortly.', 503, 'viewer_busy')
+        if not self.slots.acquire(blocking=False):
+            raise ImageError('The image viewer queue is full. Please retry shortly.', 503, 'viewer_busy')
+        deadline = time.monotonic() + self.wait_seconds
+        acquired = False
         cache_lock = None
         try:
+            acquired = self.lock.acquire(timeout=max(0, deadline - time.monotonic()))
+            if not acquired:
+                raise ImageError('Timed out waiting for the image viewer. Please retry.', 503, 'viewer_busy')
             self.settings.cache_dir.mkdir(parents=True, exist_ok=True)
             cache_lock = (self.settings.cache_dir / '.lock').open('a')
-            try:
-                fcntl.flock(cache_lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            except BlockingIOError as exc:
-                raise ImageError('The image cache is busy. Please retry shortly.', 503, 'viewer_busy') from exc
+            while True:
+                try:
+                    fcntl.flock(cache_lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    break
+                except BlockingIOError:
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise ImageError('Timed out waiting for the image cache. Please retry.', 503, 'viewer_busy')
+                    time.sleep(min(0.05, remaining))
             yield
         except OSError as exc:
             raise ImageError('The local image cache is unavailable or full.', 507, 'cache_unavailable') from exc
         finally:
             if cache_lock is not None:
                 cache_lock.close()
-            self.lock.release()
+            if acquired:
+                self.lock.release()
+            self.slots.release()
 
     def _prune(self, reserve=0):
         entries = []

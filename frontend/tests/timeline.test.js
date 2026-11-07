@@ -6,6 +6,16 @@ import { loadObservationImage } from '../src/imageAdapter.js';
 const url = id => `https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=${id}`;
 const row = (id, time, extra = {}) => ({obs_id: id, observed_at_utc: time, access_url: url(id), energy_bandpassname: 'SPHEREx-D1', obs_collection: 'spherex', em_min: 1e-6, em_max: 2e-6, ...extra});
 
+test('normalizes offset timestamps to UTC and rejects impossible calendar dates', () => {
+  assert.equal(formatUtcLabel('2025-03-18T23:15:30+02:00'), '2025-03-18T21:15:30.000 UTC');
+  assert.equal(parseUtc('2025-03-18T23:15:30+02:00'), parseUtc('2025-03-18T21:15:30Z'));
+  for (const invalid of ['2025-02-30T00:00:00', '2025-02-29T00:00:00', '2025-04-31T00:00:00', '2025-01-01T24:00:00', '2025-13-01T00:00:00', '2025-01-00T00:00:00', 'not-a-time']) {
+    assert.equal(parseUtc(invalid), null, invalid);
+    assert.equal(formatUtcLabel(invalid), 'Time unavailable', invalid);
+  }
+  assert.notEqual(parseUtc('2024-02-29T00:00:00'), null);
+});
+
 test('orders uneven real timestamps as one step each and skips unusable links', () => {
   const {frames, skippedCount, undatedCount} = chronologicalFrames([
     row('late', '2025-11-02T11:42:10.500'),

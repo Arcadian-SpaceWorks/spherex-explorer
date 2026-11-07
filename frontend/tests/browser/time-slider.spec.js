@@ -47,6 +47,18 @@ async function search(page, observations, {failEarly = false} = {}) {
   await page.getByRole('button', {name: 'Search SPHEREx Observations'}).click();
 }
 
+async function displayedPixel(explorer) {
+  const image = explorer.getByTestId('time-slider-image');
+  await expect.poll(() => image.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+  return image.evaluate(img => {
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = 1;
+    const context = canvas.getContext('2d');
+    context.drawImage(img, 0, 0);
+    return [...context.getImageData(0, 0, 1, 1).data];
+  });
+}
+
 test('slider follows chronological observations, not arrival order or equal time gaps', async ({page}) => {
   await search(page, sequence);
   const explorer = page.getByRole('region', {name: 'Astronomical time explorer'});
@@ -54,6 +66,7 @@ test('slider follows chronological observations, not arrival order or equal time
   await expect(explorer.getByTestId('time-slider-time')).toHaveText('2025-01-03T04:00:00.000 UTC');
   await expect(explorer.getByTestId('time-slider')).toHaveValue('0');
   await expect(explorer.getByTestId('time-slider-image')).toHaveAttribute('src', /synthetic-time-early\/preview$/);
+  const earlyPixel = await displayedPixel(explorer);
   await expect(explorer.getByRole('note')).toContainText('not a live NASA observation');
   await expect(explorer).toContainText('not spatially registered');
   await expect(explorer).toContainText('SPHEREx-D1, SPHEREx-D2, SPHEREx-D3');
@@ -64,11 +77,17 @@ test('slider follows chronological observations, not arrival order or equal time
   await expect(explorer.getByTestId('time-slider-id')).toHaveText('Observation SYNTHETIC-TIME-MID');
   await expect(explorer.getByTestId('time-slider-time')).toHaveText('2025-03-18T21:15:30.000 UTC');
   await expect(explorer.getByTestId('time-slider-image')).toHaveAttribute('src', /synthetic-time-mid\/preview$/);
+  const middlePixel = await displayedPixel(explorer);
+  expect(middlePixel).not.toEqual(earlyPixel);
   await expect(explorer).toContainText('2.100 – 3.200 µm');
 
   await explorer.getByRole('button', {name: 'Next observation'}).click();
   await expect(explorer.getByTestId('time-slider-id')).toHaveText('Observation SYNTHETIC-TIME-LATE');
   await expect(explorer.getByTestId('time-slider')).toHaveValue('2');
+  await expect(explorer.getByTestId('time-slider-image')).toHaveAttribute('src', /synthetic-time-late\/preview$/);
+  const lastPixel = await displayedPixel(explorer);
+  expect(lastPixel).not.toEqual(earlyPixel);
+  expect(lastPixel).not.toEqual(middlePixel);
   await explorer.getByTestId('time-slider').focus();
   await page.keyboard.press('ArrowLeft');
   await expect(explorer.getByTestId('time-slider-id')).toHaveText('Observation SYNTHETIC-TIME-MID');
@@ -85,6 +104,84 @@ test('slider follows chronological observations, not arrival order or equal time
   await expect(page.getByTestId('fits-canvas')).toHaveCount(0);
 });
 
+test('broken preview recovers on retry and malformed time is explicitly unavailable', async ({page}) => {
+  await search(page, [row('synthetic-time-early', {observed_at_utc: 'invalid'})]);
+  const explorer = page.getByRole('region', {name: 'Astronomical time explorer'});
+  await expect(explorer.getByTestId('time-slider-time')).toHaveText('Time unavailable');
+  await expect(explorer).toContainText('placed after the dated frames');
+  await displayedPixel(explorer);
+  await page.route('**/api/images', route => route.fulfill({json: {
+    ...payload('synthetic-time-early'), preview_url: '/api/images/synthetic-time-broken/preview',
+  }}));
+  await page.route('**/api/images/*/preview', route => route.fulfill({status: 404, body: 'Missing preview'}));
+  await page.getByRole('button', {name: 'Search SPHEREx Observations'}).click();
+  await expect(explorer.getByRole('alert')).toContainText('preview image failed to load');
+  await page.unroute('**/api/images/*/preview');
+  await page.route('**/api/images/*/preview', route => route.fulfill({contentType: 'image/png', body: png['synthetic-time-early']}));
+  await explorer.getByRole('button', {name: 'Retry this observation image'}).click();
+  await displayedPixel(explorer);
+  await expect(explorer.getByRole('alert')).toHaveCount(0);
+});
+
+test('a delayed image from the previous step cannot replace the selected image', async ({page}) => {
+  let release;
+  const held = new Promise(resolve => {release = resolve;});
+  let arrived;
+  const incoming = new Promise(resolve => {arrived = resolve;});
+  let finished;
+  const completed = new Promise(resolve => {finished = resolve;});
+  await search(page, sequence);
+  const explorer = page.getByRole('region', {name: 'Astronomical time explorer'});
+  await displayedPixel(explorer);
+  await page.route('**/api/images', async route => {
+    const id = new URL(route.request().postDataJSON().access_url).searchParams.get('ID');
+    if (id === 'synthetic-time-mid') {arrived(); await held;}
+    await route.fulfill({json: payload(id)});
+    if (id === 'synthetic-time-mid') finished();
+  });
+  await explorer.getByRole('button', {name: 'Next observation'}).click();
+  await incoming;
+  await expect(explorer.getByRole('status')).toContainText('Loading');
+  await explorer.getByRole('button', {name: 'Next observation'}).click();
+  await displayedPixel(explorer);
+  release();
+  await completed;
+  await expect(explorer.getByTestId('time-slider-id')).toContainText('LATE');
+  await expect(explorer.getByTestId('time-slider-image')).toHaveAttribute('src', /synthetic-time-late\/preview$/);
+});
+
+test('new coordinates and search supersede a delayed observation search', async ({page}) => {
+  await search(page, sequence);
+  const explorer = page.getByRole('region', {name: 'Astronomical time explorer'});
+  await displayedPixel(explorer);
+  let release;
+  const held = new Promise(resolve => {release = resolve;});
+  let arrived;
+  const incoming = new Promise(resolve => {arrived = resolve;});
+  let finished;
+  const completed = new Promise(resolve => {finished = resolve;});
+  await page.route('**/api/observations?**', async route => {
+    const ra = Number(new URL(route.request().url()).searchParams.get('ra'));
+    if (ra !== 10) {arrived(); await held;}
+    const observations = ra === 10 ? [row('synthetic-time-late')] : sequence;
+    await route.fulfill({json: {status: 'live', ra, dec: 20, count: observations.length, observations}});
+    if (ra !== 10) finished();
+  });
+  await page.getByRole('button', {name: 'Search SPHEREx Observations'}).click();
+  await incoming;
+  await expect(explorer.getByTestId('time-slider')).toHaveCount(0);
+  await page.locator('#ra').fill('10');
+  await page.locator('#dec').fill('20');
+  await page.getByRole('button', {name: 'Go To Coordinates'}).click();
+  await page.getByRole('button', {name: 'Search SPHEREx Observations'}).click();
+  await expect(explorer.getByTestId('time-slider-id')).toContainText('LATE');
+  release();
+  await completed;
+  await displayedPixel(explorer);
+  await expect(explorer.getByTestId('time-slider')).toBeDisabled();
+  await expect(explorer.getByTestId('time-slider-id')).toContainText('LATE');
+});
+
 test('a failed frame stays on the slider and the next observation still loads', async ({page}) => {
   await search(page, sequence.filter(item => item.access_url), {failEarly: true});
   const explorer = page.getByRole('region', {name: 'Astronomical time explorer'});
@@ -93,6 +190,37 @@ test('a failed frame stays on the slider and the next observation still loads', 
   await explorer.getByRole('button', {name: 'Next observation'}).click();
   await expect(explorer.getByTestId('time-slider-image')).toHaveAttribute('src', /synthetic-time-mid\/preview$/);
   await expect(explorer.getByRole('alert')).toHaveCount(0);
+});
+
+test('FITS viewer remains usable while a slider image is loading and coordinates invalidate it', async ({page}) => {
+  await search(page, sequence);
+  const explorer = page.getByRole('region', {name: 'Astronomical time explorer'});
+  await displayedPixel(explorer);
+  let release;
+  const held = new Promise(resolve => {release = resolve;});
+  let arrived;
+  const incoming = new Promise(resolve => {arrived = resolve;});
+  let finished;
+  const completed = new Promise(resolve => {finished = resolve;});
+  await page.route('**/api/images', async route => {
+    const id = new URL(route.request().postDataJSON().access_url).searchParams.get('ID');
+    const slider = route.request().headers()['x-skytracker-client'] === 'time-slider';
+    if (slider && id === 'synthetic-time-mid') {arrived(); await held;}
+    await route.fulfill({json: payload(id)});
+    if (slider && id === 'synthetic-time-mid') finished();
+  });
+  await explorer.getByRole('button', {name: 'Next observation'}).click();
+  await incoming;
+  await page.getByRole('button', {name: 'View Image', exact: true}).nth(1).click();
+  await expect(page.getByTestId('fits-canvas')).toBeVisible();
+  await page.locator('#ra').fill('10');
+  await page.locator('#dec').fill('20');
+  await page.getByRole('button', {name: 'Go To Coordinates'}).click();
+  release();
+  await completed;
+  await expect(explorer.getByTestId('time-slider-image')).toHaveCount(0);
+  await expect(explorer.getByTestId('time-slider')).toHaveCount(0);
+  await expect(page.getByTestId('fits-canvas')).toHaveCount(0);
 });
 
 test('zero observations and a single observation have explicit slider states', async ({page}) => {
