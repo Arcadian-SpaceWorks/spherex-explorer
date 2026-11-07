@@ -13,3 +13,30 @@
 .download-progress{margin:14px 0;padding:16px;border:1px solid #334158;border-radius:8px;background:#101825;text-align:left}.download-progress strong,.download-progress>span,.download-progress small{display:block}.download-progress>span,.download-progress p,.download-progress small{font-size:12px;color:#adc2d9;line-height:1.6}.download-progress button{width:auto;margin:8px 0}.download-progress-bar{height:7px;overflow:hidden;background:#253248;border-radius:5px;margin:12px 0}.download-progress-bar span{display:block;height:100%;width:30%;background:#80e7ce;animation:image-wait 1.5s ease-in-out infinite alternate}.time-stage .download-progress{position:absolute;inset:8px 10px auto;z-index:1}.image-controls button:disabled{cursor:not-allowed}
 @keyframes image-wait{from{transform:translateX(0)}to{transform:translateX(230%)}}@media(prefers-reduced-motion:reduce){.download-progress-bar span{animation:none}}
 .wavelength-filter{margin:14px 0}.wavelength-filter label,.wavelength-filter small{display:block;margin:7px 0}.wavelength-filter small{font-size:12px;line-height:1.6;color:#adc2d9}.wavelength-filter select,.wavelength-filter input{width:100%;padding:10px 12px;background:#0b121e;border:1px solid #334158;border-radius:6px;color:#e9edf5;font:inherit}.wavelength-filter select:focus-visible{outline:2px solid #80e7ce;outline-offset:3px}.wavelength-filter input[aria-invalid=true]{border-color:#c77c6e}.mode-panel form{max-width:560px}
+/* Data-mode chooser: two selectable cards instead of a dropdown. */
+.mode-choice{border:0;padding:0;margin:0 0 4px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;max-width:900px}
+.mode-choice legend{font-size:10px;font-weight:700;letter-spacing:1.8px;color:#80d7c2;text-transform:uppercase;margin-bottom:12px;padding:0}
+.mode-panel .mode-card{position:relative;display:flex;flex-direction:column;gap:6px;margin:0;padding:18px 20px;background:#0c1420;border:1px solid #2c3a4f;border-radius:12px;cursor:pointer;color:#c9d6e6;transition:border-color .2s,background .2s,transform .2s,box-shadow .2s}
+.mode-panel .mode-card:hover{border-color:#4b6683;background:#111c2b;transform:translateY(-2px)}
+.mode-card input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;z-index:1}
+.mode-card:has(input:focus-visible){outline:2px solid #80e7ce;outline-offset:3px}
+.mode-card-top{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.mode-icon{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;font-size:18px;background:#16263a;color:#9fb6d0}
+.mode-badge{font-size:10px;letter-spacing:.6px;padding:4px 8px;border-radius:20px;border:1px solid #33465e;color:#9fb1c8}
+.mode-check{margin-left:auto;width:20px;height:20px;border-radius:50%;border:2px solid #3d4f67;transition:all .2s}
+.mode-card strong{font:500 20px 'Space Grotesk',sans-serif;color:#eef4fa}
+.mode-tagline{font-size:13px;color:#9fb1c8}
+.mode-card ul{margin:6px 0 4px;padding-left:18px;font-size:12px;line-height:1.7;color:#8d9fb7}
+.mode-best{font-size:11px;color:#71849d;border-top:1px solid #222f40;padding-top:8px;margin-top:auto}
+.mode-live.is-active{border-color:#80e7ce;background:linear-gradient(160deg,#12302b,#0c1420 70%);box-shadow:0 0 0 1px #80e7ce55,0 10px 30px -14px #80e7ce88}
+.mode-live.is-active .mode-icon{background:#80e7ce;color:#09251f}
+.mode-live.is-active .mode-badge{border-color:#2f6b5c;color:#91e8d2}
+.mode-demo.is-active{border-color:#f2c46d;background:linear-gradient(160deg,#30270f,#0c1420 70%);box-shadow:0 0 0 1px #f2c46d55,0 10px 30px -14px #f2c46d88}
+.mode-demo.is-active .mode-icon{background:#f2c46d;color:#2b1f05}
+.mode-demo.is-active .mode-badge{border-color:#6e5a2c;color:#f5d48f}
+.mode-card.is-active .mode-check{border-color:currentColor;background:radial-gradient(circle,currentColor 0 4px,transparent 5px)}
+.mode-live.is-active .mode-check{color:#80e7ce}.mode-demo.is-active .mode-check{color:#f2c46d}
+.mode-note{max-width:900px;margin:14px 0 0;padding:10px 14px;border-radius:8px;background:#0c1420;border-left:3px solid #80e7ce}
+.mode-panel:has(.mode-demo.is-active) .mode-note{border-left-color:#f2c46d}
+@media(max-width:720px){.mode-choice{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.mode-panel .mode-card{transition:none}.mode-panel .mode-card:hover{transform:none}}
