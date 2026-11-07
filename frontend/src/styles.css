@@ -101,3 +101,9 @@
 .observations tbody tr.observation-selected td:last-child{background:#17342f}
 .observations td:last-child{white-space:nowrap}
 .observations td:last-child .view-image{width:auto;vertical-align:middle}
+/* Time-slider playback and time-lapse export. */
+.time-slider-nav button.time-play{background:#80e7ce;color:#09251f;border-color:#80e7ce;font-weight:700}
+.time-slider-nav button.time-play[aria-pressed=true]{background:#f2c46d;border-color:#f2c46d;color:#2b1f05}
+.timelapse-export{margin:14px 0 6px;padding:12px 14px;border:1px solid #263143;border-radius:9px;background:#0c1420}
+.timelapse-export>button,.timelapse-export [role=status] button{width:auto;margin:0;padding:9px 14px;font-size:12px;text-align:center}
+.timelapse-export [role=status]{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:12px;color:#becce0}

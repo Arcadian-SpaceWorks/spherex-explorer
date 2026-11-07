@@ -12,7 +12,17 @@ From the repository root:
 ./scripts/setup.sh
 ```
 
-Run these in separate terminals:
+`setup.sh` stops with a clear message if `python3` is older than 3.12.
+
+Start everything from **one terminal** (runs `setup.sh` first if needed; Ctrl+C stops both servers):
+
+```bash
+./scripts/start.sh
+```
+
+It never stops anything it did not start: if port 8000 or 5173 is already in use, it says so and exits. Other ports: `SKYTRACKER_BACKEND_PORT=8010 SKYTRACKER_FRONTEND_PORT=5180 ./scripts/start.sh`.
+
+Or run these in separate terminals:
 
 ```bash
 ./scripts/backend.sh
@@ -159,6 +169,12 @@ SKYTRACKER_LIVE_FITS=1 npm --prefix frontend run test:browser
 The other image-browser tests use clearly labeled synthetic MEF/PNG fixtures and mocked image HTTP responses. These fixtures are never loaded by the application itself. See [Milestone 2 verification](docs/milestone-2.md) for actual checks and limitations.
 
 `frontend/dist/` is the production frontend build. To serve it elsewhere, configure the same-origin `/api` reverse proxy to FastAPI. Deployment is outside this local milestone.
+
+### Time-slider playback and time-lapse export
+
+**Play** steps through the observations in time order. Each step waits until its image has loaded (live frames can take a minute) and then shows it for 1.5 s; playback stops at the last observation (**Replay** starts again). **Export time-lapse video** records the sequence as a WebM file, one second per observation, at most 24 observations (each live frame may need a download; filter by detector for long sequences). Every video frame carries its source, UTC time, observation, detector, wavelength at the target and, burned in, the caveats: each frame has its own brightness scale, images keep native detector orientation (not registered), mixed detectors are flagged, and no change or motion is validated. Ported from Danae's `feature/time-slider` work.
+
+The FITS decoder worker applies its CPU, memory and core-dump limits wherever the platform allows. If a platform refuses one (macOS does not support the memory limit), the worker still runs and the API log warns once which limits are missing.
 
 ## Official sources and attribution
 

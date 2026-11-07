@@ -102,8 +102,10 @@ export default function ImageInspector({observation, target}) {
     setPixel(null); setPixelError(''); setPixelLoading(true);
     try {
       const response = await fetch(`${metadata.pixel_url || `/api/images/${metadata.image_id}/pixel`}?${new URLSearchParams({x,y})}`, {signal:controller.signal});
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Pixel readout unavailable.');
+      let data = {};
+      try {data = await response.json();} catch {data = {};}
+      if (!response.ok) throw new Error(data.message || (response.status >= 500
+        ? 'The app\'s backend is not responding, so the pixel cannot be read.' : 'Pixel readout unavailable.'));
       if (pixelRequest.current === controller) setPixel(data);
     } catch (err) {if (!controller.signal.aborted) setPixelError(err.message);}
     finally {if (pixelRequest.current === controller) setPixelLoading(false);}
