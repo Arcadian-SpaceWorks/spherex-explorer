@@ -139,6 +139,17 @@ All numeric limits must be positive. Retained FITS occupy at most (full entry co
 
 FITS/WCS processing runs in a child process with a 60-second wall limit, 55-second CPU limit, 3 GiB address-space limit and no core dumps, so malformed native-decoder input does not terminate the API. The default scripts target Linux/Fedora. The API returns explicit errors: 400 unsafe URL; 413 file/pixel limit; 422 unsupported/invalid/all-masked FITS; 404 cache miss; 502 upstream/decoder failure; 503 busy; 504 timeout; 507 cache unavailable.
 
+### Pair suggestions for time comparison
+
+`GET /api/pairs?ra=10.6847&dec=41.2687&band=SPHEREx-D1&per_visit=1` suggests which observations of one sky point are fair to compare over time (ported from PR #1):
+
+1. Searches **one band** and groups the results into **visits** (runs separated by more than 20 days).
+2. Per visit, **shortlists** the `per_visit` observations whose image centre is closest to the target (a heuristic to limit downloads; at most 12 per request).
+3. Fetches a **0.437° cutout** for each (the size `POST /api/compare` needs; cached) and reads the **wavelength at the target pixel**. If it cannot be read it stays unknown; the image-centre value is never substituted.
+4. Ranks pairs with the **same rules as `POST /api/compare`** (same detector, at least 1 hour apart, target wavelengths within 0.02 µm). Overlap is only checked when a pair is compared. Each pair carries IRSA `access_url`s and cached `image_id`s.
+
+First use takes minutes (one cutout per candidate, roughly 20–60 s each). A suggestion is not evidence of motion or of any new object. Live check: `.venv/bin/python scripts/smoke_pairs.py` (suggests M31 D1 pairs, then compares the best one and checks both agree).
+
 ## Tests and build
 
 ```bash
