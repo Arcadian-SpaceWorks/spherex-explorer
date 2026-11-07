@@ -1,0 +1,1 @@
+{"name":"arcadian-skytracker","private":true,"version":"0.1.0","type":"module","scripts":{"dev":"vite --host 127.0.0.1","build":"vite build","test":"node --test tests/*.test.js","test:browser":"playwright test"},"dependencies":{"aladin-lite":"3.8.1","react":"19.2.0","react-dom":"19.2.0"},"devDependencies":{"@playwright/test":"1.56.1","vite":"6.4.5"}}

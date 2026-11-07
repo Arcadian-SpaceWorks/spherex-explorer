@@ -1,0 +1,133 @@
+{
+  "science_hdu": 3,
+  "width": 8,
+  "height": 6,
+  "preview_width": 8,
+  "preview_height": 6,
+  "observation_id": "LOCAL-SYNTHETIC-FIXTURE",
+  "detector": 2,
+  "observed_at_utc": "2026-06-24T03:19:00.048",
+  "unit": "MJy/sr",
+  "scaling": {
+    "method": "asinh",
+    "percentiles": [
+      1,
+      99
+    ],
+    "low": 0.47000000000000003,
+    "high": 46.53,
+    "asinh_a": 0.1,
+    "constant": false,
+    "valid_pixels": 48,
+    "masked_pixels": 0,
+    "mask_policy": "Nonfinite pixels and FLAGS bits 6 (NONFUNC), 7 (DICHROIC), 9 (MISSING_DATA) are transparent. Other flags remain visible."
+  },
+  "hdus": [
+    {
+      "index": 0,
+      "name": "PRIMARY",
+      "type": "PrimaryHDU",
+      "shape": [],
+      "columns": null
+    },
+    {
+      "index": 1,
+      "name": "FLAGS",
+      "type": "ImageHDU",
+      "shape": [
+        6,
+        8
+      ],
+      "columns": null
+    },
+    {
+      "index": 2,
+      "name": "VARIANCE",
+      "type": "ImageHDU",
+      "shape": [
+        6,
+        8
+      ],
+      "columns": null
+    },
+    {
+      "index": 3,
+      "name": "IMAGE",
+      "type": "ImageHDU",
+      "shape": [
+        6,
+        8
+      ],
+      "columns": null
+    },
+    {
+      "index": 4,
+      "name": "ZODI",
+      "type": "ImageHDU",
+      "shape": [
+        6,
+        8
+      ],
+      "columns": null
+    },
+    {
+      "index": 5,
+      "name": "PSF",
+      "type": "ImageHDU",
+      "shape": [
+        2,
+        3,
+        3
+      ],
+      "columns": null
+    },
+    {
+      "index": 6,
+      "name": "WCS-WAVE",
+      "type": "BinTableHDU",
+      "shape": null,
+      "columns": [
+        "X",
+        "Y",
+        "VALUES"
+      ]
+    }
+  ],
+  "notes": [],
+  "orientation": "Native detector orientation: x increases right, y increases up; not rotated to north-up. Pixel coordinates are zero-based.",
+  "spatial_wcs": "available",
+  "center": {
+    "x": 3.5,
+    "y": 2.5,
+    "ra": 209.97448354226887,
+    "dec": 53.99499729798925,
+    "spectral": {
+      "wavelength_um": 2.5,
+      "bandwidth_um": 0.25,
+      "source": "WCS-WAVE / alternate WCS W",
+      "approximate": true
+    }
+  },
+  "spectral_wcs": "available",
+  "wavelength_note": "Wavelength varies across this image. WCS-WAVE readouts are approximate visualization values; calibrated CWAVE/CBAND products are needed for scientific wavelength analysis.",
+  "science_header": "XTENSION= 'IMAGE   '           / Image extension                                \nBITPIX  =                  -32 / array data type                                \nNAXIS   =                    2 / number of array dimensions                     \nNAXIS1  =                    8                                                  \nNAXIS2  =                    6                                                  \nPCOUNT  =                    0 / number of parameters                           \nGCOUNT  =                    1 / number of groups                               \nEXTNAME = 'IMAGE   '           / extension name                                 \nBUNIT   = 'MJy/sr  '                                                            \nDETECTOR=                    2                                                  \nDATE-OBS= '2026-06-24T03:19:00.048'                                             \nWCSAXES =                    2 / Number of coordinate axes                      \nCRPIX1  =                  3.0 / Pixel coordinate of reference point            \nCRPIX2  =                  4.0 / Pixel coordinate of reference point            \nCDELT1  =                -0.01 / [deg] Coordinate increment at reference point  \nCDELT2  =                 0.01 / [deg] Coordinate increment at reference point  \nCUNIT1  = 'deg'                / Units of coordinate increment and value        \nCUNIT2  = 'deg'                / Units of coordinate increment and value        \nCTYPE1  = 'RA---TAN'           / Right ascension, gnomonic projection           \nCTYPE2  = 'DEC--TAN'           / Declination, gnomonic projection               \nCRVAL1  =                210.0 / [deg] Coordinate value at reference point      \nCRVAL2  =                 54.0 / [deg] Coordinate value at reference point      \nLONPOLE =                180.0 / [deg] Native longitude of celestial pole       \nLATPOLE =                 54.0 / [deg] Native latitude of celestial pole        \nMJDREF  =                  0.0 / [d] MJD of fiducial time                       \nRADESYS = 'ICRS'               / Equatorial coordinate system                   \nWCSAXESW=                    2                                                  \nWCSNAMEW= 'Synthetic per-pixel wavelength and bandwidth'                        \nCTYPE1W = 'WAVE-TAB'                                                            \nCUNIT1W = 'um      '                                                            \nCRPIX1W =                  1.0                                                  \nCRVAL1W =                  1.0                                                  \nCDELT1W =                  1.0                                                  \nPS1_0W  = 'WCS-WAVE'                                                            \nPS1_1W  = 'VALUES  '                                                            \nPS1_2W  = 'X       '                                                            \nPV1_1W  =                    1                                                  \nPV1_3W  =                    1                                                  \nCTYPE2W = 'BAND-TAB'                                                            \nCUNIT2W = 'um      '                                                            \nCRPIX2W =                  1.0                                                  \nCRVAL2W =                  1.0                                                  \nCDELT2W =                  1.0                                                  \nPS2_0W  = 'WCS-WAVE'                                                            \nPS2_1W  = 'VALUES  '                                                            \nPS2_2W  = 'Y       '                                                            \nPV2_1W  =                    1                                                  \nPV2_3W  =                    2                                                  ",
+  "wavelength_header": "XTENSION= 'BINTABLE'           / binary table extension                         \nBITPIX  =                    8 / array data type                                \nNAXIS   =                    2 / number of array dimensions                     \nNAXIS1  =                   96 / length of dimension 1                          \nNAXIS2  =                    1 / length of dimension 2                          \nPCOUNT  =                    0 / number of group parameters                     \nGCOUNT  =                    1 / number of groups                               \nTFIELDS =                    3 / number of table fields                         \nTTYPE1  = 'X       '                                                            \nTFORM1  = '2D      '                                                            \nTTYPE2  = 'Y       '                                                            \nTFORM2  = '2D      '                                                            \nTTYPE3  = 'VALUES  '                                                            \nTFORM3  = '8D      '                                                            \nTDIM3   = '(2,2,2) '                                                            \nEXTNAME = 'WCS-WAVE'           / extension name                                 ",
+  "image_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "bytes": 40320,
+  "cache_hit": false,
+  "preview_url": "/api/images/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/preview",
+  "original_url": "/api/images/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/original",
+  "target": {
+    "ra": 210,
+    "dec": 54,
+    "status": "inside",
+    "x": 2.0,
+    "y": 2.999999999999649,
+    "spectral": {
+      "wavelength_um": 2.4857142857141454,
+      "bandwidth_um": 0.24857142857141454,
+      "source": "WCS-WAVE / alternate WCS W",
+      "approximate": true
+    }
+  }
+}

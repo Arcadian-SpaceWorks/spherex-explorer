@@ -1,0 +1,43 @@
+# Python environments and generated files
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+*.egg-info/
+
+# JavaScript dependencies, builds, and browser test output
+node_modules/
+dist/
+test-results/
+playwright-report/
+blob-report/
+coverage/
+
+# Local configuration and credentials (keep shareable examples)
+.env
+.env.*
+!.env.example
+!.env.*.example
+/.aws/
+*.pem
+*.key
+
+# Downloaded FITS products and other runtime caches
+# Keep the small synthetic FITS/PNG fixtures under frontend/tests/fixtures.
+.cache/
+*.log
+*.pid
+
+# Editor and operating system files
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
