@@ -39,7 +39,8 @@ def prepare(config_path, output):
         staging.mkdir()
         for item in config['targets']:
             target = {key: item[key] for key in ('id', 'name', 'ra', 'dec', 'coordinate_source')}
-            target.update(status='missing', missing_reason='No verified local cutouts have been supplied for this target.', observations=[])
+            target['science_context'] = item.get('science_context', '')
+            target.update(status='missing', missing_reason=item.get('missing_reason', 'No verified local cutouts have been supplied for this target.'), observations=[])
             for source in item['inputs']:
                 fits_path = (config_path.parent / source['fits']).resolve()
                 record = json.loads((config_path.parent / source['metadata']).read_text())
@@ -74,7 +75,8 @@ def prepare(config_path, output):
                 for url in (record['access_url'], source_url):
                     if meta['observation_id'] not in url or f'D{meta["detector"]}' not in url:
                         raise ValueError('Source URL identity differs from FITS observation/detector')
-                position = process_fits('target', path=str(original), ra=target['ra'], dec=target['dec'], max_pixels=8_000_000)
+                frame_position = record.get('target_position', target)
+                position = process_fits('target', path=str(original), ra=frame_position['ra'], dec=frame_position['dec'], max_pixels=8_000_000)
                 if position['status'] != 'inside':
                     raise ValueError('Target is outside the cutout or lacks usable WCS')
                 stamp = meta['observed_at_utc']
@@ -90,11 +92,19 @@ def prepare(config_path, output):
                             sha256=sha, bytes=original.stat().st_size, demo=True, cache_hit=True, target=position,
                             provenance=provenance, preview_url=f'{prefix}/preview.png', original_url=f'{prefix}/original.fits',
                             pixel_url=f'/api/demo/images/{image_id}/pixel')
+                acquisition = None
+                if 'mission' in record:
+                    from backend.app.demo import Acquisition
+                    acquisition = Acquisition(**{key: record[key] for key in ('mission', 'data_release', 'calibration', 'position_source', 'position_mode', 'position_note', 'discovery_sha256', 'archive_em_min_m', 'archive_em_max_m')},
+                                              ra=frame_position['ra'], dec=frame_position['dec']).model_dump()
+                    meta['acquisition'] = acquisition
                 (directory / 'metadata.json').write_text(json.dumps(meta, indent=2, sort_keys=True, allow_nan=False)+'\n')
                 observation = dict(image_id=image_id, obs_id=meta['observation_id'], access_url=record['access_url'], source_url=source_url,
                                    observed_at_utc=stamp, detector=meta['detector'], spectral=meta['center']['spectral'],
                                    preview_path=meta['preview_url'], metadata_path=f'{prefix}/metadata.json', fits_path=meta['original_url'],
                                    fits_sha256=sha, preview_sha256=digest(directory / 'preview.png'), metadata_sha256=digest(directory / 'metadata.json'), provenance=provenance)
+                if acquisition:
+                    observation['acquisition'] = acquisition
                 target['observations'].append(observation)
             if target['observations']:
                 target.update(status='ready', missing_reason=None)

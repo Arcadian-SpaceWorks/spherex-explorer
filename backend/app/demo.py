@@ -40,6 +40,26 @@ class Provenance(Model):
     source_sha256: str = Field(pattern=SHA)
 
 
+class Acquisition(Model):
+    mission: Literal['SPHEREx']
+    data_release: Literal['spherex_qr2', 'spherex_qr3']
+    calibration: str = Field(min_length=1)
+    ra: float = Field(ge=0, lt=360)
+    dec: float = Field(ge=-90, le=90)
+    position_source: str
+    position_mode: Literal['moving-target-centered', 'fixed-sky-region']
+    position_note: str
+    discovery_sha256: str = Field(pattern=SHA)
+    archive_em_min_m: float = Field(gt=0)
+    archive_em_max_m: float = Field(gt=0)
+
+    @model_validator(mode='after')
+    def coverage(self):
+        if self.archive_em_max_m < self.archive_em_min_m or not self.position_source.startswith('https://'):
+            raise ValueError('Invalid acquisition coverage or position provenance')
+        return self
+
+
 class Observation(Model):
     image_id: str = Field(pattern=SHA)
     obs_id: str = Field(min_length=1)
@@ -55,6 +75,7 @@ class Observation(Model):
     preview_sha256: str = Field(pattern=SHA)
     metadata_sha256: str = Field(pattern=SHA)
     provenance: Provenance
+    acquisition: Acquisition | None = None
 
     @model_validator(mode='after')
     def scientific_record(self):
@@ -69,7 +90,14 @@ class Observation(Model):
             raise ValueError('Demo bundles require actual observations, not synthetic observations')
         if not urlsplit(self.source_url).path.startswith('/ibe/data/spherex/'):
             raise ValueError('Expected an IRSA SPHEREx image-server source')
+        if self.acquisition:
+            a = self.acquisition
+            if f'/spherex/{a.data_release.removeprefix("spherex_")}/' not in urlsplit(self.source_url).path or a.calibration not in urlsplit(self.source_url).path.split('/'):
+                raise ValueError('Release/calibration differs from original source URL')
         query = parse_qs(urlsplit(self.source_url).query)
+        if self.acquisition:
+            if query.get('center') != [f'{self.acquisition.ra:.6f},{self.acquisition.dec:.6f}']:
+                raise ValueError('Frame position differs from cutout URL')
         if not {'center', 'size'} <= query.keys():
             raise ValueError('A documented cutout source URL is required')
         for field, filename in [('preview_path', 'preview.png'), ('metadata_path', 'metadata.json'), ('fits_path', 'original.fits')]:
@@ -86,6 +114,7 @@ class Target(Model):
     ra: float = Field(ge=0, lt=360)
     dec: float = Field(ge=-90, le=90)
     coordinate_source: str
+    science_context: str = ""
     status: Literal['ready', 'missing']
     missing_reason: str | None = None
     observations: list[Observation]
@@ -107,7 +136,7 @@ class Target(Model):
 class Manifest(Model):
     schema_version: Literal[1]
     science_note: str = Field(min_length=1)
-    targets: list[Target] = Field(min_length=2, max_length=3)
+    targets: list[Target] = Field(min_length=2, max_length=8)
 
     @model_validator(mode='after')
     def unique(self):
@@ -146,6 +175,8 @@ def validate_bundle(root, *, check_files=True):
                     if digest(path) != getattr(observation, f'{kind}_sha256'):
                         raise ValueError(f'Checksum mismatch: {path.name} ({target.id})')
                 metadata = json.loads(asset_path(root, observation.metadata_path).read_text())
+                if observation.acquisition and metadata.get('acquisition') != observation.acquisition.model_dump():
+                    raise ValueError('Acquisition provenance differs from manifest')
                 if (metadata.get('observation_id') != observation.obs_id
                         or metadata.get('detector') != observation.detector
                         or str(metadata.get('observed_at_utc')).removesuffix('Z') != observation.observed_at_utc.removesuffix('Z')

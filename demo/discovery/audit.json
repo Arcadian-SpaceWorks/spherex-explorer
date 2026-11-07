@@ -1,0 +1,435 @@
+{
+  "audited_at_utc": "2026-11-07T13:31:42.377637+00:00",
+  "epoch_definition": "Unique exposure start t_min; visits are separated by >1 day, not inferred variability epochs",
+  "targets": {
+    "3i-atlas": {
+      "name": "3I/ATLAS",
+      "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+      "position": "Official per-exposure predicted comet_ra/comet_dec; tracking, not fixed sky",
+      "query": null,
+      "table_url": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+      "status": "metadata_verified",
+      "sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+      "records": 259,
+      "observation_ids": 133,
+      "exposure_epochs": 167,
+      "visits_gap_over_1_day": 7,
+      "earliest_utc": "2025-08-01T08:00:09.189Z",
+      "latest_utc": "2025-12-14T23:59:08.711Z",
+      "baseline_days": 135.6659666889973,
+      "detectors": {
+        "D3": 41,
+        "D6": 36,
+        "D2": 44,
+        "D5": 44,
+        "D1": 46,
+        "D4": 48
+      },
+      "releases": {
+        "spherex_qr2": 259
+      },
+      "calib_levels": [
+        2
+      ],
+      "spectral_range_um": [
+        0.7455,
+        5.0096
+      ],
+      "by_release": {
+        "spherex_qr2": {
+          "records": 259,
+          "observation_ids": 133,
+          "exposure_epochs": 167,
+          "visits_gap_over_1_day": 7,
+          "earliest_utc": "2025-08-01T08:00:09.189Z",
+          "latest_utc": "2025-12-14T23:59:08.711Z",
+          "baseline_days": 135.6659666889973,
+          "detectors": {
+            "D3": 41,
+            "D6": 36,
+            "D2": 44,
+            "D5": 44,
+            "D1": 46,
+            "D4": 48
+          },
+          "releases": {
+            "spherex_qr2": 259
+          },
+          "calib_levels": [
+            2
+          ],
+          "spectral_range_um": [
+            0.7455,
+            5.0096
+          ]
+        }
+      }
+    },
+    "rw-aur": {
+      "name": "RW Aurigae",
+      "ra": 76.956067,
+      "dec": 30.401327,
+      "source": "https://archive.stsci.edu/prepds/starcat/StarCAT-summary/Table_1.pdf",
+      "position": "Fixed ICRS region around RW Aur; components unresolved; no astrometric detection claim",
+      "query": "SELECT TOP 10000 obs_id,s_ra,s_dec,t_min,t_max,em_min,em_max,energy_bandpassname,obs_collection,access_url,s_region,calib_level,access_estsize FROM spherex.obscore WHERE 1=CONTAINS(POINT('ICRS',76.956067,30.401327),s_region) ORDER BY t_min",
+      "table_url": "https://irsa.ipac.caltech.edu/TAP/sync",
+      "status": "metadata_verified",
+      "sha256": "9c003204d577b9575367e8c14ea754c52ca9addd574e6e95cb0dfbfb5ad6bc21",
+      "records": 333,
+      "observation_ids": 168,
+      "exposure_epochs": 169,
+      "visits_gap_over_1_day": 17,
+      "earliest_utc": "2025-09-01T10:04:17.501Z",
+      "latest_utc": "2026-09-16T21:30:05.501Z",
+      "baseline_days": 380.4762499999997,
+      "detectors": {
+        "SPHEREx-D1": 56,
+        "SPHEREx-D4": 56,
+        "SPHEREx-D2": 55,
+        "SPHEREx-D5": 56,
+        "SPHEREx-D3": 56,
+        "SPHEREx-D6": 54
+      },
+      "releases": {
+        "spherex_qr2": 224,
+        "spherex_qr3": 109
+      },
+      "calib_levels": [
+        2
+      ],
+      "spectral_range_um": [
+        0.7455,
+        5.009600000000001
+      ],
+      "by_release": {
+        "spherex_qr2": {
+          "records": 224,
+          "observation_ids": 113,
+          "exposure_epochs": 114,
+          "visits_gap_over_1_day": 13,
+          "earliest_utc": "2025-09-01T10:04:17.501Z",
+          "latest_utc": "2026-03-12T00:03:00.317Z",
+          "baseline_days": 191.58243999999831,
+          "detectors": {
+            "SPHEREx-D1": 38,
+            "SPHEREx-D4": 38,
+            "SPHEREx-D2": 37,
+            "SPHEREx-D5": 37,
+            "SPHEREx-D3": 38,
+            "SPHEREx-D6": 36
+          },
+          "releases": {
+            "spherex_qr2": 224
+          },
+          "calib_levels": [
+            2
+          ],
+          "spectral_range_um": [
+            0.7455,
+            5.009600000000001
+          ]
+        },
+        "spherex_qr3": {
+          "records": 109,
+          "observation_ids": 55,
+          "exposure_epochs": 55,
+          "visits_gap_over_1_day": 4,
+          "earliest_utc": "2026-09-02T02:19:55.402Z",
+          "latest_utc": "2026-09-16T21:30:05.501Z",
+          "baseline_days": 14.798728000001574,
+          "detectors": {
+            "SPHEREx-D1": 18,
+            "SPHEREx-D4": 18,
+            "SPHEREx-D2": 18,
+            "SPHEREx-D5": 19,
+            "SPHEREx-D3": 18,
+            "SPHEREx-D6": 18
+          },
+          "releases": {
+            "spherex_qr3": 109
+          },
+          "calib_levels": [
+            2
+          ],
+          "spectral_range_um": [
+            0.7455,
+            5.009600000000001
+          ]
+        }
+      }
+    },
+    "r-dra": {
+      "name": "R Draconis",
+      "ra": 248.1676075,
+      "dec": 66.75498417,
+      "source": "https://aladin.cds.unistra.fr/simbad-thumbnails/thumbnails42.html",
+      "position": "Fixed catalog ICRS region; source detection and variability unvalidated",
+      "query": "SELECT TOP 10000 obs_id,s_ra,s_dec,t_min,t_max,em_min,em_max,energy_bandpassname,obs_collection,access_url,s_region,calib_level,access_estsize FROM spherex.obscore WHERE 1=CONTAINS(POINT('ICRS',248.1676075,66.75498417),s_region) ORDER BY t_min",
+      "table_url": "https://irsa.ipac.caltech.edu/TAP/sync",
+      "status": "metadata_verified",
+      "sha256": "522891ee12db35c15a39f98f20711f746eca472420bfcfadd40deb0505ef9cd4",
+      "records": 2483,
+      "observation_ids": 1257,
+      "exposure_epochs": 1261,
+      "visits_gap_over_1_day": 141,
+      "earliest_utc": "2025-04-24T21:06:38.390Z",
+      "latest_utc": "2026-09-27T06:59:17.520Z",
+      "baseline_days": 520.4115640000018,
+      "detectors": {
+        "SPHEREx-D3": 575,
+        "SPHEREx-D6": 565,
+        "SPHEREx-D4": 581,
+        "SPHEREx-D1": 584,
+        "SPHEREx-D2": 89,
+        "SPHEREx-D5": 89
+      },
+      "releases": {
+        "spherex_qr2_deep": 1224,
+        "spherex_qr2": 536,
+        "spherex_qr3_deep": 723
+      },
+      "calib_levels": [
+        2
+      ],
+      "spectral_range_um": [
+        0.7455,
+        5.009600000000001
+      ],
+      "by_release": {
+        "spherex_qr2": {
+          "records": 536,
+          "observation_ids": 272,
+          "exposure_epochs": 273,
+          "visits_gap_over_1_day": 57,
+          "earliest_utc": "2025-05-16T22:56:23.626Z",
+          "latest_utc": "2026-07-16T20:57:27.418Z",
+          "baseline_days": 425.91740500000014,
+          "detectors": {
+            "SPHEREx-D3": 91,
+            "SPHEREx-D6": 89,
+            "SPHEREx-D4": 87,
+            "SPHEREx-D1": 91,
+            "SPHEREx-D2": 89,
+            "SPHEREx-D5": 89
+          },
+          "releases": {
+            "spherex_qr2": 536
+          },
+          "calib_levels": [
+            2
+          ],
+          "spectral_range_um": [
+            0.7455,
+            5.009600000000001
+          ]
+        },
+        "spherex_qr2_deep": {
+          "records": 1224,
+          "observation_ids": 621,
+          "exposure_epochs": 622,
+          "visits_gap_over_1_day": 65,
+          "earliest_utc": "2025-04-24T21:06:38.390Z",
+          "latest_utc": "2026-07-19T14:04:52.781Z",
+          "baseline_days": 450.70711100000335,
+          "detectors": {
+            "SPHEREx-D3": 484,
+            "SPHEREx-D6": 476,
+            "SPHEREx-D1": 133,
+            "SPHEREx-D4": 131
+          },
+          "releases": {
+            "spherex_qr2_deep": 1224
+          },
+          "calib_levels": [
+            2
+          ],
+          "spectral_range_um": [
+            0.7455,
+            5.009600000000001
+          ]
+        },
+        "spherex_qr3_deep": {
+          "records": 723,
+          "observation_ids": 364,
+          "exposure_epochs": 366,
+          "visits_gap_over_1_day": 26,
+          "earliest_utc": "2026-07-21T01:56:49.373Z",
+          "latest_utc": "2026-09-27T06:59:17.520Z",
+          "baseline_days": 68.21004800000082,
+          "detectors": {
+            "SPHEREx-D1": 360,
+            "SPHEREx-D4": 363
+          },
+          "releases": {
+            "spherex_qr3_deep": 723
+          },
+          "calib_levels": [
+            2
+          ],
+          "spectral_range_um": [
+            0.7455,
+            3.8473000000000006
+          ]
+        }
+      }
+    },
+    "barnard": {
+      "name": "Barnard\u2019s Star",
+      "ra": 269.446,
+      "dec": 4.766,
+      "source": "https://simbad.cds.unistra.fr/simbad/sim-basic?Ident=Barnard%27s+star",
+      "position": "Mission-era reference position footprint query; near expected proper-motion position; exposure-specific astrometry/detection NOT VERIFIED",
+      "query": "SELECT TOP 10000 obs_id,s_ra,s_dec,t_min,t_max,em_min,em_max,energy_bandpassname,obs_collection,access_url,s_region,calib_level,access_estsize FROM spherex.obscore WHERE 1=CONTAINS(POINT('ICRS',269.446,4.766),s_region) ORDER BY t_min",
+      "table_url": "https://irsa.ipac.caltech.edu/TAP/sync",
+      "status": "metadata_verified",
+      "sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+      "records": 359,
+      "observation_ids": 181,
+      "exposure_epochs": 182,
+      "visits_gap_over_1_day": 24,
+      "earliest_utc": "2025-08-15T20:45:11.376Z",
+      "latest_utc": "2026-09-22T15:04:21.014Z",
+      "baseline_days": 402.76330599999346,
+      "detectors": {
+        "SPHEREx-D6": 59,
+        "SPHEREx-D3": 59,
+        "SPHEREx-D2": 61,
+        "SPHEREx-D5": 61,
+        "SPHEREx-D1": 60,
+        "SPHEREx-D4": 59
+      },
+      "releases": {
+        "spherex_qr2": 240,
+        "spherex_qr3": 119
+      },
+      "calib_levels": [
+        2
+      ],
+      "spectral_range_um": [
+        0.7455,
+        5.009600000000001
+      ],
+      "by_release": {
+        "spherex_qr2": {
+          "records": 240,
+          "observation_ids": 121,
+          "exposure_epochs": 122,
+          "visits_gap_over_1_day": 17,
+          "earliest_utc": "2025-08-15T20:45:11.376Z",
+          "latest_utc": "2026-05-05T01:59:28.781Z",
+          "baseline_days": 262.2182569999932,
+          "detectors": {
+            "SPHEREx-D6": 42,
+            "SPHEREx-D3": 42,
+            "SPHEREx-D2": 36,
+            "SPHEREx-D5": 37,
+            "SPHEREx-D1": 42,
+            "SPHEREx-D4": 41
+          },
+          "releases": {
+            "spherex_qr2": 240
+          },
+          "calib_levels": [
+            2
+          ],
+          "spectral_range_um": [
+            0.7455,
+            5.009600000000001
+          ]
+        },
+        "spherex_qr3": {
+          "records": 119,
+          "observation_ids": 60,
+          "exposure_epochs": 60,
+          "visits_gap_over_1_day": 7,
+          "earliest_utc": "2026-08-16T15:08:22.157Z",
+          "latest_utc": "2026-09-22T15:04:21.014Z",
+          "baseline_days": 36.997208999993745,
+          "detectors": {
+            "SPHEREx-D6": 17,
+            "SPHEREx-D3": 17,
+            "SPHEREx-D5": 24,
+            "SPHEREx-D2": 25,
+            "SPHEREx-D1": 18,
+            "SPHEREx-D4": 18
+          },
+          "releases": {
+            "spherex_qr3": 119
+          },
+          "calib_levels": [
+            2
+          ],
+          "spectral_range_um": [
+            0.7455,
+            5.009600000000001
+          ]
+        }
+      }
+    },
+    "wise0855": {
+      "name": "WISE 0855-0714",
+      "ra": 133.795125,
+      "dec": -7.24513889,
+      "source": "https://doi.org/10.1088/2041-8205/786/2/L18",
+      "position": "Catalog-designation position footprint query only; current astrometry and source detectability NOT VERIFIED; not selected",
+      "query": "SELECT TOP 10000 obs_id,s_ra,s_dec,t_min,t_max,em_min,em_max,energy_bandpassname,obs_collection,access_url,s_region,calib_level,access_estsize FROM spherex.obscore WHERE 1=CONTAINS(POINT('ICRS',133.795125,-7.24513889),s_region) ORDER BY t_min",
+      "table_url": "https://irsa.ipac.caltech.edu/TAP/sync",
+      "status": "metadata_verified",
+      "sha256": "dc71d9e1bf705af429f1694f602e0d3494fe3d4a9019633427861656f446ceb8",
+      "records": 256,
+      "observation_ids": 129,
+      "exposure_epochs": 129,
+      "visits_gap_over_1_day": 14,
+      "earliest_utc": "2025-05-05T16:48:02.419Z",
+      "latest_utc": "2026-05-14T06:53:35.635Z",
+      "baseline_days": 373.5871899999984,
+      "detectors": {
+        "SPHEREx-D3": 45,
+        "SPHEREx-D6": 43,
+        "SPHEREx-D2": 48,
+        "SPHEREx-D5": 48,
+        "SPHEREx-D1": 36,
+        "SPHEREx-D4": 36
+      },
+      "releases": {
+        "spherex_qr2": 256
+      },
+      "calib_levels": [
+        2
+      ],
+      "spectral_range_um": [
+        0.7455,
+        5.009600000000001
+      ],
+      "by_release": {
+        "spherex_qr2": {
+          "records": 256,
+          "observation_ids": 129,
+          "exposure_epochs": 129,
+          "visits_gap_over_1_day": 14,
+          "earliest_utc": "2025-05-05T16:48:02.419Z",
+          "latest_utc": "2026-05-14T06:53:35.635Z",
+          "baseline_days": 373.5871899999984,
+          "detectors": {
+            "SPHEREx-D3": 45,
+            "SPHEREx-D6": 43,
+            "SPHEREx-D2": 48,
+            "SPHEREx-D5": 48,
+            "SPHEREx-D1": 36,
+            "SPHEREx-D4": 36
+          },
+          "releases": {
+            "spherex_qr2": 256
+          },
+          "calib_levels": [
+            2
+          ],
+          "spectral_range_um": [
+            0.7455,
+            5.009600000000001
+          ]
+        }
+      }
+    }
+  }
+}

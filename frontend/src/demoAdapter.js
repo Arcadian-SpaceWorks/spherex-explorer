@@ -4,7 +4,7 @@ import { chronologicalFrames, parseUtc } from './timeline.js';
 const hash = /^[a-f0-9]{64}$/;
 const asset = (value, id, name) => value === `/demo/assets/${id}/${name}`;
 export function validateDemoManifest(data) {
-  if (data?.schema_version !== 1 || typeof data.science_note !== 'string' || !Array.isArray(data.targets) || data.targets.length < 2 || data.targets.length > 3) {
+  if (data?.schema_version !== 1 || typeof data.science_note !== 'string' || !Array.isArray(data.targets) || data.targets.length < 2 || data.targets.length > 8) {
     throw new Error('Invalid demo manifest schema. Prepare and validate the demo bundle.');
   }
   const ids = new Set(), images = new Set();
@@ -27,6 +27,18 @@ export function validateDemoManifest(data) {
           !['fits_sha256', 'preview_sha256', 'metadata_sha256'].every(key => hash.test(row[key])) || !row.provenance?.verification || !row.provenance?.renderer) {
         throw new Error('Invalid demo observation or unsafe asset path.');
       }
+      if (row.acquisition) {
+        const a=row.acquisition;
+        if (a.mission !== 'SPHEREx' || !['spherex_qr2','spherex_qr3'].includes(a.data_release) ||
+            !source.pathname.includes(`/spherex/${a.data_release.slice(8)}/`) || !a.calibration || !source.pathname.split('/').includes(a.calibration) ||
+            !Number.isFinite(a.ra) || a.ra < 0 || a.ra >= 360 || !Number.isFinite(a.dec) || Math.abs(a.dec)>90 ||
+            !['moving-target-centered','fixed-sky-region'].includes(a.position_mode) || !a.position_source?.startsWith('https://') ||
+            !hash.test(a.discovery_sha256) || !(a.archive_em_min_m>0) || !(a.archive_em_max_m>=a.archive_em_min_m)) {
+          throw new Error('Invalid demo acquisition provenance.');
+        }
+        const center=source.searchParams.get('center')?.split(',').map(Number);
+        if (center?.length!==2 || Math.abs(center[0]-a.ra)>0.00000051 || Math.abs(center[1]-a.dec)>0.00000051) throw new Error('Cutout center differs from frame position.');
+      }
       images.add(row.image_id);
     }
   }
@@ -43,7 +55,7 @@ export function demoResult(target, scienceNote) {
   const observations = chronologicalFrames(target.observations.map(row => ({
     obs_id: row.obs_id, access_url: row.access_url, access_format: 'application/fits (preloaded cutout)',
     observed_at_utc: row.observed_at_utc, energy_bandpassname: `SPHEREx-D${row.detector}`,
-    obs_collection: 'Preloaded IRSA SPHEREx', s_ra: null, s_dec: null, em_min: null, em_max: null, t_exptime: null,
+    obs_collection: row.acquisition?.data_release || 'Preloaded IRSA SPHEREx', s_ra: null, s_dec: null, em_min: row.acquisition?.archive_em_min_m ?? null, em_max: row.acquisition?.archive_em_max_m ?? null, t_exptime: null,
     demo: row,
   }))).frames;
   return {mode: 'demo', status: target.status, ra: target.ra, dec: target.dec, count: observations.length, truncated: false, observations, science_note: scienceNote};
@@ -62,5 +74,13 @@ export async function loadDemoImage(observation, {signal, fetchImpl = fetch} = {
       metadata.original_url !== row.fits_path || metadata.pixel_url !== `/api/demo/images/${row.image_id}/pixel` || metadata.demo !== true) {
     throw new Error('Preloaded image identity or asset paths differ from the manifest.');
   }
+  if (row.acquisition && Object.entries(row.acquisition).some(([key,value])=>metadata.acquisition?.[key]!==value)) throw new Error('Preloaded acquisition provenance differs from manifest.');
   return metadata;
+}
+
+export function targetCoverage(target) {
+  const rows = target?.observations || [];
+  const times = [...new Set(rows.map(row => row.observed_at_utc))].sort();
+  return {frames:rows.length, epochs:times.length, first:times[0], last:times.at(-1),
+    days:times.length ? (Date.parse(times.at(-1))-Date.parse(times[0]))/86400000 : 0};
 }
