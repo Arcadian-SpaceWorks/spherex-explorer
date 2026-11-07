@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { validCoordinates } from '../coordinates';
 import WavelengthFilter from './WavelengthFilter';
-export default function CoordinatePanel({selected, onGo, onSearch, loading, filter, onFilterChange, filterError}) {
+import CentreOffsetFilter from './CentreOffsetFilter';
+export default function CoordinatePanel({selected, onGo, onSearch, loading, filter, onFilterChange, filterError, maxOffset, onOffsetChange}) {
   const [ra, setRa] = useState(String(selected.ra)), [dec, setDec] = useState(String(selected.dec));
   const [error, setError] = useState('');
   useEffect(() => {setRa(selected.ra.toFixed(6)); setDec(selected.dec.toFixed(6)); setError('');}, [selected]);
@@ -19,6 +20,7 @@ export default function CoordinatePanel({selected, onGo, onSearch, loading, filt
       {error && <p className="error" role="alert">{error}</p>}<button className="secondary" type="submit">Go To Coordinates <span>↗</span></button></form>
     <div className="search-block"><div className="eyebrow">SPHEREx ARCHIVE</div><p>Find spectral images whose footprints cover your selected point.</p>
       <form onSubmit={event => {event.preventDefault(); if (!loading) onSearch();}}>
+        <CentreOffsetFilter value={maxOffset} onChange={onOffsetChange}/>
         <WavelengthFilter filter={filter} onChange={onFilterChange} error={filterError}/>
         <button type="submit" disabled={loading}>{loading ? 'Searching IRSA…' : 'Search SPHEREx Observations'}</button>
       </form><small>Live query · NASA/IPAC IRSA</small></div>

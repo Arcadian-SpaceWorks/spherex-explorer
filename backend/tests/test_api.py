@@ -8,7 +8,7 @@ from astropy.table import Table
 from astropy.io.votable import from_table, writeto
 from fastapi.testclient import TestClient
 from backend.app.main import app
-from backend.app.irsa import (COLUMNS, IRSAUnavailable, build_query,
+from backend.app.irsa import (COLUMNS, IRSAUnavailable, angular_distance_deg, build_query,
                               parse_observations, scalar, verify_schema, tap)
 
 client = TestClient(app)
@@ -128,3 +128,69 @@ def test_band_filter_is_passed_to_archive():
         response = client.get('/api/observations?ra=10&dec=20&band=SPHEREx-D3')
     assert response.json()['band'] == 'SPHEREx-D3'
     assert "energy_bandpassname = 'SPHEREx-D3'" in tap_call.call_args.args[0]
+
+
+def centres_votable(centres):
+    """VOTable whose rows have the given (s_ra, s_dec) image centres."""
+    table = Table()
+    for name in COLUMNS:
+        if name in ('obs_id', 'energy_bandpassname', 'obs_collection', 'access_url', 'access_format'):
+            table[name] = [f'test-fixture-{i}' for i in range(len(centres))]
+        elif name == 's_ra':
+            table[name] = [ra for ra, _ in centres]
+        elif name == 's_dec':
+            table[name] = [dec for _, dec in centres]
+        else:
+            table[name] = [60000.] * len(centres)
+    output = BytesIO()
+    writeto(from_table(table), output)
+    return output.getvalue().replace(b'<RESOURCE type="results">', b'<RESOURCE type="results"><INFO name="QUERY_STATUS" value="OK"/>')
+
+
+def test_angular_distance():
+    assert angular_distance_deg(10, 20, 10, 20) == 0
+    assert angular_distance_deg(0, 0, 0, 1) == pytest.approx(1)
+    assert angular_distance_deg(359.5, 0, 0.5, 0) == pytest.approx(1)  # across RA 0°
+    assert angular_distance_deg(0, 60, 2, 60) == pytest.approx(1, rel=1e-3)  # RA shrinks with cos(dec)
+    assert angular_distance_deg(0, 89.5, 180, 89.5) == pytest.approx(1)  # across the pole
+
+
+def test_offset_box_in_query():
+    query = build_query(210, 54, max_offset_deg=0.5)
+    assert 's_dec BETWEEN 53.5000000000 AND 54.5000000000' in query
+    assert 's_ra BETWEEN 209.1' in query and 'AND 210.8' in query  # widened by 1/cos(dec)
+    assert 's_dec BETWEEN' not in build_query(210, 54)
+    for bad in (0.01, 5, float('nan'), float('inf')):
+        with pytest.raises(ValueError):
+            build_query(210, 54, max_offset_deg=bad)
+
+
+def test_offset_box_wraps_ra_and_handles_poles():
+    assert '(s_ra >= 359.' in build_query(0.2, 0, max_offset_deg=1) and 'OR s_ra <= 1.2' in build_query(0.2, 0, max_offset_deg=1)
+    assert '(s_ra >= 358.79' in build_query(359.8, 0, max_offset_deg=1) and 'OR s_ra <= 0.8' in build_query(359.8, 0, max_offset_deg=1)
+    polar = build_query(10, 89.5, max_offset_deg=1)
+    assert 's_dec BETWEEN 88.5000000000 AND 90.0000000000' in polar and 's_ra' not in polar.split('WHERE')[1].split('ORDER')[0]
+
+
+def test_offset_filter_keeps_only_centres_inside_circle():
+    # Inside (0.3°), box corner but outside the circle (~0.57°), and just outside on the edge.
+    centres = [(210.0, 54.3), (210.0 + 0.4 / 0.588, 54.4), (210.0, 54.0 - 0.51)]
+    with patch('backend.app.irsa.verify_schema'), patch('backend.app.irsa.tap', return_value=centres_votable(centres)) as tap_call:
+        response = client.get('/api/observations?ra=210&dec=54&max_offset_deg=0.5')
+    body = response.json()
+    assert response.status_code == 200
+    assert body['max_offset_deg'] == 0.5 and body['count'] == 1
+    assert body['observations'][0]['center_offset_deg'] == pytest.approx(0.3)
+    assert 's_dec BETWEEN' in tap_call.call_args.args[0]
+
+
+def test_offset_reported_without_filter():
+    with patch('backend.app.irsa.verify_schema'), patch('backend.app.irsa.tap', return_value=centres_votable([(210.0, 55.0)])):
+        body = client.get('/api/observations?ra=210&dec=54').json()
+    assert body['max_offset_deg'] is None and body['count'] == 1
+    assert body['observations'][0]['center_offset_deg'] == pytest.approx(1)
+
+
+@pytest.mark.parametrize('value', ['0', '0.01', '3.5', 'nan', 'x'])
+def test_invalid_offset_rejected(value):
+    assert client.get(f'/api/observations?ra=10&dec=20&max_offset_deg={value}').status_code == 422

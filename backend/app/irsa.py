@@ -19,6 +19,38 @@ LIMIT = 100
 BANDS = tuple(f'SPHEREx-D{n}' for n in range(1, 7))  # the only values allowed into ADQL
 # Accepted wavelength filter range in micrometres; SPHEREx spans about 0.75 to 5.0 µm.
 WAVELENGTH_MIN_UM, WAVELENGTH_MAX_UM = 0.7, 5.1
+# Accepted limit on how far an image centre may be from the target, in degrees. A SPHEREx
+# detector image is about 3.5° wide, so footprint matches have centres up to ~2.5° away.
+OFFSET_MIN_DEG, OFFSET_MAX_DEG = 0.05, 3.0
+
+
+def angular_distance_deg(ra1, dec1, ra2, dec2):
+    """Great-circle distance between two ICRS positions, in degrees (haversine, stable for small angles)."""
+    ra1, dec1, ra2, dec2 = map(math.radians, (ra1, dec1, ra2, dec2))
+    h = math.sin((dec2 - dec1) / 2) ** 2 + math.cos(dec1) * math.cos(dec2) * math.sin((ra2 - ra1) / 2) ** 2
+    return math.degrees(2 * math.asin(min(1.0, math.sqrt(h))))
+
+
+def centre_box_filter(ra, dec, radius):
+    """ADQL bounding box on s_ra/s_dec that contains every centre within `radius` degrees.
+
+    IRSA rejects a second CONTAINS(...) geometry test in the same query, so the archive
+    query uses this box and the exact circular distance is applied afterwards.
+    """
+    low, high = dec - radius, dec + radius
+    clause = f"AND s_dec BETWEEN {max(-90.0, low):.10f} AND {min(90.0, high):.10f} "
+    widest = max(abs(low), abs(high))
+    if widest >= 89.9:
+        return clause  # the circle reaches a pole: every RA is possible
+    half_width = math.degrees(math.asin(min(1.0, math.sin(math.radians(radius)) / math.cos(math.radians(widest)))))
+    if half_width >= 180:
+        return clause
+    ra_low, ra_high = ra - half_width, ra + half_width
+    if ra_low < 0:  # wraps through RA 0°
+        return clause + f"AND (s_ra >= {ra_low + 360:.10f} OR s_ra <= {ra_high:.10f}) "
+    if ra_high >= 360:
+        return clause + f"AND (s_ra >= {ra_low:.10f} OR s_ra <= {ra_high - 360:.10f}) "
+    return clause + f"AND s_ra BETWEEN {ra_low:.10f} AND {ra_high:.10f} "
 
 
 class IRSAUnavailable(Exception):
@@ -49,7 +81,7 @@ def verify_schema():
     return True
 
 
-def build_query(ra, dec, band=None, wavelength_um=None):
+def build_query(ra, dec, band=None, wavelength_um=None, max_offset_deg=None):
     # Only validated finite floats and whitelisted band names enter ADQL; never interpolate user text.
     if not math.isfinite(ra) or not math.isfinite(dec) or not 0 <= ra < 360 or not -90 <= dec <= 90:
         raise ValueError('Invalid ICRS coordinates')
@@ -64,6 +96,10 @@ def build_query(ra, dec, band=None, wavelength_um=None):
         # em_min/em_max are in metres: keep only images whose spectral range covers the wavelength.
         metres = wavelength_um * 1e-6
         band_filter += f"AND em_min <= {metres:.6e} AND em_max >= {metres:.6e} "
+    if max_offset_deg is not None:
+        if not math.isfinite(max_offset_deg) or not OFFSET_MIN_DEG <= max_offset_deg <= OFFSET_MAX_DEG:
+            raise ValueError('Invalid centre offset')
+        band_filter += centre_box_filter(ra, dec, max_offset_deg)
     return (f"SELECT TOP {LIMIT + 1} {', '.join(COLUMNS)} FROM {TABLE} "
             f"WHERE 1=CONTAINS(POINT('ICRS',{ra:.10f},{dec:.10f}),s_region) "
             f"{band_filter}"
@@ -105,9 +141,18 @@ def parse_observations(payload):
 
 
 class IRSAClient:
-    def observations(self, ra, dec, band=None, wavelength_um=None):
+    def observations(self, ra, dec, band=None, wavelength_um=None, max_offset_deg=None):
         verify_schema()
-        rows, truncated = parse_observations(tap(build_query(ra, dec, band, wavelength_um), 'votable'))
+        rows, truncated = parse_observations(tap(build_query(ra, dec, band, wavelength_um, max_offset_deg), 'votable'))
+        for row in rows:
+            row['center_offset_deg'] = (angular_distance_deg(ra, dec, row['s_ra'], row['s_dec'])
+                                        if row['s_ra'] is not None and row['s_dec'] is not None else None)
+        if max_offset_deg is not None:
+            # The archive query used a bounding box; drop its corners so the limit is a true circle.
+            rows = [row for row in rows if row['center_offset_deg'] is not None
+                    and row['center_offset_deg'] <= max_offset_deg]
         return {'status': 'live', 'source': TAP_URL, 'table': TABLE,
-                'ra': ra, 'dec': dec, 'band': band, 'wavelength_um': wavelength_um, 'match': 'point-in-footprint',
+                'ra': ra, 'dec': dec, 'band': band, 'wavelength_um': wavelength_um,
+                'max_offset_deg': max_offset_deg,
+                'match': 'point-in-footprint' if max_offset_deg is None else 'point-in-footprint, centre within max_offset_deg',
                 'limit': LIMIT, 'truncated': truncated, 'count': len(rows), 'observations': rows}
