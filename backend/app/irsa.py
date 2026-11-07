@@ -16,6 +16,7 @@ COLUMNS = ('obs_id', 's_ra', 's_dec', 't_min', 't_max', 't_exptime',
            'em_min', 'em_max', 'energy_bandpassname', 'obs_collection',
            'access_url', 'access_format')
 LIMIT = 100
+BANDS = tuple(f'SPHEREx-D{n}' for n in range(1, 7))  # the only values allowed into ADQL
 
 
 class IRSAUnavailable(Exception):
@@ -46,12 +47,18 @@ def verify_schema():
     return True
 
 
-def build_query(ra, dec):
-    # Only validated finite floats enter ADQL; never interpolate user text.
+def build_query(ra, dec, band=None):
+    # Only validated finite floats and whitelisted band names enter ADQL; never interpolate user text.
     if not math.isfinite(ra) or not math.isfinite(dec) or not 0 <= ra < 360 or not -90 <= dec <= 90:
         raise ValueError('Invalid ICRS coordinates')
+    band_filter = ''
+    if band is not None:
+        if band not in BANDS:
+            raise ValueError('Invalid SPHEREx band')
+        band_filter = f"AND energy_bandpassname = '{band}' "
     return (f"SELECT TOP {LIMIT + 1} {', '.join(COLUMNS)} FROM {TABLE} "
             f"WHERE 1=CONTAINS(POINT('ICRS',{ra:.10f},{dec:.10f}),s_region) "
+            f"{band_filter}"
             'ORDER BY t_min DESC, obs_id ASC, energy_bandpassname ASC')
 
 
@@ -90,9 +97,9 @@ def parse_observations(payload):
 
 
 class IRSAClient:
-    def observations(self, ra, dec):
+    def observations(self, ra, dec, band=None):
         verify_schema()
-        rows, truncated = parse_observations(tap(build_query(ra, dec), 'votable'))
+        rows, truncated = parse_observations(tap(build_query(ra, dec, band), 'votable'))
         return {'status': 'live', 'source': TAP_URL, 'table': TABLE,
-                'ra': ra, 'dec': dec, 'match': 'point-in-footprint',
+                'ra': ra, 'dec': dec, 'band': band, 'match': 'point-in-footprint',
                 'limit': LIMIT, 'truncated': truncated, 'count': len(rows), 'observations': rows}

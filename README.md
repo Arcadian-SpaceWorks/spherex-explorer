@@ -108,6 +108,18 @@ By default the inspector asks IRSA for a **cutout**: a small square (0.3 degrees
 - If the server is busy with another file, the UI waits a few seconds and retries (up to four times) instead of failing immediately.
 - Not verified against live IRSA in the test suite (tests mock the network). Run `.venv/bin/python scripts/smoke_cutout.py` once with internet to check it end to end. Check in particular whether wavelength readouts are available in cutout files.
 
+### Pair suggestions for time comparison (backend)
+
+`GET /api/pairs?ra=10.6847&dec=41.2687&band=SPHEREx-D1&per_visit=2` suggests pairs of observations of the same sky point that are fair to compare over time. It is backend-only for now; a comparison view in the frontend is the next step.
+
+1. Searches **one band** (`band=SPHEREx-D1` to `SPHEREx-D6`). The observation search also accepts `band` now, because without it the newest 100 rows of all bands can hide the older survey passes that a time comparison needs.
+2. Groups the results into **visits** (runs separated by more than 20 days).
+3. **Shortlists** up to `per_visit` observations per visit whose image centre is closest to the target. This is a heuristic to limit downloads.
+4. Fetches a **cutout** for each shortlisted observation (about 20 s each on first use; cached afterwards; cutouts have their own cache limit, `SKYTRACKER_CUTOUT_CACHE_ENTRIES`, default 30) and reads the **wavelength at the target pixel**.
+5. Ranks pairs at least 1 hour apart: **ACCEPT** when the target wavelengths differ by at most 0.02 micron (blink and difference image are fair), **WARN** when they differ more or one is unknown (blink only, with the reason). Each pair says whether it is within one visit or between visits.
+
+Because SPHEREx uses linear variable filters, the same band name does not mean the same wavelength at the target, so the measured wavelength decides. A suggestion is not evidence of motion or of any new object. Try it live with `.venv/bin/python scripts/smoke_pairs.py` (first run can take a few minutes; the second should be quick).
+
 ### Image endpoints and limits
 
 `POST /api/images` accepts `{ "access_url": "<actual IRSA metadata URL>", "ra": 210.80227, "dec": 54.34895 }`. RA/Dec are optional as a pair and used only for locating the selected target. Add `"cutout_deg": 0.3` (0.02 to 1.0, requires RA/Dec) to request an IRSA cutout of that width instead of the full file. The response contains the image identifier, preview/original URLs, HDU inventory, scaling, WCS metadata, image-center readout and target position.
