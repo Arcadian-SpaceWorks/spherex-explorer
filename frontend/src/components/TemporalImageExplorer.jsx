@@ -14,13 +14,20 @@ import TimeSlider from './TimeSlider';
 
 export default function TemporalImageExplorer({result, loading, error, target}) {
   const sequence = useMemo(() => chronologicalFrames(loading ? [] : result?.observations), [loading, result]);
-  const availableMonths = useMemo(() => extractAvailableMonths(sequence.frames), [sequence.frames]);
 
   const [selectedMonthKey, setSelectedMonthKey] = useState('all');
-  const [enableCadence, setEnableCadence] = useState(false);
+  const [enableCadence, setEnableCadence] = useState(true);
   const [cadenceValue, setCadenceValue] = useState(6);
   const [cadenceUnit, setCadenceUnit] = useState('months');
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const availableMonths = useMemo(() => {
+    // Strictly extract 6-month survey epochs when survey cadence is active
+    const frames = enableCadence
+      ? filterTimelineFrames(sequence.frames, { enableCadence: true, cadenceValue: 6, cadenceUnit: 'months' }).frames
+      : sequence.frames;
+    return extractAvailableMonths(frames);
+  }, [sequence.frames, enableCadence]);
 
   const [timelapseState, setTimelapseState] = useState({
     loading: false,
@@ -65,7 +72,7 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
 
   function resetFilters() {
     setSelectedMonthKey('all');
-    setEnableCadence(false);
+    setEnableCadence(true);
     setCadenceValue(6);
     setCadenceUnit('months');
     setIsPlaying(false);
@@ -422,13 +429,6 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
                 <div className="cadence-presets">
                   <button
                     type="button"
-                    className={`preset-btn ${!enableCadence ? 'active' : ''}`}
-                    onClick={() => setEnableCadence(false)}
-                  >
-                    All Photos
-                  </button>
-                  <button
-                    type="button"
                     className={`preset-btn highlight ${enableCadence && cadenceValue === 6 && cadenceUnit === 'months' ? 'active' : ''}`}
                     onClick={() => {
                       setEnableCadence(true);
@@ -436,29 +436,25 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
                       setCadenceUnit('months');
                     }}
                   >
-                    🛰️ 6 Months (Survey Cadence)
+                    🛰️ 6 Months (SPHEREx Survey Cadence)
                   </button>
                   <button
                     type="button"
-                    className={`preset-btn ${enableCadence && cadenceValue === 1 && cadenceUnit === 'months' ? 'active' : ''}`}
+                    className={`preset-btn ${enableCadence && cadenceValue === 12 && cadenceUnit === 'months' ? 'active' : ''}`}
                     onClick={() => {
                       setEnableCadence(true);
-                      setCadenceValue(1);
+                      setCadenceValue(12);
                       setCadenceUnit('months');
                     }}
                   >
-                    1 Month
+                    12 Months (Annual)
                   </button>
                   <button
                     type="button"
-                    className={`preset-btn ${enableCadence && cadenceValue === 1 && cadenceUnit === 'days' ? 'active' : ''}`}
-                    onClick={() => {
-                      setEnableCadence(true);
-                      setCadenceValue(1);
-                      setCadenceUnit('days');
-                    }}
+                    className={`preset-btn ${!enableCadence ? 'active' : ''}`}
+                    onClick={() => setEnableCadence(false)}
                   >
-                    1 Day
+                    All Survey Dithers (Raw Observations)
                   </button>
                 </div>
               </div>
