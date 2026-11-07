@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "targets": [
+    {
+      "id": "m101",
+      "name": "M101 \u2014 Pinwheel Galaxy region",
+      "ra": 210.80227,
+      "dec": 54.34895,
+      "coordinate_source": "https://simbad.cds.unistra.fr/simbad/sim-basic?Ident=M101",
+      "inputs": [
+        {
+          "fits": "../frontend/public/demo/assets/60d20ed41684efe311e1a0152c886fdd617c6eae743859d7df2924ee7ca29a6b/original.fits",
+          "metadata": "source-records/ed0095a308611f6650c7b5a5d34b78ed371317b4801fe10f6b00aae386724aac.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/afd22738b2b236408093b533613a714c6653716a021cb5e3941e57d1a21eebed/original.fits",
+          "metadata": "source-records/520e02c01d89eb6593c86ad274a5b0192dd2c3ccdc75978ea45cc2d5164e52da.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/0b2c99828183fcb4f2d742a3c76e5770126f18b0a3bae3f4459a879505ec03e4/original.fits",
+          "metadata": "source-records/c61cdd18a17878266db3942860f5d3146f64b0a3152342b9bde29a0077369d88.json"
+        }
+      ]
+    },
+    {
+      "id": "m31",
+      "name": "M31 \u2014 Andromeda Galaxy (assets not prepared)",
+      "ra": 10.684708333333333,
+      "dec": 41.26875,
+      "coordinate_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+      "inputs": []
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { chronologicalFrames, formatUtcLabel, isSyntheticObservation, wavelengthLabel } from '../timeline';
+import { chronologicalFrames, parseUtc, formatUtcLabel, isSyntheticObservation, wavelengthLabel } from '../timeline';
 import { loadObservationImage } from '../imageAdapter';
 import TimeSlider from './TimeSlider';
 
@@ -34,12 +34,13 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
   const timeLabel = frame ? formatUtcLabel(frame.observed_at_utc) : '';
 
   return <section className="panel time-explorer" aria-label="Astronomical time explorer" aria-busy={loading || imageLoading}>
-    <div className="section-heading"><div><div className="eyebrow">OBSERVATION TIME</div><h2>Time slider</h2></div><span className={`tag ${frame && metadata ? 'live' : ''}`}>{loading ? 'Waiting for search' : imageError || previewFailed ? 'Image unavailable' : frame ? 'Archive sequence' : 'No sequence'}</span></div>
+    <div className="section-heading"><div><div className="eyebrow">OBSERVATION TIME</div><h2>Time slider</h2></div><span className={`tag ${frame && metadata ? 'live' : ''}`}>{loading ? 'Waiting for search' : imageError || previewFailed ? 'Image unavailable' : frame ? result?.mode === 'demo' ? 'Preloaded sequence' : 'Archive sequence' : 'No sequence'}</span></div>
     {loading ? <p className="empty" role="status">Waiting for the observation search to finish. The time slider resets for each target.</p>
       : error ? <p className="error" role="alert">No time sequence is available. {error}</p>
       : !result ? <p className="empty">Search SPHEREx observations for the selected point to build a time sequence.</p>
       : !sequence.frames.length ? <p className="empty">{result.count ? 'None of the returned observations include a usable image link.' : 'No observations were returned for this point, so there is no time sequence.'}</p>
       : <>
+        {result?.mode === 'demo' && <p className="demo-notice" role="note">{result.science_note}</p>}
         <div className="time-readout" aria-live="polite">
           <p className="time-current" data-testid="time-slider-time">{timeLabel}</p>
           <p data-testid="time-slider-id">Observation {frame.obs_id || '—'}</p>
@@ -54,7 +55,7 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
           <div><span>Collection</span><strong>{frame.obs_collection || '—'}</strong></div>
           <div><span>Center wavelength</span><strong>{metadata?.center?.spectral ? `${Number(metadata.center.spectral.wavelength_um).toFixed(3)} µm` : imageLoading ? 'Loading…' : '—'}</strong></div>
         </div>
-        {metadata?.observed_at_utc && metadata.observed_at_utc !== frame.observed_at_utc && <p className="result-note">FITS header time differs from the archive timestamp: {formatUtcLabel(metadata.observed_at_utc)}.</p>}
+        {metadata?.observed_at_utc && parseUtc(metadata.observed_at_utc) !== parseUtc(frame.observed_at_utc) && <p className="result-note">FITS header time differs from the archive timestamp: {formatUtcLabel(metadata.observed_at_utc)}.</p>}
         <div className="time-stage">
           {imageLoading && <p className="image-loading" role="status">Loading the observation image for {frame.obs_id || 'this step'}.</p>}
           {imageError && <p className="image-loading error" role="alert">{imageError}</p>}

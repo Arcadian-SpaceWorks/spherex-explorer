@@ -34,7 +34,8 @@ export default function SkyMap({ selected, navigation, onSelect, onFov }) {
     }).catch(() => {if (!cancelled) setStatus('error');});
     return () => {
       cancelled = true;
-      for (const event of ['click', 'zoomChanged', 'resizeChanged']) api.current?.off(event);
+      // Aladin Lite 3.8.1 replaces callbacks through on(); it has no off() API.
+      for (const event of ['click', 'zoomChanged', 'resizeChanged']) api.current?.on(event, null);
       if (host.current) {delete host.current.skyAtlas; host.current.replaceChildren();}
       api.current = null;
     };

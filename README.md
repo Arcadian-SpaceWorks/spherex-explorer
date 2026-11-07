@@ -170,3 +170,9 @@ The other image-browser tests use clearly labeled synthetic MEF/PNG fixtures and
 Aladin Lite is developed by CDS, Strasbourg Observatory. Its built-in bottom-right logo/link remains intact and unobscured. DSS2 HiPS tiles are loaded from the [STScI public mirror](https://stpubdata.s3.us-east-1.amazonaws.com/mast/skybackgrounds/DSSColor/properties), listed in the [official CDS survey registry](https://alasky.cds.unistra.fr/MocServer/query?ID=CDS%2FP%2FDSS2%2Fcolor&fmt=html&get=record). DSS2 survey attribution is available through Aladin's survey information. SPHEREx metadata is served by NASA/IPAC IRSA. Survey tiles and IRSA need network connectivity; Aladin JS/CSS/WebAssembly are bundled locally after installation; map failure is explicitly reported and never replaced with a simulated star field.
 
 SPHEREx image conventions: [official product guide](https://github.com/Caltech-IPAC/spherex-archive-documentation/blob/main/documentation/spherex_data_products.md), [IRSA spatial/spectral WCS tutorial](https://github.com/Caltech-IPAC/irsa-tutorials/blob/main/tutorials/spherex/spherex_intro.md), and [pixel flag definitions](https://irsa.ipac.caltech.edu/onlinehelp/spherex/spherex/sp.html).
+
+### Preloaded presentation mode
+
+Open `/?mode=demo` or choose **Demo Mode** in the Data mode selector. Three preserved real SPHEREx cutouts for the M101 region are included; M31 is explicitly marked not prepared. Demo playback uses local PNGs and manifests, with local FastAPI FITS pixel readouts. Live Mode retains the existing IRSA search/cutout pipeline.
+
+Validate assets before presenting: `.venv/bin/python scripts/prepare_demo.py --validate frontend/public/demo`. For offline preparation, provenance, deployment and scaling instructions, see [the hybrid demo architecture](docs/demo-architecture.md). PNGs are independently stretched previews; the application makes no validated motion or variability claim.

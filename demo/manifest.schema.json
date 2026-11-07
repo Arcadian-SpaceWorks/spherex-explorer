@@ -1,0 +1,284 @@
+{
+  "$defs": {
+    "Observation": {
+      "additionalProperties": false,
+      "properties": {
+        "image_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Image Id",
+          "type": "string"
+        },
+        "obs_id": {
+          "minLength": 1,
+          "title": "Obs Id",
+          "type": "string"
+        },
+        "access_url": {
+          "title": "Access Url",
+          "type": "string"
+        },
+        "source_url": {
+          "title": "Source Url",
+          "type": "string"
+        },
+        "observed_at_utc": {
+          "title": "Observed At Utc",
+          "type": "string"
+        },
+        "detector": {
+          "maximum": 6,
+          "minimum": 1,
+          "title": "Detector",
+          "type": "integer"
+        },
+        "spectral": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Spectral"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "preview_path": {
+          "title": "Preview Path",
+          "type": "string"
+        },
+        "metadata_path": {
+          "title": "Metadata Path",
+          "type": "string"
+        },
+        "fits_path": {
+          "title": "Fits Path",
+          "type": "string"
+        },
+        "fits_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Fits Sha256",
+          "type": "string"
+        },
+        "preview_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Preview Sha256",
+          "type": "string"
+        },
+        "metadata_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Metadata Sha256",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "required": [
+        "image_id",
+        "obs_id",
+        "access_url",
+        "source_url",
+        "observed_at_utc",
+        "detector",
+        "spectral",
+        "preview_path",
+        "metadata_path",
+        "fits_path",
+        "fits_sha256",
+        "preview_sha256",
+        "metadata_sha256",
+        "provenance"
+      ],
+      "title": "Observation",
+      "type": "object"
+    },
+    "Provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "verification": {
+          "minLength": 1,
+          "title": "Verification",
+          "type": "string"
+        },
+        "renderer": {
+          "const": "backend.app.fits_image.render_fits",
+          "title": "Renderer",
+          "type": "string"
+        },
+        "renderer_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Renderer Sha256",
+          "type": "string"
+        },
+        "versions": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Versions",
+          "type": "object"
+        },
+        "registration": {
+          "const": "native detector; no spatial registration",
+          "title": "Registration",
+          "type": "string"
+        },
+        "normalization": {
+          "minLength": 1,
+          "title": "Normalization",
+          "type": "string"
+        },
+        "science_values": {
+          "const": "original FITS copied byte-for-byte",
+          "title": "Science Values",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "verification",
+        "renderer",
+        "renderer_sha256",
+        "versions",
+        "registration",
+        "normalization",
+        "science_values",
+        "source_sha256"
+      ],
+      "title": "Provenance",
+      "type": "object"
+    },
+    "Spectral": {
+      "additionalProperties": false,
+      "properties": {
+        "wavelength_um": {
+          "exclusiveMinimum": 0,
+          "title": "Wavelength Um",
+          "type": "number"
+        },
+        "bandwidth_um": {
+          "exclusiveMinimum": 0,
+          "title": "Bandwidth Um",
+          "type": "number"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "approximate": {
+          "const": true,
+          "title": "Approximate",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "wavelength_um",
+        "bandwidth_um",
+        "source",
+        "approximate"
+      ],
+      "title": "Spectral",
+      "type": "object"
+    },
+    "Target": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-z0-9-]+$",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "ra": {
+          "exclusiveMaximum": 360,
+          "minimum": 0,
+          "title": "Ra",
+          "type": "number"
+        },
+        "dec": {
+          "maximum": 90,
+          "minimum": -90,
+          "title": "Dec",
+          "type": "number"
+        },
+        "coordinate_source": {
+          "title": "Coordinate Source",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "ready",
+            "missing"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "missing_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Missing Reason"
+        },
+        "observations": {
+          "items": {
+            "$ref": "#/$defs/Observation"
+          },
+          "title": "Observations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "ra",
+        "dec",
+        "coordinate_source",
+        "status",
+        "observations"
+      ],
+      "title": "Target",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "science_note": {
+      "minLength": 1,
+      "title": "Science Note",
+      "type": "string"
+    },
+    "targets": {
+      "items": {
+        "$ref": "#/$defs/Target"
+      },
+      "maxItems": 3,
+      "minItems": 2,
+      "title": "Targets",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "science_note",
+    "targets"
+  ],
+  "title": "Manifest",
+  "type": "object"
+}

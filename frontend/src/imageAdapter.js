@@ -1,3 +1,5 @@
+import { loadDemoImage } from './demoAdapter.js';
+
 /**
  * FITS viewer integration contract
  *
@@ -27,21 +29,22 @@
 
 export const CUTOUT_DEG = 0.3;
 
-export async function loadObservationImage(observation, target, {signal, fetchImpl = fetch} = {}) {
+export async function loadObservationImage(observation, target, {signal, fetchImpl = fetch, full = false, client = 'time-slider'} = {}) {
+  if (observation.demo) return loadDemoImage(observation, {signal, fetchImpl});
   let response;
   try {
     response = await fetchImpl('/api/images', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-SkyTracker-Client': 'time-slider',
+        'X-SkyTracker-Client': client,
       },
       signal,
       body: JSON.stringify({
         access_url: observation.access_url,
         ra: target.ra,
         dec: target.dec,
-        cutout_deg: CUTOUT_DEG,
+        ...(full ? {} : {cutout_deg: CUTOUT_DEG}),
       }),
     });
   } catch (err) {

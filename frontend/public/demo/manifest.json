@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "science_note": "Preloaded real SPHEREx cutouts, not a live archive query. PNGs are independently stretched display previews, not science data. Images differ in wavelength, coverage and detector orientation and are not spatially registered or photometrically matched. No source motion or brightness variation has been validated. Use the preserved FITS for scientific analysis.",
+  "targets": [
+    {
+      "id": "m101",
+      "name": "M101 — Pinwheel Galaxy region",
+      "ra": 210.80227,
+      "dec": 54.34895,
+      "coordinate_source": "https://simbad.cds.unistra.fr/simbad/sim-basic?Ident=M101",
+      "status": "ready",
+      "missing_reason": null,
+      "observations": [
+        {
+          "image_id": "60d20ed41684efe311e1a0152c886fdd617c6eae743859d7df2924ee7ca29a6b",
+          "obs_id": "2026W21_2A_0213_2",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W21_2A_0213_2/D5",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W21_2A/l2b-v25-2026-147/5/level2_2026W21_2A_0213_2D5_spx_l2b-v25-2026-147.fits?center=210.802270,54.348950&size=0.3000deg",
+          "observed_at_utc": "2026-05-22T19:40:19.088Z",
+          "detector": 5,
+          "spectral": {
+            "wavelength_um": 4.366267216040602,
+            "bandwidth_um": 0.038064798886829725,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/60d20ed41684efe311e1a0152c886fdd617c6eae743859d7df2924ee7ca29a6b/preview.png",
+          "metadata_path": "/demo/assets/60d20ed41684efe311e1a0152c886fdd617c6eae743859d7df2924ee7ca29a6b/metadata.json",
+          "fits_path": "/demo/assets/60d20ed41684efe311e1a0152c886fdd617c6eae743859d7df2924ee7ca29a6b/original.fits",
+          "fits_sha256": "ed0095a308611f6650c7b5a5d34b78ed371317b4801fe10f6b00aae386724aac",
+          "preview_sha256": "7484e7a9300e900edc1b616043ff9bff67d45ed31b170f57346de32f2932a58e",
+          "metadata_sha256": "6d9bfa847b9a6e40c659e1e945845bee238dc8feabb05f447976c0a3f5b6de9f",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "d42a49115c381d69f595644503d764d2542b2e58531d555068312b14513bdfdf",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "ed0095a308611f6650c7b5a5d34b78ed371317b4801fe10f6b00aae386724aac"
+          }
+        },
+        {
+          "image_id": "afd22738b2b236408093b533613a714c6653716a021cb5e3941e57d1a21eebed",
+          "obs_id": "2026W21_2A_0213_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W21_2A_0213_3/D2",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W21_2A/l2b-v25-2026-147/2/level2_2026W21_2A_0213_3D2_spx_l2b-v25-2026-147.fits?center=210.802270,54.348950&size=0.3000deg",
+          "observed_at_utc": "2026-05-22T19:42:28.021Z",
+          "detector": 2,
+          "spectral": {
+            "wavelength_um": 1.630544339130127,
+            "bandwidth_um": 0.03927783649627825,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/afd22738b2b236408093b533613a714c6653716a021cb5e3941e57d1a21eebed/preview.png",
+          "metadata_path": "/demo/assets/afd22738b2b236408093b533613a714c6653716a021cb5e3941e57d1a21eebed/metadata.json",
+          "fits_path": "/demo/assets/afd22738b2b236408093b533613a714c6653716a021cb5e3941e57d1a21eebed/original.fits",
+          "fits_sha256": "520e02c01d89eb6593c86ad274a5b0192dd2c3ccdc75978ea45cc2d5164e52da",
+          "preview_sha256": "735f9996aead90811460c3038a52636efffa23deabc640f2ccd856081bedd91a",
+          "metadata_sha256": "2a03014104b9680937db5ef588f14b020499f955d465550cb71d53ed8f6b3264",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "d42a49115c381d69f595644503d764d2542b2e58531d555068312b14513bdfdf",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "520e02c01d89eb6593c86ad274a5b0192dd2c3ccdc75978ea45cc2d5164e52da"
+          }
+        },
+        {
+          "image_id": "0b2c99828183fcb4f2d742a3c76e5770126f18b0a3bae3f4459a879505ec03e4",
+          "obs_id": "2026W21_2A_0213_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W21_2A_0213_3/D5",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W21_2A/l2b-v25-2026-147/5/level2_2026W21_2A_0213_3D5_spx_l2b-v25-2026-147.fits?center=210.802270,54.348950&size=0.3000deg",
+          "observed_at_utc": "2026-05-22T19:42:28.021Z",
+          "detector": 5,
+          "spectral": {
+            "wavelength_um": 4.4002173725388145,
+            "bandwidth_um": 0.03850473757966263,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/0b2c99828183fcb4f2d742a3c76e5770126f18b0a3bae3f4459a879505ec03e4/preview.png",
+          "metadata_path": "/demo/assets/0b2c99828183fcb4f2d742a3c76e5770126f18b0a3bae3f4459a879505ec03e4/metadata.json",
+          "fits_path": "/demo/assets/0b2c99828183fcb4f2d742a3c76e5770126f18b0a3bae3f4459a879505ec03e4/original.fits",
+          "fits_sha256": "c61cdd18a17878266db3942860f5d3146f64b0a3152342b9bde29a0077369d88",
+          "preview_sha256": "25d0440b524652d4efe3a1e83669a5b1bf8ef33a1ac7c73ebb9cb129522a6abc",
+          "metadata_sha256": "aafd48289f3574e254e8da0df54408e2213d0a840903398170b8f573cee5a75c",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "d42a49115c381d69f595644503d764d2542b2e58531d555068312b14513bdfdf",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "c61cdd18a17878266db3942860f5d3146f64b0a3152342b9bde29a0077369d88"
+          }
+        }
+      ]
+    },
+    {
+      "id": "m31",
+      "name": "M31 — Andromeda Galaxy (assets not prepared)",
+      "ra": 10.684708333333333,
+      "dec": 41.26875,
+      "coordinate_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+      "status": "missing",
+      "missing_reason": "No verified local cutouts have been supplied for this target.",
+      "observations": []
+    }
+  ]
+}
