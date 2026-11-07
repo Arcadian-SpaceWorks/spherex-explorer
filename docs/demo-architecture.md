@@ -11,12 +11,11 @@ Use localhost or HTTPS (metadata SHA-256 verification uses Web Crypto).
 ## Prepared inventory and scientific limits
 
 `frontend/public/demo/manifest.json` lists two astronomical targets with coordinate
-references: M101 (ready), M31 (missing). M101's selected point is the existing
+references: M101 (ready), M31 (ready). M101's selected point is the existing
 application region at ICRS 210.802270°, +54.348950°. The coordinate reference identifies
 the named galaxy; the selected region is not asserted to be an exact catalog centroid.
 References: [M101](https://simbad.cds.unistra.fr/simbad/sim-basic?Ident=M101),
 [M31](https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31).
-No observation IDs or dates are supplied for the unprepared M31 target.
 
 Three existing real IRSA cutouts were successfully prepared, about 16 MiB of FITS
 plus small PNGs/JSON. They represent **two epochs and three detector frames**, not
@@ -27,6 +26,23 @@ three distinct observing times:
 | 2026W21_2A_0213_2 | 2026-05-22T19:40:19.088Z | 5 | 4.3663 |
 | 2026W21_2A_0213_3 | 2026-05-22T19:42:28.021Z | 2 | 1.6305 |
 | 2026W21_2A_0213_3 | 2026-05-22T19:42:28.021Z | 5 | 4.4002 |
+
+M31 (ICRS 10.684708°, +41.268750°) has six real IRSA cutouts of **0.437°**, the size
+`/api/compare` needs to fill its north-up 0.3° grid, about 36 MiB of FITS. They are the
+three survey passes validated by `scripts/smoke_compare.py`, each in D1 and in D4 of the
+**same exposure** (imaged at the same moment through a dichroic):
+
+| FITS observation ID | FITS UTC | D1 wavelength at M31 (approx. µm) | D4 wavelength at M31 (approx. µm) |
+| --- | --- | --- | --- |
+| 2025W28_1B_0480_4 | 2025-07-09T14:56:47.965Z | 0.7502 | 2.4419 |
+| 2026W01_1A_0471_1 | 2025-12-31T06:00:22.121Z | 0.8946 | 2.9799 |
+| 2026W28_2A_0117_1 | 2026-07-10T00:02:31.613Z | 0.8935 | 2.9751 |
+
+Brightness differences between passes follow the wavelength at the target (linear variable
+filters), not time; no variability is claimed. `scripts/acquire_m31_demo.py` re-downloads the
+set through the app's `ImageService` (sequential, checksummed, resumable) into the ignored
+`demo/acquired/m31/` staging folder and writes the source records; `demo/targets.json` then
+points at the published originals so the bundle rebuilds offline byte-for-byte.
 
 The original DataLink and IBE cutout URLs are retained per frame. Preparation
 verified FITS header IDs, times (explicit TIMESYS=UTC), detectors, source-record SHA-256, URL identity,
@@ -59,7 +75,7 @@ renderer produces identical bytes; dependency versions and renderer source hash
 are recorded in provenance. Validate a new bundle before deliberately deploying
 it under `/demo/`. Keep a copy of the preserved FITS when replacing a bundle.
 
-To add M31 or a third target, supply local, already bounded cutouts and their
+To add another target, supply local, already bounded cutouts and their
 source records in the inventory; do not invent observation metadata. The script
 has no network code and a 128 MiB per-input cap. It invokes the existing isolated
 FITS renderer (8 million science pixels, CPU/time/memory bounds), generates PNGs
@@ -120,4 +136,4 @@ Starlette/httpx deprecation warning), **3 frontend unit test files passed**,
 Aladin bundle-size warning). Offline rebuilding of the real bundle reproduced all
 10 files byte-for-byte, including after explicit UTC verification. The three PNGs
 total 172,182 bytes; preserved FITS total 16,571,520 bytes. No new live datasets were
-acquired. M31 requires verified source cutouts before it can be presented.
+acquired at that time. (M31 was prepared later; see the M31 table above.)

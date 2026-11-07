@@ -1,17 +1,71 @@
+import { useEffect, useState } from 'react';
 import { filterLabel } from '../wavelengths';
-import { canPick, sameObservation } from '../compareAdapter';
+import { WAVELENGTH_MATCH_UM, canPick, detectorOf, sameObservation } from '../compareAdapter';
+import { loadObservationImage } from '../imageAdapter';
+import { targetWavelength, useTargetWavelengthVersion, wavelengthKey } from '../targetWavelengths';
 function display(value, digits) {return value == null ? '—' : digits != null ? Number(value).toFixed(digits) : value;}
 function safeUrl(value) {try {const url = new URL(value); return ['https:', 'http:'].includes(url.protocol) ? url.href : null;} catch {return null;}}
-export default function ObservationsTable({mode = 'live', result, loading, error, selectedObservation, onViewImage, compare = null}) {
+function TargetWavelength({row, target, live, pickA, state, onMeasure}) {
+  const info = targetWavelength(row, target);
+  if (info?.status === 'measured') {
+    const a = pickA && !sameObservation(pickA, row) ? targetWavelength(pickA, target) : null;
+    const matchesA = a?.status === 'measured' && detectorOf(pickA) === detectorOf(row)
+      && Math.abs(a.wavelength_um - info.wavelength_um) <= WAVELENGTH_MATCH_UM;
+    return <>
+      <strong className="target-wavelength" data-testid="target-wavelength">{info.wavelength_um.toFixed(4)}</strong>
+      {pickA && sameObservation(pickA, row) && <span className="wavelength-badge is-a">A</span>}
+      {matchesA && <span className="wavelength-badge" title={`Same detector, within ${WAVELENGTH_MATCH_UM} µm of A at the target: a time comparison can make a difference image.`}>≈ A</span>}
+      {info.bandwidth_um != null && <small>bandwidth {info.bandwidth_um.toFixed(4)}</small>}
+    </>;
+  }
+  if (info?.status === 'outside') return <small>Target outside this image</small>;
+  if (info?.status === 'unavailable') return <small>No spectral WCS</small>;
+  if (!live) return <small>{state === 'loading' ? 'Reading…' : '—'}</small>;
+  if (state === 'loading') return <small role="status">Measuring… (downloads a cutout)</small>;
+  return <>
+    <button type="button" className="secondary measure-wavelength" onClick={() => onMeasure(row)}
+      aria-label={`Measure wavelength at target for ${row.obs_id || 'observation'} ${row.energy_bandpassname || ''}`}>Measure</button>
+    {state && <small className="error">{state}</small>}
+  </>;
+}
+
+export default function ObservationsTable({mode = 'live', result, loading, error, selectedObservation, onViewImage, compare = null, target = null}) {
+  useTargetWavelengthVersion();
+  const [measuring, setMeasuring] = useState({});
+  const live = result?.mode !== 'demo';
+  async function measure(row) {
+    const key = wavelengthKey(row, target);
+    setMeasuring(current => ({...current, [key]: 'loading'}));
+    try {
+      await loadObservationImage(row, target, {client: 'wavelength'});
+      setMeasuring(current => ({...current, [key]: undefined}));
+    } catch (err) {
+      setMeasuring(current => ({...current, [key]: err.message || 'Measurement failed. Retry.'}));
+    }
+  }
+  useEffect(() => {
+    // Demo images are local: read every row's wavelength at the target straight away.
+    if (result?.mode !== 'demo' || !target) return;
+    let cancelled = false;
+    (async () => {
+      for (const row of result.observations) {
+        if (cancelled) return;
+        if (!targetWavelength(row, target)) await loadObservationImage(row, target).catch(() => {});
+      }
+    })();
+    return () => {cancelled = true;};
+  }, [result, target]);
   return <section className="panel observations" aria-busy={loading}><div className="section-heading"><div><div className="eyebrow">ARCHIVE RESULTS</div><h2>SPHEREx observations</h2></div><span className={`tag ${result ? 'live' : ''}`}>{loading ? mode === 'demo' ? 'Loading preloaded data' : 'Querying IRSA' : error ? 'Unavailable' : result ? result.mode === 'demo' ? 'Preloaded data' : 'Live data' : 'Awaiting search'}</span></div>
     <div aria-live="polite">{error ? <p className="error" role="alert">{error} No observations are shown. Retry the search.</p> : loading ? <p className="empty">{mode === 'demo' ? 'Loading the local SPHEREx inventory…' : 'Searching SPHEREx image footprints…'}</p> : !result ? <p className="empty">Select a point on the sky, then search the archive. No observations loaded.</p> : <>
       <p className="result-note">{result.count} records at RA {result.ra.toFixed(6)}°, Dec {result.dec.toFixed(6)}° · {result.mode === 'demo' ? 'local verified cutout inventory' : 'spherex.obscore'}{result.truncated ? ' · Limited to the first 100 records; more may be available.' : ''}</p>
       <p className="result-note" data-testid="active-filter">Showing {filterLabel(result)}</p>
       {result.wavelength_um != null && <p className="result-note">This is whole-product spectral coverage; the wavelength at your exact target may differ. Inspect the target/pixel WCS readout for an approximate value. Unknown spectral bounds are retained{result.unknown_wavelength_count > 0 ? ` (${result.unknown_wavelength_count} unverified observations)` : ''}.</p>}
-      {!result.count ? <p className="empty">{result.mode === 'demo' ? result.unfiltered_count ? 'No preloaded observations match this filter.' : 'Real demo assets have not been prepared for this target.' : 'IRSA returned no matching observations for this point.'}</p> : <div className="table-scroll"><table><thead><tr><th>Observation ID / collection</th><th>Observed UTC</th><th>Bandpass</th><th>Center RA / Dec (°)</th><th>Exposure (s)</th><th>Wavelength (µm)</th><th>Access</th><th>Image</th></tr></thead><tbody>{result.observations.map((row, i) => <tr key={`${row.obs_id}-${row.energy_bandpassname}-${i}`} className={selectedObservation === row ? 'observation-selected' : ''}
+      {!result.count ? <p className="empty">{result.mode === 'demo' ? result.unfiltered_count ? 'No preloaded observations match this filter.' : 'Real demo assets have not been prepared for this target.' : 'IRSA returned no matching observations for this point.'}</p> : <div className="table-scroll"><table><thead><tr><th>Observation ID / collection</th><th>Observed UTC</th><th>Bandpass</th><th>Center RA / Dec (°)</th><th>Exposure (s)</th><th>Archive range (µm)</th><th title="Wavelength at the selected target, read from the image (WCS-WAVE). Images at the same detector and wavelength can be compared directly.">λ at target (µm)</th><th>Access</th><th>Image</th></tr></thead><tbody>{result.observations.map((row, i) => <tr key={`${row.obs_id}-${row.energy_bandpassname}-${i}`} className={selectedObservation === row ? 'observation-selected' : ''}
         aria-selected={selectedObservation === row} tabIndex={row.access_url ? 0 : undefined}
         onClick={event => {if (row.access_url && !event.target.closest('a,button')) onViewImage(row);}}
-        onKeyDown={event => {if (event.target === event.currentTarget && row.access_url && ['Enter',' '].includes(event.key)) {event.preventDefault(); onViewImage(row);}}}><td>{display(row.obs_id)}<small>{display(row.obs_collection)}</small></td><td>{display(row.observed_at_utc)}</td><td>{display(row.energy_bandpassname)}</td><td>{display(row.s_ra, 4)} / {display(row.s_dec, 4)}</td><td>{display(row.t_exptime, 2)}</td><td>{display(row.em_min == null ? null : row.em_min * 1e6, 3)} – {display(row.em_max == null ? null : row.em_max * 1e6, 3)}{row.wavelength_coverage === 'unknown' && <small>Unknown coverage; retained</small>}</td><td>{safeUrl(row.access_url) ? <a href={safeUrl(row.access_url)} target="_blank" rel="noreferrer">{row.demo ? 'Original source ↗' : 'DataLink ↗'}</a> : '—'}<small>{display(row.access_format)}</small></td><td><button className="view-image" type="button" disabled={!row.access_url} aria-pressed={selectedObservation === row} onClick={() => onViewImage(row)}>View Image</button>
+        onKeyDown={event => {if (event.target === event.currentTarget && row.access_url && ['Enter',' '].includes(event.key)) {event.preventDefault(); onViewImage(row);}}}><td>{display(row.obs_id)}<small>{display(row.obs_collection)}</small></td><td>{display(row.observed_at_utc)}</td><td>{display(row.energy_bandpassname)}</td><td>{display(row.s_ra, 4)} / {display(row.s_dec, 4)}</td><td>{display(row.t_exptime, 2)}</td><td>{display(row.em_min == null ? null : row.em_min * 1e6, 3)} – {display(row.em_max == null ? null : row.em_max * 1e6, 3)}{row.wavelength_coverage === 'unknown' && <small>Unknown coverage; retained</small>}</td><td className="target-wavelength-cell">
+          <TargetWavelength row={row} target={target} live={live} pickA={compare?.a}
+            state={measuring[wavelengthKey(row, target)]} onMeasure={measure}/></td><td>{safeUrl(row.access_url) ? <a href={safeUrl(row.access_url)} target="_blank" rel="noreferrer">{row.demo ? 'Original source ↗' : 'DataLink ↗'}</a> : '—'}<small>{display(row.access_format)}</small></td><td><button className="view-image" type="button" disabled={!row.access_url} aria-pressed={selectedObservation === row} onClick={() => onViewImage(row)}>View Image</button>
           {compare && canPick(row) && <span className="compare-pick" role="group" aria-label={`Compare ${row.obs_id || 'observation'}`}>
             {['a', 'b'].map(role => <button key={role} type="button" className={`pick-${role}`} aria-pressed={sameObservation(compare[role], row)}
               aria-label={`Set ${row.obs_id || 'observation'} ${row.energy_bandpassname || ''} as ${role.toUpperCase()} for comparison`}

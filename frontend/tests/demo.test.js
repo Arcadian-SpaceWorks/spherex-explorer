@@ -15,7 +15,10 @@ test('validates real bundle and orders observations by UTC, then detector', () =
   assert.equal(result.observations.length, 3);
   assert.deepEqual(result.observations.map(row => row.energy_bandpassname), ['SPHEREx-D5', 'SPHEREx-D2', 'SPHEREx-D5']);
   assert.deepEqual(result.observations.map(o => o.observed_at_utc), [...result.observations.map(o => o.observed_at_utc)].sort());
-  assert.equal(demoResult(manifest.targets[1], manifest.science_note).count, 0);
+  const m31 = demoResult(manifest.targets[1], manifest.science_note);
+  assert.equal(m31.count, 6);
+  assert.deepEqual(m31.observations.map(row => row.energy_bandpassname),
+    ['SPHEREx-D1', 'SPHEREx-D4', 'SPHEREx-D1', 'SPHEREx-D4', 'SPHEREx-D1', 'SPHEREx-D4']);
 });
 
 test('rejects malformed versions, times, targets, sources and external asset URLs', () => {
@@ -26,7 +29,7 @@ test('rejects malformed versions, times, targets, sources and external asset URL
     data => {data.targets[0].observations[0].observed_at_utc = '2026-02-30T00:00:00Z';},
     data => {data.targets[0].observations[0].source_url = 'https://evil.test/a';},
     data => {data.targets[0].observations[0].preview_path = 'https://evil.test/a.png';},
-    data => {data.targets[1].status = 'ready';},
+    data => {data.targets[1].status = 'missing';},  // Ready target with observations claimed missing.
   ];
   for (const change of changes) {
     const data = structuredClone(manifest); change(data);

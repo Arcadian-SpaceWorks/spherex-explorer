@@ -5,9 +5,12 @@
  * here only pre-select a mode and give early hints; they never decide comparability.
  */
 import { parseUtc, usableAccessUrl } from './timeline.js';
+import { recordTargetWavelength } from './targetWavelengths.js';
 
 export const COMPARE_SIZE_DEG = 0.3;
 export const SIMULTANEOUS_HOURS = 1;
+// Same tolerance as the server's time-mode rule (CompareSettings.max_wavelength_delta_um).
+export const WAVELENGTH_MATCH_UM = 0.02;
 export const MODES = {
   time: {label: 'Time', description: 'Same detector at different dates. A difference image is made only when the wavelengths at the target agree.'},
   wavelength: {label: 'Wavelength', description: 'Different detectors of the same exposure. Shown side by side or blinked, never subtracted.'},
@@ -87,6 +90,11 @@ export async function requestComparison({a, b, target, mode, signal, fetchImpl =
   if (!response.ok) throw new Error(errorMessage(data, response.status));
   if (!['ACCEPT', 'WARN', 'REJECT'].includes(data.decision) || !data.previews?.a || !data.previews?.b || data.frames?.length !== 2) {
     throw new Error('The comparison service returned an incomplete result.');
+  }
+  for (const [row, frame] of [[a, data.frames[0]], [b, data.frames[1]]]) {
+    recordTargetWavelength(row, target, Number.isFinite(frame?.wavelength_um)
+      ? {status: 'measured', wavelength_um: frame.wavelength_um, bandwidth_um: frame.bandwidth_um ?? null}
+      : {status: 'unavailable'});
   }
   return data;
 }

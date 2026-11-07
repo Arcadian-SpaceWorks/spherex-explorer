@@ -170,3 +170,41 @@ test('demo mode has no compare buttons; the panel fits a phone screen', async ({
   await expect(page.getByRole('button', {name: /for comparison$/})).toHaveCount(0);
   await expect(panel(page)).toHaveCount(0);
 });
+
+test('A/B buttons stay visible without scrolling the wide table', async ({page}) => {
+  await page.setViewportSize({width: 1280, height: 900});
+  await setup(page);
+  const scroller = await page.locator('.observations .table-scroll').boundingBox();
+  for (const role of ['A', 'B']) {
+    const box = await pickButton(page, rows[0], role).boundingBox();
+    expect(box.x).toBeGreaterThanOrEqual(scroller.x);
+    expect(box.x + box.width).toBeLessThanOrEqual(scroller.x + scroller.width);
+  }
+  // Still clickable without any horizontal scrolling.
+  expect(await page.locator('.observations .table-scroll').evaluate(el => el.scrollLeft)).toBe(0);
+  await pickButton(page, rows[0], 'A').click();
+  await expect(panel(page).getByTestId('compare-slot-a')).toContainText('SYNTHETIC-JUL');
+});
+
+test('wavelength at target: measured on demand, from comparisons, and same-wavelength rows marked', async ({page}) => {
+  const posted = await setup(page);
+  const cell = r => page.locator('tr', {hasText: r.obs_id}).filter({hasText: r.energy_bandpassname}).locator('.target-wavelength-cell');
+  // Measure downloads a cutout through POST /api/images and shows the value read from the image.
+  const measuring = page.waitForRequest(req => req.url().endsWith('/api/images') && req.headers()['x-skytracker-client'] === 'wavelength');
+  // The time slider already loaded the earliest frame (rows[3]); its value appears without measuring.
+  await expect(cell(rows[3]).getByTestId('target-wavelength')).toHaveText(fixture.target.spectral.wavelength_um.toFixed(4));
+  await page.getByRole('button', {name: `Measure wavelength at target for ${rows[2].obs_id} ${rows[2].energy_bandpassname}`}).click();
+  expect((await measuring).postDataJSON().access_url).toBe(rows[2].access_url);
+  await expect(cell(rows[2]).getByTestId('target-wavelength')).toHaveText(fixture.target.spectral.wavelength_um.toFixed(4));
+  // A comparison records both images; a row on the same detector within 0.02 um of A is marked.
+  await pickButton(page, rows[1], 'A').click();
+  await pickButton(page, rows[0], 'B').click();
+  await panel(page).getByRole('button', {name: 'Compare A and B'}).click();
+  await expect(panel(page).getByTestId('compare-verdict')).toContainText('ACCEPT');
+  expect(posted).toHaveLength(1);
+  await expect(cell(rows[1]).getByTestId('target-wavelength')).toHaveText('0.8946');
+  await expect(cell(rows[1]).locator('.wavelength-badge')).toHaveText('A');
+  await expect(cell(rows[0]).getByTestId('target-wavelength')).toHaveText('0.8935');
+  await expect(cell(rows[0]).locator('.wavelength-badge')).toHaveText('≈ A');
+  await expect(cell(rows[3]).locator('.wavelength-badge')).toHaveCount(0);  // 2.486 um: far from A.
+});

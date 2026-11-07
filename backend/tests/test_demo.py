@@ -120,4 +120,10 @@ def test_shipped_real_bundle_validates():
     root = Path(__file__).resolve().parents[2] / 'frontend/public/demo'
     manifest = validate_bundle(root)
     assert len(manifest.targets[0].observations) == 3
-    assert manifest.targets[1].status == 'missing'
+    m31 = manifest.targets[1]
+    assert m31.id == 'm31' and m31.status == 'ready' and len(m31.observations) == 6
+    # Three survey passes, each in D1 and D4 of the same exposure (curated M31 set).
+    assert sorted((o.obs_id, o.detector) for o in m31.observations) == [
+        (obs_id, detector) for obs_id in ('2025W28_1B_0480_4', '2026W01_1A_0471_1', '2026W28_2A_0117_1')
+        for detector in (1, 4)]
+    assert all('size=0.4370deg' in o.source_url for o in m31.observations)
