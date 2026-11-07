@@ -4,11 +4,13 @@ from .irsa import IRSAClient, IRSAUnavailable, WAVELENGTH_MIN_UM, WAVELENGTH_MAX
 
 from .images import router as images_router
 from .demo import router as demo_router
+from .compare_api import router as compare_router
 from .image_download import ImageError
 
 app = FastAPI(title='Arcadian SkyTracker API', version='0.2.0')
 app.include_router(images_router)
 app.include_router(demo_router)
+app.include_router(compare_router)
 
 
 @app.exception_handler(ImageError)
