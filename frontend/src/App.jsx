@@ -1,3 +1,4 @@
+import DemoTargetSummary from './components/DemoTargetSummary';
 import { useRef, useState, useEffect } from 'react';
 import SkyMap from './components/SkyMap';
 import CoordinatePanel from './components/CoordinatePanel';
@@ -91,7 +92,8 @@ export default function App() {
     <div className="intro"><div><div className="eyebrow">EXPLORE THE INFRARED UNIVERSE</div><h1>A point in the sky.<br className="mobile-break"/> A place to begin.</h1><p>Navigate the celestial sphere and discover SPHEREx coverage.</p></div><div className="fov"><span>FIELD OF VIEW</span><strong data-testid="fov">{mode === 'demo' ? 'Preloaded cutouts' : fov ? `${fov[0].toFixed(3)}° × ${fov[1].toFixed(3)}°` : 'Connecting…'}</strong></div></div>
     {mode === 'live' ? <div className="workspace"><section className="map-panel"><div className="map-heading"><span><i/> CELESTIAL ATLAS</span><span>ICRS / DSS2 COLOR</span></div><SkyMap selected={selected} navigation={navigation} onSelect={select} onFov={setFov}/></section><CoordinatePanel selected={selected} onGo={point => {select(point); setNavigation({...point});}} onSearch={() => search()} loading={loading} filter={filter} onFilterChange={changeFilter} filterError={filterError}/></div> : <section className="panel demo-region" aria-label="Preloaded sky region">
       <h2>{manifest?.targets.find(target => target.id === demoTargetId)?.name || 'Preloaded sky region'}</h2>
-      {manifest && <p>Target ICRS RA {selected.ra.toFixed(6)}°, Dec {selected.dec.toFixed(6)}°. The cutouts below retain native detector orientation and may have different coverage. Live Mode provides the interactive Aladin sky atlas.</p>}
+      <DemoTargetSummary target={manifest?.targets.find(target => target.id === demoTargetId)}/>
+      {manifest && <p>Reference ICRS RA {selected.ra.toFixed(6)}°, Dec {selected.dec.toFixed(6)}°. For tracking targets this reference is the first prepared frame; each image records its own center. The cutouts below retain native detector orientation and may have different coverage. Live Mode provides the interactive Aladin sky atlas.</p>}
     </section>}
     <ObservationsTable mode={mode} result={result} loading={loading} error={error} selectedObservation={imageObservation} onViewImage={setImageObservation}/>
     <TemporalImageExplorer result={result} loading={loading} error={error} target={selected}/>

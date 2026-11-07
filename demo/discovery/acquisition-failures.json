@@ -1,0 +1,12 @@
+[
+  {
+    "target": "3i-atlas",
+    "obs_id": "2025W33_1B_0399_4",
+    "error": "Command '['/home/andrewmp/Documents/NasaSpaceApps/spherex-explorer/.venv/bin/python', '/home/andrewmp/Documents/NasaSpaceApps/spherex-explorer/scripts/acquire_demo.py', '--one', 'https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W33_1B_0399_4/D5', '/home/andrewmp/Documents/NasaSpaceApps/spherex-explorer/demo/acquired/2b03c7a20ab8337d073e6731091b211c98b716fc60af37eb9c8ae882e07e0fd3/original.fits', '244.5563840421331', '-16.495805476277283']' returned non-zero exit status 1."
+  },
+  {
+    "target": "rw-aur",
+    "obs_id": "2025W37_1A_0366_1",
+    "error": "Command '['/home/andrewmp/Documents/NasaSpaceApps/spherex-explorer/.venv/bin/python', '/home/andrewmp/Documents/NasaSpaceApps/spherex-explorer/scripts/acquire_demo.py', '--one', 'https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W37_1A_0366_1/D2', '/home/andrewmp/Documents/NasaSpaceApps/spherex-explorer/demo/acquired/00dcae7b78a72d63e9552871180f18ec04726155f662bc65b912c7f97bf8ad36/original.fits', '76.956067', '30.401327']' returned non-zero exit status 1."
+  }
+]
