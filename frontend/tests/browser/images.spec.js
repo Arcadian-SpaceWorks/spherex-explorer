@@ -22,7 +22,7 @@ async function setup(page) {
 
 test('select observation, inspect science image, pan/zoom, read pixel and download original',async ({page}) => {
   let posted;
-  await page.route('**/api/images',route => {posted=route.request().postDataJSON();return route.fulfill({json:fixture});});
+  await page.route('**/api/images',route => {if (route.request().headers()['x-skytracker-client'] !== 'time-slider') posted=route.request().postDataJSON();return route.fulfill({json:fixture});});
   await setup(page);
   await page.getByRole('button',{name:'View Image'}).first().click();
   await expect(page.getByTestId('fits-target')).toBeVisible();
@@ -48,7 +48,7 @@ test('select observation, inspect science image, pan/zoom, read pixel and downlo
 test('loading and size-limit errors are explicit, retry works, selection clears with target',async ({page}) => {
   let incoming;
   const received=new Promise(resolve => {incoming=resolve;});
-  await page.route('**/api/images',route => incoming(route));
+  await page.route('**/api/images',route => {if (route.request().headers()['x-skytracker-client'] === 'time-slider') return route.fulfill({json:fixture});incoming(route);});
   await setup(page);
   await page.getByRole('button',{name:'View Image'}).first().click();
   const route=await received;

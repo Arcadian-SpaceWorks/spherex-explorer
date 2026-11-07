@@ -3,6 +3,7 @@ import SkyMap from './components/SkyMap';
 import CoordinatePanel from './components/CoordinatePanel';
 import ObservationsTable from './components/ObservationsTable';
 import ImageInspector from './components/ImageInspector';
+import TemporalImageExplorer from './components/TemporalImageExplorer';
 export default function App() {
   const [selected, setSelected] = useState({ra: 210.80227, dec: 54.34895});
   const [navigation, setNavigation] = useState(null), [fov, setFov] = useState(null);
@@ -30,5 +31,6 @@ export default function App() {
     <main><div className="intro"><div><div className="eyebrow">EXPLORE THE INFRARED UNIVERSE</div><h1>A point in the sky.<br className="mobile-break"/> A place to begin.</h1><p>Navigate the celestial sphere and discover SPHEREx coverage.</p></div><div className="fov"><span>FIELD OF VIEW</span><strong data-testid="fov">{fov ? `${fov[0].toFixed(3)}° × ${fov[1].toFixed(3)}°` : 'Connecting…'}</strong></div></div>
     <div className="workspace"><section className="map-panel"><div className="map-heading"><span><i/> CELESTIAL ATLAS</span><span>ICRS / DSS2 COLOR</span></div><SkyMap selected={selected} navigation={navigation} onSelect={select} onFov={setFov}/></section><CoordinatePanel selected={selected} onGo={point => {select(point); setNavigation({...point});}} onSearch={search} loading={loading}/></div>
     <ObservationsTable result={result} loading={loading} error={error} selectedObservation={imageObservation} onViewImage={setImageObservation}/>
+    <TemporalImageExplorer result={result} loading={loading} error={error} target={selected}/>
     <ImageInspector observation={imageObservation} target={selected}/></main><footer><span>Arcadian SkyTracker · Milestone 02</span><span>Sky atlas by <a href="https://aladin.cds.unistra.fr/AladinLite/">Aladin Lite / CDS</a> · DSS2 imagery · Observations from <a href="https://irsa.ipac.caltech.edu/Missions/spherex.html">NASA/IPAC IRSA</a></span></footer></div>;
 }
