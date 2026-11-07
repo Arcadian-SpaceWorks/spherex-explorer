@@ -243,7 +243,7 @@ def test_cache_hits_eviction_ttl_and_open_download(settings,mef):
 
 
 def test_api_image_preview_pixel_original_and_errors(settings,mef):
-    downloader=FixtureDownloader(mef);service=ImageService(settings,downloader)
+    downloader=FixtureDownloader(mef);service=ImageService(settings,downloader,wait_seconds=0.05)
     app.dependency_overrides[get_image_service]=lambda:service
     try:
         client=TestClient(app)
@@ -334,7 +334,7 @@ def test_download_deadline_and_redirect_limit(settings,tmp_path):
 
 
 def test_cache_file_lock_across_service_instances(settings):
-    first=ImageService(settings);second=ImageService(settings)
+    first=ImageService(settings);second=ImageService(settings,wait_seconds=0.05)
     with first.transaction():
         with pytest.raises(ImageError) as error:
             with second.transaction(): pass
