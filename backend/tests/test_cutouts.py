@@ -180,3 +180,25 @@ def test_cutout_redirect_cannot_silently_download_full_product(settings, tmp_pat
         assert error.value.code == 'cutout_unsupported'
         assert session.get.call_count == 1
         assert not destination.exists()
+
+
+def test_cutout_and_full_cache_limits_are_independent(settings, mef):
+    """Contributor retention idea with explicit small limits and main's safeguards."""
+    from dataclasses import replace
+    service = ImageService(replace(settings,cache_entries=1,cutout_cache_entries=2),RecordingDownloader(mef))
+    full = service.prepare(ACCESS,210,54)
+    cuts = [service.prepare(ACCESS,210,54,size) for size in (.1,.2,.3)]
+    kept={p.name for p in settings.cache_dir.iterdir() if not p.name.startswith('.')}
+    assert kept=={full['image_id'],cuts[1]['image_id'],cuts[2]['image_id']}
+    other=service.prepare(ACCESS+'-other',210,54)
+    assert service.prepare(ACCESS,210,54,.2)['cache_hit'] is True
+    assert not (settings.cache_dir/full['image_id']).exists()
+    assert (settings.cache_dir/other['image_id']).exists()
+
+
+def test_cutout_cache_configuration_is_bounded_and_validated(monkeypatch):
+    from backend.app.image_download import ImageSettings
+    monkeypatch.setenv('SKYTRACKER_CUTOUT_CACHE_ENTRIES','0')
+    with pytest.raises(ValueError):ImageSettings.from_env()
+    monkeypatch.setenv('SKYTRACKER_CUTOUT_CACHE_ENTRIES','2')
+    assert ImageSettings.from_env().cutout_cache_entries==2

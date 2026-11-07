@@ -28,6 +28,7 @@ class ImageSettings:
     cache_ttl: int = 3600
     max_pixels: int = 8_000_000
     download_seconds: int = 600
+    cutout_cache_entries: int = 3
 
     @classmethod
     def from_env(cls):
@@ -38,9 +39,10 @@ class ImageSettings:
             cache_ttl=int(os.getenv('SKYTRACKER_FITS_CACHE_TTL', 3600)),
             max_pixels=int(os.getenv('SKYTRACKER_FITS_MAX_PIXELS', 8_000_000)),
             download_seconds=int(os.getenv('SKYTRACKER_FITS_DOWNLOAD_SECONDS', 600)),
+            cutout_cache_entries=int(os.getenv('SKYTRACKER_CUTOUT_CACHE_ENTRIES', cls.cutout_cache_entries)),
         )
         if min(settings.max_bytes, settings.cache_entries, settings.cache_ttl,
-               settings.max_pixels, settings.download_seconds) <= 0:
+               settings.max_pixels, settings.download_seconds, settings.cutout_cache_entries) <= 0:
             raise ValueError('FITS limits must be positive integers')
         return settings
 

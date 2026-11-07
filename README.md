@@ -87,7 +87,7 @@ Metadata: observation ID, collection, detector bandpass, image center RA/Dec, st
 
 ## View a real SPHEREx FITS image
 
-Search the archive as before, then click **View Image** or select a row (Enter/Space also works). The inspector appears beneath the table. It downloads the exact `access_url` from the selected observation; for DataLink responses it follows the unique FITS `#this` product. It does not construct product URLs or substitute calibration files/cutouts. The first load may take several minutes. Reopening a cached image is much faster.
+Search the archive as before, then click **View Image** or select a row (Enter/Space also works). The inspector appears beneath the table. It resolves the selected observation’s `access_url`; for DataLink responses it follows the unique FITS `#this` product, then requests the documented cutout by default. Full detector retrieval is an explicit inspector choice. No product path is guessed or calibration file substituted. The first load may take several minutes. Reopening a cached image is much faster.
 
 - Use + / −, Fit image, drag, or the arrow buttons to zoom and pan the preview.
 - Click an image pixel for its original surface brightness, flags, ICRS position, and approximate wavelength/bandwidth where the file supports them.
@@ -105,7 +105,7 @@ The inspector and Time Slider request the same **0.3 degree cutout** around the 
 
 The backend resolves the archive DataLink product URL and appends `?center=RA,DEC&size=0.3000deg` only to an allowlisted `/ibe/data/spherex/` product. This follows the [official IRSA cutout documentation](https://irsa.ipac.caltech.edu/ibe/cutouts.html). Unsupported product URLs fail explicitly; there is no automatic full-file fallback. Large parent-file size metadata does not block a cutout, but the downloaded response still has byte, pixel and time limits.
 
-Cutout cache keys include the product URL, target (six decimal places) and size (four decimal places). Full images have separate entries. Main's bounded request queue serializes download/render work and lets duplicate requests reuse the result. Cache limits apply jointly to full images and cutouts.
+Cutout cache keys include the product URL, target (six decimal places) and size (four decimal places). Full images have separate entries. Main's bounded request queue serializes download/render work and lets duplicate requests reuse the result. Full images and cutouts have independent count limits and share the idle TTL.
 
 The returned MEF bytes are stored unchanged, including all returned HDUs, headers, masks and WCS tables. Only the PNG uses display stretching and masking. The requested angular size follows detector axes and can be clipped at detector edges; it is not guaranteed to be north-up or exactly square on the sky. Wavelength readouts use available alternate WCS tables and remain approximate; missing spectral metadata is reported as unavailable.
 
@@ -130,11 +130,12 @@ Configure these environment variables **before starting the backend**:
 | `SKYTRACKER_FITS_MAX_BYTES` | `134217728` | 128 MiB per original FITS download |
 | `SKYTRACKER_FITS_DOWNLOAD_SECONDS` | `600` | Overall remote-download deadline, seconds |
 | `SKYTRACKER_FITS_CACHE_DIR` | repository `.cache/arcadian-fits-v1` | Cache directory; an absolute override is recommended |
-| `SKYTRACKER_FITS_CACHE_ENTRIES` | `3` | Maximum completed originals/previews |
+| `SKYTRACKER_FITS_CACHE_ENTRIES` | `3` | Maximum completed full-detector originals/previews |
+| `SKYTRACKER_CUTOUT_CACHE_ENTRIES` | `3` | Maximum completed cutout originals/previews |
 | `SKYTRACKER_FITS_CACHE_TTL` | `3600` | Idle expiry, seconds |
 | `SKYTRACKER_FITS_MAX_PIXELS` | `8000000` | Maximum science-image pixels before loading its array |
 
-All numeric limits must be positive. Originals occupy at most entry count × maximum file bytes, plus small previews/metadata. Cache pruning occurs on access; expired entries and stale partial directories are removed. Thread and file locks serialize download/decoding work; a concurrent request returns a retryable 503 instead of queueing large jobs. Open file downloads remain valid even if their cache entry is subsequently evicted. Cache files are ignored by Git.
+All numeric limits must be positive. Retained FITS occupy at most (full entry count + cutout entry count) × maximum file bytes, plus previews/metadata and one temporary preparation. Cache pruning occurs on access; expired entries and stale partial directories are removed. Thread and file locks serialize download/decoding work; ordinary concurrent requests use a bounded waiting queue and reuse completed results; queue saturation or wait timeout returns a retryable 503. Open file downloads remain valid even if their cache entry is subsequently evicted. Cache files are ignored by Git.
 
 FITS/WCS processing runs in a child process with a 60-second wall limit, 55-second CPU limit, 3 GiB address-space limit and no core dumps, so malformed native-decoder input does not terminate the API. The default scripts target Linux/Fedora. The API returns explicit errors: 400 unsafe URL; 413 file/pixel limit; 422 unsupported/invalid/all-masked FITS; 404 cache miss; 502 upstream/decoder failure; 503 busy; 504 timeout; 507 cache unavailable.
 
@@ -176,3 +177,23 @@ SPHEREx image conventions: [official product guide](https://github.com/Caltech-I
 Open `/?mode=demo` or choose **Demo Mode** in the Data mode selector. Three preserved real SPHEREx cutouts for the M101 region are included; M31 is explicitly marked not prepared. Demo playback uses local PNGs and manifests, with local FastAPI FITS pixel readouts. Live Mode retains the existing IRSA search/cutout pipeline.
 
 Validate assets before presenting: `.venv/bin/python scripts/prepare_demo.py --validate frontend/public/demo`. For offline preparation, provenance, deployment and scaling instructions, see [the hybrid demo architecture](docs/demo-architecture.md). PNGs are independently stretched previews; the application makes no validated motion or variability claim.
+
+### Detector / product-wavelength filters and image waiting state
+
+Live searches accept an optional `band=SPHEREx-D1` through `SPHEREx-D6`, or
+`wavelength_um` in the supported input range 0.7–5.1 µm. The latter filters real
+ObsCore `em_min`/`em_max` metadata in metres; it does not establish the wavelength
+at the exact selected pixel. Unknown/inconsistent bounds remain visible and are
+flagged. Detector labels are not exact wavelengths. The same controls filter the
+preloaded demo inventory locally; M101 frames have unknown product bounds and
+remain visible for numeric wavelength filtering. A D5 filter selects two real
+frames across the two preserved UTC epochs.
+
+Image loading shows elapsed time and an indeterminate indicator. The API supplies
+no byte/stage progress or completion estimate. **Stop waiting** aborts the browser
+request; server work already underway may complete and be cached. No extra image
+polling is introduced. Cutouts now have a separate configurable retention limit:
+`SKYTRACKER_CUTOUT_CACHE_ENTRIES` defaults to 3; `SKYTRACKER_FITS_CACHE_ENTRIES`
+continues to limit full-detector files. See the
+[integration review](docs/image-progress-wavelength-integration.md) for scientific
+limitations, validation results and exact integration scope.

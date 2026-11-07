@@ -57,7 +57,14 @@ class ImageService:
                 self.lock.release()
             self.slots.release()
 
-    def _prune(self, reserve=0):
+    @staticmethod
+    def _is_cutout(path):
+        try:
+            return bool(json.loads((path / 'metadata.json').read_text()).get('cutout'))
+        except (OSError, ValueError):
+            return False
+
+    def _prune(self, reserve=0, cutout=False):
         entries = []
         for path in self.settings.cache_dir.iterdir():
             if path.name.startswith('.part-') and path.is_dir() and not path.is_symlink():
@@ -71,8 +78,14 @@ class ImageService:
             else:
                 entries.append(path)
         entries.sort(key=lambda path: path.stat().st_mtime)
-        for path in entries[:max(0, len(entries) - self.settings.cache_entries + reserve)]:
-            shutil.rmtree(path)
+        groups = {False: [], True: []}
+        for path in entries:
+            groups[self._is_cutout(path)].append(path)
+        for kind, group in groups.items():
+            limit = self.settings.cutout_cache_entries if kind else self.settings.cache_entries
+            extra = reserve if kind == cutout else 0
+            for path in group[:max(0, len(group) - limit + extra)]:
+                shutil.rmtree(path)
 
     def _entry(self, image_id):
         if not TOKEN.fullmatch(image_id):
@@ -102,7 +115,7 @@ class ImageService:
             self._prune()
             cached = (self.settings.cache_dir / image_id / 'metadata.json').is_file()
             if not cached:
-                self._prune(reserve=1)
+                self._prune(reserve=1, cutout=cutout is not None)
                 with tempfile.TemporaryDirectory(prefix='.part-', dir=self.settings.cache_dir) as temporary:
                     working = Path(temporary)
                     source = working / 'original.fits'

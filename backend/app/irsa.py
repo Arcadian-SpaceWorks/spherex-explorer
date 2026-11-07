@@ -16,6 +16,20 @@ COLUMNS = ('obs_id', 's_ra', 's_dec', 't_min', 't_max', 't_exptime',
            'em_min', 'em_max', 'energy_bandpassname', 'obs_collection',
            'access_url', 'access_format')
 LIMIT = 100
+BANDS = tuple(f'SPHEREx-D{n}' for n in range(1, 7))
+WAVELENGTH_MIN_UM, WAVELENGTH_MAX_UM = 0.7, 5.1
+
+
+def wavelength_coverage(row, wavelength_um):
+    """ObsCore bounds are in metres; unknown/inconsistent bounds are not exclusions.
+
+    This is whole-product spectral coverage, never a target-pixel wavelength test.
+    """
+    low, high = row.get('em_min'), row.get('em_max')
+    if (low is None or high is None or not math.isfinite(low) or not math.isfinite(high)
+            or low <= 0 or high < low):
+        return 'unknown'
+    return 'range_includes' if low <= wavelength_um / 1_000_000 <= high else 'range_excludes'
 
 
 class IRSAUnavailable(Exception):
@@ -46,12 +60,25 @@ def verify_schema():
     return True
 
 
-def build_query(ra, dec):
+def build_query(ra, dec, band=None, wavelength_um=None):
     # Only validated finite floats enter ADQL; never interpolate user text.
     if not math.isfinite(ra) or not math.isfinite(dec) or not 0 <= ra < 360 or not -90 <= dec <= 90:
         raise ValueError('Invalid ICRS coordinates')
+    filters = ''
+    if band is not None:
+        if band not in BANDS:
+            raise ValueError('Invalid SPHEREx detector')
+        filters += f"AND energy_bandpassname = '{band}' "
+    if wavelength_um is not None:
+        if not math.isfinite(wavelength_um) or not WAVELENGTH_MIN_UM <= wavelength_um <= WAVELENGTH_MAX_UM:
+            raise ValueError('Invalid wavelength')
+        metres = wavelength_um / 1_000_000
+        # Filter before TOP/LIMIT; retain missing or inconsistent coverage as unverified.
+        filters += (f'AND (em_min IS NULL OR em_max IS NULL OR em_min <= 0 OR em_max < em_min '
+                    f'OR (em_min <= {metres:.17e} AND em_max >= {metres:.17e})) ')
     return (f"SELECT TOP {LIMIT + 1} {', '.join(COLUMNS)} FROM {TABLE} "
             f"WHERE 1=CONTAINS(POINT('ICRS',{ra:.10f},{dec:.10f}),s_region) "
+            f'{filters}'
             'ORDER BY t_min DESC, obs_id ASC, energy_bandpassname ASC')
 
 
@@ -90,9 +117,16 @@ def parse_observations(payload):
 
 
 class IRSAClient:
-    def observations(self, ra, dec):
+    def observations(self, ra, dec, band=None, wavelength_um=None):
+        query = build_query(ra, dec, band, wavelength_um)
         verify_schema()
-        rows, truncated = parse_observations(tap(build_query(ra, dec), 'votable'))
+        rows, truncated = parse_observations(tap(query, 'votable'))
+        if wavelength_um is not None:
+            for row in rows:
+                row['wavelength_coverage'] = wavelength_coverage(row, wavelength_um)
+            rows = [row for row in rows if row['wavelength_coverage'] != 'range_excludes']
         return {'status': 'live', 'source': TAP_URL, 'table': TABLE,
-                'ra': ra, 'dec': dec, 'match': 'point-in-footprint',
+                'ra': ra, 'dec': dec, 'band': band, 'wavelength_um': wavelength_um,
+                'unknown_wavelength_count': sum(row.get('wavelength_coverage') == 'unknown' for row in rows),
+                'match': 'point-in-footprint',
                 'limit': LIMIT, 'truncated': truncated, 'count': len(rows), 'observations': rows}

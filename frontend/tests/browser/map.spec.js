@@ -7,7 +7,8 @@ test('real Aladin initializes, clicks select ICRS coordinates, marker and naviga
   await expect(page.getByTestId('fov')).toContainText('°', {timeout:60000});
   const host = page.getByTestId('sky-map');
   await expect(host.locator('canvas').first()).toBeVisible();
-  const box = await host.boundingBox();
+  await host.scrollIntoViewIfNeeded();
+  let box = await host.boundingBox();
   const x = Math.round(box.width * .63), y = Math.round(box.height * .4);
   // Read the genuine API projection at the pixel being clicked as the oracle.
   const expected = await page.evaluate(({x,y}) => document.querySelector('[data-testid="sky-map"]').skyAtlas.pix2world(x,y,'icrs'), {x,y});
@@ -26,6 +27,9 @@ test('real Aladin initializes, clicks select ICRS coordinates, marker and naviga
   });
   expect(marker).toEqual([{ra:83.822,dec:-5.391}]);
   const initialFov = await page.getByTestId('fov').textContent();
+  // Form interactions can scroll the taller control panel; refresh pointer geometry.
+  await host.scrollIntoViewIfNeeded();
+  box = await host.boundingBox();
   await page.mouse.move(box.x + box.width/2, box.y + box.height/2);
   await page.mouse.wheel(0,-300);
   await expect(page.getByTestId('fov')).not.toHaveText(initialFov);

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { CUTOUT_DEG, loadObservationImage } from '../imageAdapter';
+import DownloadProgress, { useElapsed } from './DownloadProgress';
 
 const number = (value, digits = 5) => value == null ? '—' : Number(value).toFixed(digits);
 const wavelength = spectral => spectral ? `${number(spectral.wavelength_um)} µm · bandwidth ${number(spectral.bandwidth_um)} µm (approx.)` : 'Unavailable for this pixel';
@@ -8,12 +9,13 @@ function ImageCanvas({metadata, onPixel}) {
   const [zoom, setZoom] = useState(1), [pan, setPan] = useState({x:0,y:0});
   const [loaded, setLoaded] = useState(false), [failed, setFailed] = useState(false);
   const svg = useRef(null), group = useRef(null), drag = useRef(null);
+  const ready = loaded && !failed;
   const {width, height, target} = metadata;
   function point(event, element) {
     return new DOMPoint(event.clientX, event.clientY).matrixTransform(element.getScreenCTM().inverse());
   }
   function down(event) {
-    if (event.button !== 0) return;
+    if (event.button !== 0 || !ready) return;
     const start = point(event, svg.current);
     drag.current = {start, pan, clientX:event.clientX, clientY:event.clientY, moved:false};
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -39,14 +41,14 @@ function ImageCanvas({metadata, onPixel}) {
   function shift(x,y) {setPan(previous => ({x:previous.x + x*width*.12, y:previous.y + y*height*.12}));}
   return <div className="image-viewer">
     <div className="image-controls" aria-label="Image navigation controls">
-      <button type="button" onClick={() => setZoom(z => Math.min(16,z*1.4))} aria-label="Zoom in image">+</button>
-      <button type="button" onClick={() => setZoom(z => Math.max(.25,z/1.4))} aria-label="Zoom out image">−</button>
-      <button type="button" onClick={reset}>Fit image</button>
+      <button type="button" onClick={() => setZoom(z => Math.min(16,z*1.4))} disabled={!ready} aria-label="Zoom in image">+</button>
+      <button type="button" onClick={() => setZoom(z => Math.max(.25,z/1.4))} disabled={!ready} aria-label="Zoom out image">−</button>
+      <button type="button" onClick={reset} disabled={!ready}>Fit image</button>
       <span data-testid="image-zoom">{Math.round(zoom*100)}%</span>
-      <button type="button" onClick={() => shift(-1,0)} aria-label="Pan image left">←</button>
-      <button type="button" onClick={() => shift(1,0)} aria-label="Pan image right">→</button>
-      <button type="button" onClick={() => shift(0,-1)} aria-label="Pan image up">↑</button>
-      <button type="button" onClick={() => shift(0,1)} aria-label="Pan image down">↓</button>
+      <button type="button" onClick={() => shift(-1,0)} disabled={!ready} aria-label="Pan image left">←</button>
+      <button type="button" onClick={() => shift(1,0)} disabled={!ready} aria-label="Pan image right">→</button>
+      <button type="button" onClick={() => shift(0,-1)} disabled={!ready} aria-label="Pan image up">↑</button>
+      <button type="button" onClick={() => shift(0,1)} disabled={!ready} aria-label="Pan image down">↓</button>
     </div>
     <div className="fits-viewport">
       {!loaded && !failed && <p className="image-loading" role="status">Loading science preview…</p>}
@@ -70,9 +72,12 @@ export default function ImageInspector({observation, target}) {
   const [loading, setLoading] = useState(false), [retry, setRetry] = useState(0);
   const [full, setFull] = useState(false);  // false: quick IRSA cutout; true: whole detector image
   const [pixel, setPixel] = useState(null), [pixelError, setPixelError] = useState(''), [pixelLoading, setPixelLoading] = useState(false);
-  const pixelRequest = useRef(null);
+  const pixelRequest = useRef(null), request = useRef(null);
+  const [waitingStopped, setWaitingStopped] = useState(false);
+  const elapsed = useElapsed(loading ? `${observation?.access_url}|${observation?.energy_bandpassname}|${full}|${retry}|${target.ra}|${target.dec}` : null);
   useEffect(() => {
     const controller = new AbortController();
+    request.current = controller; setWaitingStopped(false);
     let cancelled = false;
     setMetadata(null); setError(''); setPixel(null); setPixelError(''); setPixelLoading(false);
     setLoading(Boolean(observation));
@@ -82,9 +87,9 @@ export default function ImageInspector({observation, target}) {
     async function load() {
       try {
         const data = await loadObservationImage(observation, target, {signal:controller.signal, full, client:'inspector'});
-        if (!cancelled) setMetadata(data);
+        if (!cancelled && !controller.signal.aborted) setMetadata(data);
       } catch (err) {
-        if (!cancelled) setError(controller.signal.aborted ? 'Image request timed out. The file may be large; please retry.' : err.message);
+        if (!cancelled && controller.signal.reason !== 'user') setError(controller.signal.aborted ? 'Image request timed out. The file may be large; please retry.' : err.message);
       } finally {clearTimeout(timeout); if (!cancelled) setLoading(false);}
     }
     load();
@@ -111,7 +116,9 @@ export default function ImageInspector({observation, target}) {
         <button type="button" className={full ? 'secondary' : ''} aria-pressed={!full} onClick={() => setFull(false)}>Quick cutout ({CUTOUT_DEG}° around target)</button>
         <button type="button" className={full ? '' : 'secondary'} aria-pressed={full} onClick={() => setFull(true)}>Full detector image (slow)</button>
       </div>}
-      {loading && <p className="empty" role="status">{observation.demo ? 'Loading the preloaded science preview from local assets.' : full ? 'Downloading and inspecting the original FITS from IRSA. Full detector images can be tens of megabytes; this may take a few minutes.' : 'Downloading and inspecting a small cutout around your target from IRSA. The FITS data and available metadata are preserved.'}</p>}
+      {loading && <DownloadProgress title={observation.demo ? 'Loading the preloaded science preview from local assets.' : full ? 'Downloading and inspecting the full detector FITS from IRSA' : `Downloading and inspecting a ${CUTOUT_DEG}° cutout around your target`}
+        local={Boolean(observation.demo)} elapsed={elapsed} onCancel={() => {request.current?.abort('user'); setWaitingStopped(true); setLoading(false);}}/>}
+      {waitingStopped && <p className="empty" role="status">{observation.demo ? 'Stopped waiting for the preloaded preview. Load image again to retry.' : 'Stopped waiting for this image. Server work already started may finish and be cached.'}</p>}
       {error && <p className="error" role="alert">{error}</p>}
       {metadata && <>
         {metadata.demo && <p className="demo-notice" role="note">Preloaded real SPHEREx cutout. PNG is a display preview; science values are in the preserved FITS. {metadata.provenance.verification}</p>}
@@ -136,7 +143,7 @@ export default function ImageInspector({observation, target}) {
         <div className="image-actions"><a className="download-fits" href={metadata.original_url} target="_blank" rel="noreferrer">{metadata.cutout ? 'Download FITS cutout' : 'Download original FITS'} ↗ ({(metadata.bytes/1024/1024).toFixed(metadata.bytes < 1048576 ? 2 : 1)} MiB)</a><span className="result-note">{metadata.demo ? 'Preserved local FITS; original science values unchanged.' : 'If the local cache expires, reload this image.'}</span></div>
         <details><summary>FITS HDUs and WCS metadata</summary><div className="table-scroll"><table><thead><tr><th>HDU</th><th>Extension</th><th>Type</th><th>Array shape / columns</th></tr></thead><tbody>{metadata.hdus.map(hdu => <tr key={hdu.index}><td>{hdu.index}</td><td>{hdu.name}</td><td>{hdu.type}</td><td>{hdu.shape?.join(' × ') || hdu.columns?.join(', ') || 'No image array'}</td></tr>)}</tbody></table></div><p className="result-note">Spatial WCS: {metadata.spatial_wcs} · Spectral WCS: {metadata.spectral_wcs}. Complete headers and lookup tables remain in the downloadable original.</p><pre>{metadata.science_header}</pre>{metadata.wavelength_header && <pre>{metadata.wavelength_header}</pre>}</details>
       </>}
-      {!loading && <button type="button" className="secondary reload-image" onClick={() => setRetry(n => n+1)}>{error ? 'Retry image' : 'Reload image'}</button>}
+      {!loading && <button type="button" className="secondary reload-image" onClick={() => setRetry(n => n+1)}>{waitingStopped ? 'Load image again' : error ? 'Retry image' : 'Reload image'}</button>}
     </>}
   </section>;
 }

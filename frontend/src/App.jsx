@@ -5,22 +5,28 @@ import ObservationsTable from './components/ObservationsTable';
 import ImageInspector from './components/ImageInspector';
 import TemporalImageExplorer from './components/TemporalImageExplorer';
 import { demoResult, loadDemoManifest } from './demoAdapter';
+import WavelengthFilter from './components/WavelengthFilter';
+import { ALL_FILTER, filterParams, filterDemoResult } from './wavelengths';
 export default function App() {
   const [mode, setMode] = useState(() => new URLSearchParams(window.location.search).get('mode') === 'demo' ? 'demo' : 'live');
   const [manifest, setManifest] = useState(null), [demoTargetId, setDemoTargetId] = useState('');
+  const [filter, setFilter] = useState(ALL_FILTER), [filterError, setFilterError] = useState('');
   const [selected, setSelected] = useState({ra: 210.80227, dec: 54.34895});
   const [navigation, setNavigation] = useState(null), [fov, setFov] = useState(null);
   const [result, setResult] = useState(null), [error, setError] = useState(''), [loading, setLoading] = useState(false);
   const [imageObservation, setImageObservation] = useState(null);
   const request = useRef(null);
   useEffect(() => () => request.current?.abort(), []);
-  function chooseDemoTarget(target, scienceNote) {
-    const next = demoResult(target, scienceNote);
+  function chooseDemoTarget(target, scienceNote, activeFilter = ALL_FILTER) {
+    const {params} = filterParams(activeFilter);
+    const next = filterDemoResult(demoResult(target, scienceNote), params);
+    setFilter(activeFilter); setFilterError('');
     setDemoTargetId(target.id); setSelected({ra:target.ra, dec:target.dec}); setNavigation({ra:target.ra, dec:target.dec});
     setResult(next); setError(''); setImageObservation(next.observations[0] || null);
   }
   function changeMode(next) {
     request.current?.abort(); request.current = null;
+    setFilter(ALL_FILTER); setFilterError('');
     setMode(next); setResult(null); setError(''); setLoading(false);
     setImageObservation(null); setManifest(null); setFov(null);
   }
@@ -37,14 +43,26 @@ export default function App() {
     return () => controller.abort();
   }, [mode]);
   function select(point) {setImageObservation(null); request.current?.abort(); request.current = null; setLoading(false); setSelected(point); setResult(null); setError('');}
-  async function search() {
+  function changeFilter(next, apply) {
+    setFilter(next); setFilterError('');
+    if (apply && (result || loading || error)) search(next);
+  }
+  async function search(activeFilter = filter) {
+    const {params, error:invalid} = filterParams(activeFilter);
+    if (invalid) {setFilterError(invalid); return;}
+    setFilterError('');
+    if (mode === 'demo') {
+      const target = manifest?.targets.find(item => item.id === demoTargetId);
+      if (target) chooseDemoTarget(target, manifest.science_note, activeFilter);
+      return;
+    }
     setImageObservation(null);
     request.current?.abort();
     const controller = new AbortController(); request.current = controller;
     setLoading(true); setResult(null); setError('');
     const timeout = setTimeout(() => controller.abort('timeout'), 65000);
     try {
-      const response = await fetch(`/api/observations?${new URLSearchParams(selected)}`, {signal: controller.signal});
+      const response = await fetch(`/api/observations?${new URLSearchParams({...selected, ...params})}`, {signal: controller.signal});
       const data = await response.json();
       if (!response.ok || data.status !== 'live') throw new Error(data.message || 'The observation service is unavailable.');
       if (request.current === controller) setResult(data);
@@ -64,11 +82,14 @@ export default function App() {
         {loading && <p role="status">Loading preloaded target manifest…</p>}
         {manifest && <><label htmlFor="demo-target">Preloaded target</label><select id="demo-target" value={demoTargetId} onChange={event => chooseDemoTarget(manifest.targets.find(target => target.id === event.target.value), manifest.science_note)}>
           {manifest.targets.map(target => <option key={target.id} value={target.id}>{target.name}{target.status === 'missing' ? ' — not prepared' : ''}</option>)}
-        </select>{manifest.targets.find(target => target.id === demoTargetId)?.missing_reason && <p role="status">{manifest.targets.find(target => target.id === demoTargetId).missing_reason}</p>}</>}
+        </select><form onSubmit={event => {event.preventDefault(); search();}}>
+          <WavelengthFilter filter={filter} onChange={changeFilter} error={filterError}/>
+          <button type="submit">Apply preloaded filter</button>
+        </form>{manifest.targets.find(target => target.id === demoTargetId)?.missing_reason && <p role="status">{manifest.targets.find(target => target.id === demoTargetId).missing_reason}</p>}</>}
       </>}
     </section>
     <div className="intro"><div><div className="eyebrow">EXPLORE THE INFRARED UNIVERSE</div><h1>A point in the sky.<br className="mobile-break"/> A place to begin.</h1><p>Navigate the celestial sphere and discover SPHEREx coverage.</p></div><div className="fov"><span>FIELD OF VIEW</span><strong data-testid="fov">{mode === 'demo' ? 'Preloaded cutouts' : fov ? `${fov[0].toFixed(3)}° × ${fov[1].toFixed(3)}°` : 'Connecting…'}</strong></div></div>
-    {mode === 'live' ? <div className="workspace"><section className="map-panel"><div className="map-heading"><span><i/> CELESTIAL ATLAS</span><span>ICRS / DSS2 COLOR</span></div><SkyMap selected={selected} navigation={navigation} onSelect={select} onFov={setFov}/></section><CoordinatePanel selected={selected} onGo={point => {select(point); setNavigation({...point});}} onSearch={search} loading={loading}/></div> : <section className="panel demo-region" aria-label="Preloaded sky region">
+    {mode === 'live' ? <div className="workspace"><section className="map-panel"><div className="map-heading"><span><i/> CELESTIAL ATLAS</span><span>ICRS / DSS2 COLOR</span></div><SkyMap selected={selected} navigation={navigation} onSelect={select} onFov={setFov}/></section><CoordinatePanel selected={selected} onGo={point => {select(point); setNavigation({...point});}} onSearch={() => search()} loading={loading} filter={filter} onFilterChange={changeFilter} filterError={filterError}/></div> : <section className="panel demo-region" aria-label="Preloaded sky region">
       <h2>{manifest?.targets.find(target => target.id === demoTargetId)?.name || 'Preloaded sky region'}</h2>
       {manifest && <p>Target ICRS RA {selected.ra.toFixed(6)}°, Dec {selected.dec.toFixed(6)}°. The cutouts below retain native detector orientation and may have different coverage. Live Mode provides the interactive Aladin sky atlas.</p>}
     </section>}
