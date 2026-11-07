@@ -79,8 +79,12 @@ export default function App() {
     const timeout = setTimeout(() => controller.abort('timeout'), 65000);
     try {
       const response = await fetch(`/api/observations?${new URLSearchParams({...selected, ...params})}`, {signal: controller.signal});
-      const data = await response.json();
-      if (!response.ok || data.status !== 'live') throw new Error(data.message || 'The observation service is unavailable.');
+      // A non-JSON reply means the app's own backend did not answer (IRSA failures arrive as JSON messages).
+      let data = {};
+      try {data = await response.json();} catch {data = {};}
+      if (!response.ok || data.status !== 'live') throw new Error(data.message || (response.status >= 500
+        ? 'The app\'s backend is not responding. Start it with ./scripts/start.sh (or ./scripts/backend.sh).'
+        : 'The observation service is unavailable.'));
       if (request.current === controller) setResult(data);
     } catch (err) {
       if (request.current === controller) setError(controller.signal.aborted ? 'The observation search timed out.' : err.message);
