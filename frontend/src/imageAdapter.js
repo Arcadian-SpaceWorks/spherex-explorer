@@ -1,4 +1,5 @@
 import { loadDemoImage } from './demoAdapter.js';
+import { recordFromMetadata } from './targetWavelengths.js';
 
 /**
  * FITS viewer integration contract
@@ -29,7 +30,14 @@ import { loadDemoImage } from './demoAdapter.js';
 
 export const CUTOUT_DEG = 0.3;
 
-export async function loadObservationImage(observation, target, {signal, fetchImpl = fetch, full = false, client = 'time-slider'} = {}) {
+export async function loadObservationImage(observation, target, options = {}) {
+  const data = await prepareObservationImage(observation, target, options);
+  // Every prepared image reports the wavelength at the target; keep it for the results table.
+  recordFromMetadata(observation, target, data);
+  return data;
+}
+
+async function prepareObservationImage(observation, target, {signal, fetchImpl = fetch, full = false, client = 'time-slider'} = {}) {
   if (observation.demo) return loadDemoImage(observation, {signal, fetchImpl});
   let response;
   try {

@@ -106,3 +106,20 @@ test('a target without prepared cutouts is explicitly unavailable', async ({page
   await expect(page.getByTestId('time-slider')).toHaveCount(0);
   await expect(page.getByTestId('fits-canvas')).toHaveCount(0);
 });
+
+test('demo rows show the exact wavelength at the target, read from the local images', async ({page}) => {
+  const traffic = await blockArchive(page);
+  await page.goto('/?mode=demo');
+  await visiblePreview(page);
+  await page.getByLabel('Preloaded target').selectOption('m31');
+  const m31 = manifest.targets.find(item => item.id === 'm31');
+  const values = page.locator('.observations').getByTestId('target-wavelength');
+  await expect(values).toHaveCount(m31.observations.length);
+  for (const observation of m31.observations) {
+    const metadata = JSON.parse(fs.readFileSync(new URL(`../../public${observation.metadata_path}`, import.meta.url)));
+    const row = page.locator('.observations tr', {hasText: observation.obs_id}).filter({hasText: `SPHEREx-D${observation.detector}`});
+    await expect(row.getByTestId('target-wavelength')).toHaveText(metadata.target.spectral.wavelength_um.toFixed(4));
+  }
+  await expect(page.getByRole('button', {name: /^Measure wavelength/})).toHaveCount(0);  // Never downloads in Demo Mode.
+  expect(traffic).toEqual({external: [], live: []});
+});

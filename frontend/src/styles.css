@@ -89,3 +89,15 @@
 .compare-facts th:first-child{color:#8ea5bf;font-weight:500}
 .compare-facts td,.compare-facts th{white-space:normal}
 @media(max-width:720px){.compare-panel{padding:18px}.compare-tray{grid-template-columns:1fr}.compare-swap{justify-self:center}.compare-side{grid-template-columns:1fr}}
+/* Wavelength at the target, and the Image / compare column pinned to the right of the scrolling table. */
+.target-wavelength-cell strong{font-weight:600;color:#eef4fa;font-variant-numeric:tabular-nums}
+.target-wavelength-cell small{display:block}
+.wavelength-badge{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:5px;font-size:10px;font-weight:700;background:#14322d;color:#91e8d2;border:1px solid #2f6b5c}
+.wavelength-badge.is-a{background:#80e7ce;color:#09251f;border-color:#80e7ce}
+.measure-wavelength{width:auto;margin:0;padding:6px 10px;font-size:11px;text-align:center}
+.observations th:last-child,.observations td:last-child{position:sticky;right:0;background:#101825;box-shadow:-10px 0 12px -10px #000c;border-left:1px solid #273247}
+.observations th:last-child{z-index:2;background:#152133}
+.observations tbody tr[tabindex]:hover td:last-child{background:#172739}
+.observations tbody tr.observation-selected td:last-child{background:#17342f}
+.observations td:last-child{white-space:nowrap}
+.observations td:last-child .view-image{width:auto;vertical-align:middle}

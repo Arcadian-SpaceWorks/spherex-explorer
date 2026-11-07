@@ -118,7 +118,7 @@ export default function App() {
       {manifest && <p>Reference ICRS RA {selected.ra.toFixed(6)}°, Dec {selected.dec.toFixed(6)}°. For tracking targets this reference is the first prepared frame; each image records its own center. The cutouts below retain native detector orientation and may have different coverage. Live Mode provides the interactive Aladin sky atlas.</p>}
     </section>}
     <ObservationsTable mode={mode} result={result} loading={loading} error={error} selectedObservation={imageObservation} onViewImage={setImageObservation}
-      compare={mode === 'live' ? {...picks, onPick: pick} : null}/>
+      compare={mode === 'live' ? {...picks, onPick: pick} : null} target={selected}/>
     {mode === 'live' && result?.count > 0 && <ComparePanel key={`${picks.a?.access_url}|${picks.b?.access_url}|${selected.ra}|${selected.dec}`}
       picks={picks} target={selected} onRemove={role => setPicks(current => ({...current, [role]: null}))}
       onSwap={() => setPicks(current => ({a: current.b, b: current.a}))}/>}
