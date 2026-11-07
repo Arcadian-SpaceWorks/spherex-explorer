@@ -17,6 +17,8 @@ COLUMNS = ('obs_id', 's_ra', 's_dec', 't_min', 't_max', 't_exptime',
            'access_url', 'access_format')
 LIMIT = 100
 BANDS = tuple(f'SPHEREx-D{n}' for n in range(1, 7))  # the only values allowed into ADQL
+# Accepted wavelength filter range in micrometres; SPHEREx spans about 0.75 to 5.0 µm.
+WAVELENGTH_MIN_UM, WAVELENGTH_MAX_UM = 0.7, 5.1
 
 
 class IRSAUnavailable(Exception):
@@ -47,7 +49,7 @@ def verify_schema():
     return True
 
 
-def build_query(ra, dec, band=None):
+def build_query(ra, dec, band=None, wavelength_um=None):
     # Only validated finite floats and whitelisted band names enter ADQL; never interpolate user text.
     if not math.isfinite(ra) or not math.isfinite(dec) or not 0 <= ra < 360 or not -90 <= dec <= 90:
         raise ValueError('Invalid ICRS coordinates')
@@ -56,6 +58,12 @@ def build_query(ra, dec, band=None):
         if band not in BANDS:
             raise ValueError('Invalid SPHEREx band')
         band_filter = f"AND energy_bandpassname = '{band}' "
+    if wavelength_um is not None:
+        if not math.isfinite(wavelength_um) or not WAVELENGTH_MIN_UM <= wavelength_um <= WAVELENGTH_MAX_UM:
+            raise ValueError('Invalid wavelength')
+        # em_min/em_max are in metres: keep only images whose spectral range covers the wavelength.
+        metres = wavelength_um * 1e-6
+        band_filter += f"AND em_min <= {metres:.6e} AND em_max >= {metres:.6e} "
     return (f"SELECT TOP {LIMIT + 1} {', '.join(COLUMNS)} FROM {TABLE} "
             f"WHERE 1=CONTAINS(POINT('ICRS',{ra:.10f},{dec:.10f}),s_region) "
             f"{band_filter}"
@@ -97,9 +105,9 @@ def parse_observations(payload):
 
 
 class IRSAClient:
-    def observations(self, ra, dec, band=None):
+    def observations(self, ra, dec, band=None, wavelength_um=None):
         verify_schema()
-        rows, truncated = parse_observations(tap(build_query(ra, dec, band), 'votable'))
+        rows, truncated = parse_observations(tap(build_query(ra, dec, band, wavelength_um), 'votable'))
         return {'status': 'live', 'source': TAP_URL, 'table': TABLE,
-                'ra': ra, 'dec': dec, 'band': band, 'match': 'point-in-footprint',
+                'ra': ra, 'dec': dec, 'band': band, 'wavelength_um': wavelength_um, 'match': 'point-in-footprint',
                 'limit': LIMIT, 'truncated': truncated, 'count': len(rows), 'observations': rows}

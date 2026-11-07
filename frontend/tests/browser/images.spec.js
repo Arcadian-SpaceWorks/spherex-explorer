@@ -75,3 +75,40 @@ test('row keyboard selection and mobile inspector fit the viewport',async ({page
   await expect(row).toHaveAttribute('aria-selected','true');
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
+
+test('download progress shows, switching rows asks first, and cancel stops the download',async ({page}) => {
+  const held=[];
+  await page.route('**/api/images',route => {
+    if (route.request().headers()['x-skytracker-client'] === 'time-slider') return route.fulfill({json:fixture});
+    held.push(route);
+  });
+  await setup(page);
+  await page.getByRole('button',{name:'View Image'}).first().click();
+  await expect.poll(() => held.length).toBe(1);
+  const inspector=page.getByRole('region',{name:'FITS image inspector'});
+  await expect(inspector.getByTestId('download-progress')).toContainText('Contacting IRSA');
+  await expect(inspector.getByRole('progressbar')).toBeVisible();
+  await expect(inspector.getByTestId('download-elapsed')).toContainText('0:01');
+  await expect(page.locator('.observations tbody tr').first().getByRole('button')).toContainText('Downloading');
+
+  // Choosing another row while downloading asks first; keeping the download leaves it running.
+  await page.getByRole('button',{name:'View Image'}).last().click();
+  await expect(page.getByTestId('pending-switch')).toContainText('has not finished downloading');
+  await page.getByRole('button',{name:'Keep waiting'}).click();
+  await expect(page.getByTestId('pending-switch')).toHaveCount(0);
+  await expect(page.locator('tr.observation-selected')).toContainText(rows[0].obs_id);
+
+  // Switching mode is guarded too; confirming starts a new request.
+  await page.getByRole('button',{name:/Full detector image/}).click();
+  await page.getByRole('button',{name:'Cancel and continue'}).click();
+  await expect.poll(() => held.length).toBe(2);
+  expect(held[1].request().postDataJSON().cutout_deg).toBeUndefined();
+
+  // Cancel stops it and offers a restart.
+  await page.getByRole('button',{name:'Cancel download'}).click();
+  await expect(inspector).toContainText('Download cancelled');
+  await page.unroute('**/api/images');
+  await page.route('**/api/images',route => route.fulfill({json:fixture}));
+  await page.getByRole('button',{name:'Download again'}).click();
+  await expect(page.getByTestId('fits-target')).toBeVisible();
+});

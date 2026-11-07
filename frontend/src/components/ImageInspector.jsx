@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import DownloadProgress, { PendingSwitchNotice, useElapsed } from './DownloadProgress';
 
 const number = (value, digits = 5) => value == null ? '—' : Number(value).toFixed(digits);
 const CUTOUT_DEG = 0.3;  // width of the quick cutout around the selected target
@@ -10,7 +11,8 @@ const wavelength = spectral => spectral ? `${number(spectral.wavelength_um)} µm
 
 function ImageCanvas({metadata, onPixel}) {
   const [zoom, setZoom] = useState(1), [pan, setPan] = useState({x:0,y:0});
-  const [loaded, setLoaded] = useState(false), [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false), [failed, setFailed] = useState(false), [hint, setHint] = useState(false);
+  const ready = loaded && !failed;
   const svg = useRef(null), group = useRef(null), drag = useRef(null);
   const {width, height, target} = metadata;
   function point(event, element) {
@@ -33,7 +35,8 @@ function ImageCanvas({metadata, onPixel}) {
     const clicked = !drag.current.moved;
     drag.current = null;
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
-    if (clicked && loaded && !failed) {
+    if (clicked && !loaded && !failed) setHint(true);
+    if (clicked && ready) {
       const p = point(event, group.current);
       const x = Math.floor(p.x), y = height - 1 - Math.floor(p.y);
       if (x >= 0 && x < width && y >= 0 && y < height) onPixel(x, y);
@@ -43,17 +46,17 @@ function ImageCanvas({metadata, onPixel}) {
   function shift(x,y) {setPan(previous => ({x:previous.x + x*width*.12, y:previous.y + y*height*.12}));}
   return <div className="image-viewer">
     <div className="image-controls" aria-label="Image navigation controls">
-      <button type="button" onClick={() => setZoom(z => Math.min(16,z*1.4))} aria-label="Zoom in image">+</button>
-      <button type="button" onClick={() => setZoom(z => Math.max(.25,z/1.4))} aria-label="Zoom out image">−</button>
-      <button type="button" onClick={reset}>Fit image</button>
+      <button type="button" onClick={() => setZoom(z => Math.min(16,z*1.4))} disabled={!ready} aria-label="Zoom in image">+</button>
+      <button type="button" onClick={() => setZoom(z => Math.max(.25,z/1.4))} disabled={!ready} aria-label="Zoom out image">−</button>
+      <button type="button" onClick={reset} disabled={!ready}>Fit image</button>
       <span data-testid="image-zoom">{Math.round(zoom*100)}%</span>
-      <button type="button" onClick={() => shift(-1,0)} aria-label="Pan image left">←</button>
-      <button type="button" onClick={() => shift(1,0)} aria-label="Pan image right">→</button>
-      <button type="button" onClick={() => shift(0,-1)} aria-label="Pan image up">↑</button>
-      <button type="button" onClick={() => shift(0,1)} aria-label="Pan image down">↓</button>
+      <button type="button" onClick={() => shift(-1,0)} disabled={!ready} aria-label="Pan image left">←</button>
+      <button type="button" onClick={() => shift(1,0)} disabled={!ready} aria-label="Pan image right">→</button>
+      <button type="button" onClick={() => shift(0,-1)} disabled={!ready} aria-label="Pan image up">↑</button>
+      <button type="button" onClick={() => shift(0,1)} disabled={!ready} aria-label="Pan image down">↓</button>
     </div>
     <div className="fits-viewport">
-      {!loaded && !failed && <p className="image-loading" role="status">Loading science preview…</p>}
+      {!loaded && !failed && <p className="image-loading" role="status"><span className="spinner" aria-hidden="true"/>{hint ? 'Still drawing the preview. Pixel readout, zoom and pan will work as soon as it appears.' : 'File downloaded. Drawing the science preview…'}</p>}
       {failed && <p className="image-loading error" role="alert">Preview unavailable or evicted from cache. Reload this image below.</p>}
       <svg ref={svg} viewBox={`0 0 ${width} ${height}`} role="img" aria-label="SPHEREx science image in native detector orientation" data-testid="fits-canvas"
         onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={() => {drag.current=null;}}>
@@ -69,16 +72,24 @@ function ImageCanvas({metadata, onPixel}) {
   </div>;
 }
 
-export default function ImageInspector({observation, target}) {
+const QUICK_SECONDS = 25, FULL_SECONDS = 180;
+
+export default function ImageInspector({observation, target, pendingObservation, onResolvePending, onBusyChange}) {
   const [metadata, setMetadata] = useState(null), [error, setError] = useState('');
   const [loading, setLoading] = useState(false), [retry, setRetry] = useState(0);
   const [full, setFull] = useState(false);  // false: quick IRSA cutout; true: whole detector image
   const [pixel, setPixel] = useState(null), [pixelError, setPixelError] = useState(''), [pixelLoading, setPixelLoading] = useState(false);
-  const pixelRequest = useRef(null);
+  const pixelRequest = useRef(null), request = useRef(null), userCancelled = useRef(false), section = useRef(null);
+  const [queued, setQueued] = useState(false), [cancelled, setCancelled] = useState(false), [pendingAction, setPendingAction] = useState(null);
+  const elapsed = useElapsed(loading ? `${observation?.obs_id}|${full}|${retry}|${target.ra}|${target.dec}` : null);
+  useEffect(() => {onBusyChange?.(loading); if (!loading) setPendingAction(null);}, [loading, onBusyChange]);
+  // Bring the inspector into view so the user sees the download start.
+  useEffect(() => {if (observation) section.current?.scrollIntoView?.({behavior:'smooth', block:'start'});}, [observation]);
   useEffect(() => {
     const controller = new AbortController();
     let cancelled = false;
-    setMetadata(null); setError(''); setPixel(null); setPixelError(''); setPixelLoading(false);
+    request.current = controller; userCancelled.current = false;
+    setMetadata(null); setError(''); setPixel(null); setPixelError(''); setPixelLoading(false); setQueued(false); setCancelled(false);
     setLoading(Boolean(observation));
     pixelRequest.current?.abort();
     if (!observation) return () => controller.abort();
@@ -92,17 +103,26 @@ export default function ImageInspector({observation, target}) {
           data = await response.json();
           if (response.ok) break;
           // The server handles one file at a time; wait a few seconds and try again instead of failing.
-          if (data.code === 'viewer_busy' && attempt < 4) {await wait(4000, controller.signal); continue;}
+          if (data.code === 'viewer_busy' && attempt < 4) {if (!cancelled) setQueued(true); await wait(4000, controller.signal); continue;}
           throw new Error(data.message || 'This FITS image could not be loaded.');
         }
         if (!cancelled) setMetadata(data);
       } catch (err) {
-        if (!cancelled) setError(controller.signal.aborted ? 'Image request timed out. The file may be large; please retry.' : err.message);
-      } finally {clearTimeout(timeout); if (!cancelled) setLoading(false);}
+        if (cancelled) return;
+        if (userCancelled.current) setCancelled(true);
+        else setError(controller.signal.aborted ? 'Image request timed out. The file may be large; please retry.' : err.message);
+      } finally {clearTimeout(timeout); if (!cancelled) {setLoading(false); setQueued(false);}}
     }
     load();
     return () => {cancelled=true; clearTimeout(timeout); controller.abort(); pixelRequest.current?.abort();};
   }, [observation, target.ra, target.dec, retry, full]);
+
+  function cancelDownload() {userCancelled.current = true; request.current?.abort();}
+  // Ask before an action that would throw away a download still in progress.
+  function guard(what, run) {if (loading) setPendingAction({what, run}); else run();}
+  function chooseFull(value) {if (value !== full) guard(value ? 'Switching to the full detector image' : 'Switching to the quick cutout', () => setFull(value));}
+  const pending = pendingObservation ? {what:`Opening observation ${pendingObservation.obs_id || ''}`.trim(), run:() => onResolvePending?.(true), keep:() => onResolvePending?.(false)}
+    : pendingAction ? {...pendingAction, keep:() => setPendingAction(null)} : null;
 
   async function inspectPixel(x,y) {
     pixelRequest.current?.abort();
@@ -116,15 +136,18 @@ export default function ImageInspector({observation, target}) {
     } catch (err) {if (!controller.signal.aborted) setPixelError(err.message);}
     finally {if (pixelRequest.current === controller) setPixelLoading(false);}
   }
-  return <section className="panel image-inspector" aria-busy={loading} aria-label="FITS image inspector">
-    <div className="section-heading"><div><div className="eyebrow">SPHEREx SCIENCE IMAGE</div><h2>FITS image inspector</h2></div><span className={`tag ${metadata ? 'live' : ''}`}>{loading ? 'Downloading FITS' : error ? 'Unavailable' : metadata ? metadata.cache_hit ? 'Cached IRSA file' : 'IRSA file' : 'Select an observation'}</span></div>
+  return <section ref={section} className="panel image-inspector" aria-busy={loading} aria-label="FITS image inspector">
+    <div className="section-heading"><div><div className="eyebrow">SPHEREx SCIENCE IMAGE</div><h2>FITS image inspector</h2></div><span className={`tag ${metadata ? 'live' : ''}`}>{loading ? queued ? 'Waiting in queue' : 'Downloading FITS' : cancelled ? 'Cancelled' : error ? 'Unavailable' : metadata ? metadata.cache_hit ? 'Cached IRSA file' : 'IRSA file' : 'Select an observation'}</span></div>
     {!observation ? <p className="empty">Choose View Image on an observation to inspect its original science image.</p> : <>
       <p className="result-note">Selected observation {observation.obs_id} · {observation.energy_bandpassname} · {observation.obs_collection}</p>
       <div className="image-mode" role="group" aria-label="Image size">
-        <button type="button" className={full ? 'secondary' : ''} aria-pressed={!full} onClick={() => setFull(false)}>Quick cutout ({CUTOUT_DEG}° around target)</button>
-        <button type="button" className={full ? '' : 'secondary'} aria-pressed={full} onClick={() => setFull(true)}>Full detector image (slow)</button>
+        <button type="button" className={full ? 'secondary' : ''} aria-pressed={!full} onClick={() => chooseFull(false)}>Quick cutout ({CUTOUT_DEG}° around target)</button>
+        <button type="button" className={full ? '' : 'secondary'} aria-pressed={full} onClick={() => chooseFull(true)}>Full detector image (slow)</button>
       </div>
-      {loading && <p className="empty" role="status">{full ? 'Downloading and inspecting the original FITS from IRSA. Full detector images can be tens of megabytes; this may take a few minutes.' : 'Downloading and inspecting a small cutout around your target from IRSA. This usually takes 20 to 30 seconds.'}</p>}
+      {pending && <PendingSwitchNotice what={pending.what} elapsed={elapsed} onKeepWaiting={pending.keep} onConfirm={() => {setPendingAction(null); pending.run();}}/>}
+      {loading && <DownloadProgress title={full ? 'Downloading and inspecting the full detector FITS from IRSA' : `Downloading and inspecting a ${CUTOUT_DEG}° cutout around your target`}
+        expectedSeconds={full ? FULL_SECONDS : QUICK_SECONDS} elapsed={elapsed} queued={queued} onCancel={cancelDownload}/>}
+      {cancelled && <p className="empty" role="status">Download cancelled. Nothing is shown for this observation. Use “Download again” to restart it.</p>}
       {error && <p className="error" role="alert">{error}</p>}
       {metadata && <>
         <div className="image-facts">
@@ -148,7 +171,7 @@ export default function ImageInspector({observation, target}) {
         <div className="image-actions"><a className="download-fits" href={metadata.original_url} target="_blank" rel="noreferrer">{metadata.cutout ? 'Download FITS cutout' : 'Download original FITS'} ↗ ({(metadata.bytes/1024/1024).toFixed(metadata.bytes < 1048576 ? 2 : 1)} MiB)</a><span className="result-note">If the local cache expires, reload this image.</span></div>
         <details><summary>FITS HDUs and WCS metadata</summary><div className="table-scroll"><table><thead><tr><th>HDU</th><th>Extension</th><th>Type</th><th>Array shape / columns</th></tr></thead><tbody>{metadata.hdus.map(hdu => <tr key={hdu.index}><td>{hdu.index}</td><td>{hdu.name}</td><td>{hdu.type}</td><td>{hdu.shape?.join(' × ') || hdu.columns?.join(', ') || 'No image array'}</td></tr>)}</tbody></table></div><p className="result-note">Spatial WCS: {metadata.spatial_wcs} · Spectral WCS: {metadata.spectral_wcs}. Complete headers and lookup tables remain in the downloadable original.</p><pre>{metadata.science_header}</pre>{metadata.wavelength_header && <pre>{metadata.wavelength_header}</pre>}</details>
       </>}
-      {!loading && <button type="button" className="secondary reload-image" onClick={() => setRetry(n => n+1)}>{error ? 'Retry image' : 'Reload image'}</button>}
+      {!loading && <button type="button" className="secondary reload-image" onClick={() => setRetry(n => n+1)}>{error ? 'Retry image' : cancelled ? 'Download again' : 'Reload image'}</button>}
     </>}
   </section>;
 }

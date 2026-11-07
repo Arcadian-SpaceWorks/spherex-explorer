@@ -97,3 +97,34 @@ def test_network_timeout():
     with patch('backend.app.irsa.requests.get', side_effect=requests.Timeout):
         with pytest.raises(IRSAUnavailable, match='timed out'):
             tap('SELECT TOP 1 obs_id FROM spherex.obscore', 'votable')
+
+
+def test_wavelength_filter_enters_query_in_metres():
+    query = build_query(10, 20, wavelength_um=2.5)
+    assert 'AND em_min <= 2.500000e-06 AND em_max >= 2.500000e-06' in query
+    assert 'em_min <=' not in build_query(10, 20)
+    combined = build_query(10, 20, band='SPHEREx-D4', wavelength_um=3)
+    assert "energy_bandpassname = 'SPHEREx-D4'" in combined and 'em_max >= 3.000000e-06' in combined
+    for bad in (0.1, 9, float('nan'), float('inf')):
+        with pytest.raises(ValueError):
+            build_query(10, 20, wavelength_um=bad)
+
+
+def test_wavelength_filter_is_passed_to_archive_and_echoed():
+    with patch('backend.app.irsa.verify_schema'), patch('backend.app.irsa.tap', return_value=votable()) as tap_call:
+        response = client.get('/api/observations?ra=10&dec=20&wavelength_um=1.25')
+    assert response.status_code == 200
+    assert response.json()['wavelength_um'] == 1.25
+    assert 'em_min <= 1.250000e-06' in tap_call.call_args.args[0]
+
+
+@pytest.mark.parametrize('value', ['0.2', '6', 'nan', 'inf', 'x'])
+def test_invalid_wavelength_rejected(value):
+    assert client.get(f'/api/observations?ra=10&dec=20&wavelength_um={value}').status_code == 422
+
+
+def test_band_filter_is_passed_to_archive():
+    with patch('backend.app.irsa.verify_schema'), patch('backend.app.irsa.tap', return_value=votable()) as tap_call:
+        response = client.get('/api/observations?ra=10&dec=20&band=SPHEREx-D3')
+    assert response.json()['band'] == 'SPHEREx-D3'
+    assert "energy_bandpassname = 'SPHEREx-D3'" in tap_call.call_args.args[0]

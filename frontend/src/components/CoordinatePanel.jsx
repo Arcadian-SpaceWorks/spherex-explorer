@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { validCoordinates } from '../coordinates';
-export default function CoordinatePanel({selected, onGo, onSearch, loading}) {
+import WavelengthFilter from './WavelengthFilter';
+export default function CoordinatePanel({selected, onGo, onSearch, loading, filter, onFilterChange, filterError}) {
   const [ra, setRa] = useState(String(selected.ra)), [dec, setDec] = useState(String(selected.dec));
   const [error, setError] = useState('');
   useEffect(() => {setRa(selected.ra.toFixed(6)); setDec(selected.dec.toFixed(6)); setError('');}, [selected]);
@@ -16,6 +17,10 @@ export default function CoordinatePanel({selected, onGo, onSearch, loading}) {
     <form onSubmit={go}><label htmlFor="ra">RA <span>0 ≤ RA &lt; 360°</span></label><input id="ra" inputMode="decimal" value={ra} onChange={e => setRa(e.target.value)} required/>
       <label htmlFor="dec">Dec <span>−90° to +90°</span></label><input id="dec" inputMode="decimal" value={dec} onChange={e => setDec(e.target.value)} required/>
       {error && <p className="error" role="alert">{error}</p>}<button className="secondary" type="submit">Go To Coordinates <span>↗</span></button></form>
-    <div className="search-block"><div className="eyebrow">SPHEREx ARCHIVE</div><p>Find spectral images whose footprints cover your selected point.</p><button onClick={onSearch} disabled={loading}>{loading ? 'Searching IRSA…' : 'Search SPHEREx Observations'}</button><small>Live query · NASA/IPAC IRSA</small></div>
+    <div className="search-block"><div className="eyebrow">SPHEREx ARCHIVE</div><p>Find spectral images whose footprints cover your selected point.</p>
+      <form onSubmit={event => {event.preventDefault(); if (!loading) onSearch();}}>
+        <WavelengthFilter filter={filter} onChange={onFilterChange} error={filterError}/>
+        <button type="submit" disabled={loading}>{loading ? 'Searching IRSA…' : 'Search SPHEREx Observations'}</button>
+      </form><small>Live query · NASA/IPAC IRSA</small></div>
   </aside>;
 }

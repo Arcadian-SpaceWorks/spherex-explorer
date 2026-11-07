@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { chronologicalFrames, formatUtcLabel, isSyntheticObservation, wavelengthLabel } from '../timeline';
 import { loadObservationImage } from '../imageAdapter';
 import TimeSlider from './TimeSlider';
+import DownloadProgress, { useElapsed } from './DownloadProgress';
 
 export default function TemporalImageExplorer({result, loading, error, target}) {
   const sequence = useMemo(() => chronologicalFrames(loading ? [] : result?.observations), [loading, result]);
@@ -17,6 +18,7 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
   if (seen !== signature) {setSeen(signature); setIndex(0);}
 
   const frame = sequence.frames[displayIndex] || null;
+  const elapsed = useElapsed(imageLoading && frame ? `${frame.obs_id}|${frame.access_url}|${retry}` : null);
   useEffect(() => {
     const controller = new AbortController();
     let cancelled = false;
@@ -56,7 +58,8 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
         </div>
         {metadata?.observed_at_utc && metadata.observed_at_utc !== frame.observed_at_utc && <p className="result-note">FITS header time differs from the archive timestamp: {formatUtcLabel(metadata.observed_at_utc)}.</p>}
         <div className="time-stage">
-          {imageLoading && <p className="image-loading" role="status">Loading the observation image for {frame.obs_id || 'this step'}.</p>}
+          {imageLoading && <DownloadProgress title={`Loading the full observation image for ${frame.obs_id || 'this step'}`} expectedSeconds={180} elapsed={elapsed}/>}
+          {imageLoading && <p className="result-note">Moving the slider stops this download and starts the next step’s image.</p>}
           {imageError && <p className="image-loading error" role="alert">{imageError}</p>}
           {metadata?.preview_url && !previewFailed && <img data-testid="time-slider-image" src={metadata.preview_url} alt={`${frame.obs_id || 'SPHEREx observation'} at ${timeLabel}`} onError={() => setPreviewFailed(true)}/>}
           {previewFailed && <p className="image-loading error" role="alert">The preview image failed to load. Choose another observation or retry this one.</p>}

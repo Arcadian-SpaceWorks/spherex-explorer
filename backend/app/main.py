@@ -1,6 +1,6 @@
 from fastapi import Depends, FastAPI, Query
 from fastapi.responses import JSONResponse
-from .irsa import IRSAClient, IRSAUnavailable
+from .irsa import IRSAClient, IRSAUnavailable, WAVELENGTH_MAX_UM, WAVELENGTH_MIN_UM
 
 from .images import get_image_service, router as images_router
 from .pairs import build_pair_report
@@ -35,9 +35,12 @@ BAND_PATTERN = r'^SPHEREx-D[1-6]$'
 def observations(ra: float = Query(..., ge=0, lt=360, allow_inf_nan=False),
                  dec: float = Query(..., ge=-90, le=90, allow_inf_nan=False),
                  band: str | None = Query(None, pattern=BAND_PATTERN),
+                 wavelength_um: float | None = Query(None, ge=WAVELENGTH_MIN_UM, le=WAVELENGTH_MAX_UM, allow_inf_nan=False),
                  data_client: IRSAClient = Depends(get_client)):
+    # Filtering in the archive query means only matching observations (and later images) are loaded.
+    filters = {key: value for key, value in (('band', band), ('wavelength_um', wavelength_um)) if value is not None}
     try:
-        return data_client.observations(ra, dec, band) if band else data_client.observations(ra, dec)
+        return data_client.observations(ra, dec, **filters)
     except IRSAUnavailable as exc:
         return JSONResponse(status_code=503, content={
             'status': 'unavailable', 'message': str(exc), 'observations': [],
