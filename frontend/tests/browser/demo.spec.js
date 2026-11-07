@@ -38,9 +38,11 @@ test('real preloaded playback, local science pixel readout and target changes wo
   await expect(explorer.getByTestId('time-slider-image')).toHaveAttribute('src', target.observations[1].preview_path);
   await expect.poll(() => explorer.getByTestId('time-slider-image').evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
   await page.getByLabel('Preloaded target').selectOption('m31');
-  await expect(page.getByText('No verified local cutouts have been supplied for this target.')).toBeVisible();
-  await expect(page.getByTestId('time-slider')).toHaveCount(0);
-  await expect(page.getByTestId('fits-canvas')).toHaveCount(0);
+  const m31 = manifest.targets.find(item => item.id === 'm31');
+  await expect(explorer.getByTestId('time-slider-id')).toHaveText(`Observation ${m31.observations[0].obs_id}`);
+  await expect(explorer).toContainText('Step 1 of 6');
+  await expect.poll(() => explorer.getByTestId('time-slider-image').evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+  await expect(page.getByTestId('fits-target')).toBeVisible();
   await page.getByLabel('Preloaded target').selectOption('m101');
   await visiblePreview(page);
   expect(traffic).toEqual({external:[], live:[]});
@@ -87,4 +89,20 @@ test('missing previews recover through existing viewer and slider retry controls
   await explorer.getByRole('button', {name:'Retry this observation image'}).click();
   await page.getByRole('button', {name:'Reload image', exact:true}).click();
   await visiblePreview(page);
+});
+
+test('a target without prepared cutouts is explicitly unavailable', async ({page}) => {
+  // TEST DATA: the real manifest plus one synthetic unprepared target, served only in this test.
+  const missing = {id: 'test-missing', name: 'Unprepared test target', ra: 1, dec: 2,
+    coordinate_source: 'https://example.org/test-only', status: 'missing',
+    missing_reason: 'No verified local cutouts have been supplied for this target.', observations: []};
+  await blockArchive(page);
+  // Registered after blockArchive's catch-all route, so this one takes priority.
+  await page.route('**/demo/manifest.json', route => route.fulfill({json: {...manifest, targets: [...manifest.targets, missing]}}));
+  await page.goto('/?mode=demo');
+  await visiblePreview(page);
+  await page.getByLabel('Preloaded target').selectOption('test-missing');
+  await expect(page.getByText(missing.missing_reason)).toBeVisible();
+  await expect(page.getByTestId('time-slider')).toHaveCount(0);
+  await expect(page.getByTestId('fits-canvas')).toHaveCount(0);
 });

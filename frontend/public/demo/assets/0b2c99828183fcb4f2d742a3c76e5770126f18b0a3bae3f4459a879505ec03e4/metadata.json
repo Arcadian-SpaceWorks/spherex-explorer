@@ -108,7 +108,7 @@
     "normalization": "independent 1\u201399 percentile asinh stretch; invalid pixels transparent",
     "registration": "native detector; no spatial registration",
     "renderer": "backend.app.fits_image.render_fits",
-    "renderer_sha256": "d42a49115c381d69f595644503d764d2542b2e58531d555068312b14513bdfdf",
+    "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
     "science_values": "original FITS copied byte-for-byte",
     "source_sha256": "c61cdd18a17878266db3942860f5d3146f64b0a3152342b9bde29a0077369d88",
     "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",

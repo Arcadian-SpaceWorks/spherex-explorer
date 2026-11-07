@@ -8,6 +8,7 @@
       "ra": 210.80227,
       "dec": 54.34895,
       "coordinate_source": "https://simbad.cds.unistra.fr/simbad/sim-basic?Ident=M101",
+      "science_context": "",
       "status": "ready",
       "missing_reason": null,
       "observations": [
@@ -28,12 +29,12 @@
           "metadata_path": "/demo/assets/60d20ed41684efe311e1a0152c886fdd617c6eae743859d7df2924ee7ca29a6b/metadata.json",
           "fits_path": "/demo/assets/60d20ed41684efe311e1a0152c886fdd617c6eae743859d7df2924ee7ca29a6b/original.fits",
           "fits_sha256": "ed0095a308611f6650c7b5a5d34b78ed371317b4801fe10f6b00aae386724aac",
-          "preview_sha256": "7484e7a9300e900edc1b616043ff9bff67d45ed31b170f57346de32f2932a58e",
-          "metadata_sha256": "6d9bfa847b9a6e40c659e1e945845bee238dc8feabb05f447976c0a3f5b6de9f",
+          "preview_sha256": "157aa786419d0967ce96e2c4e6c03b835e55cb7dc66908dabbdbca76dcfa0d9d",
+          "metadata_sha256": "032061c62310345f2e629ec8d95bd5cedbb87eafe37e3e5fd7099d094aaa2203",
           "provenance": {
             "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
             "renderer": "backend.app.fits_image.render_fits",
-            "renderer_sha256": "d42a49115c381d69f595644503d764d2542b2e58531d555068312b14513bdfdf",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
             "versions": {
               "astropy": "8.0.2",
               "numpy": "2.5.4",
@@ -43,7 +44,8 @@
             "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
             "science_values": "original FITS copied byte-for-byte",
             "source_sha256": "ed0095a308611f6650c7b5a5d34b78ed371317b4801fe10f6b00aae386724aac"
-          }
+          },
+          "acquisition": null
         },
         {
           "image_id": "afd22738b2b236408093b533613a714c6653716a021cb5e3941e57d1a21eebed",
@@ -62,12 +64,12 @@
           "metadata_path": "/demo/assets/afd22738b2b236408093b533613a714c6653716a021cb5e3941e57d1a21eebed/metadata.json",
           "fits_path": "/demo/assets/afd22738b2b236408093b533613a714c6653716a021cb5e3941e57d1a21eebed/original.fits",
           "fits_sha256": "520e02c01d89eb6593c86ad274a5b0192dd2c3ccdc75978ea45cc2d5164e52da",
-          "preview_sha256": "735f9996aead90811460c3038a52636efffa23deabc640f2ccd856081bedd91a",
-          "metadata_sha256": "2a03014104b9680937db5ef588f14b020499f955d465550cb71d53ed8f6b3264",
+          "preview_sha256": "3318e7e7e138c900c73ed7611358a3f87ea32ef1551a5bc658f87b0af4c44c92",
+          "metadata_sha256": "a5632581df8d91f605fcec4bfd13e31f4e8ef29b58c86c7d1f140a5c1bf14b33",
           "provenance": {
             "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
             "renderer": "backend.app.fits_image.render_fits",
-            "renderer_sha256": "d42a49115c381d69f595644503d764d2542b2e58531d555068312b14513bdfdf",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
             "versions": {
               "astropy": "8.0.2",
               "numpy": "2.5.4",
@@ -77,7 +79,8 @@
             "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
             "science_values": "original FITS copied byte-for-byte",
             "source_sha256": "520e02c01d89eb6593c86ad274a5b0192dd2c3ccdc75978ea45cc2d5164e52da"
-          }
+          },
+          "acquisition": null
         },
         {
           "image_id": "0b2c99828183fcb4f2d742a3c76e5770126f18b0a3bae3f4459a879505ec03e4",
@@ -96,12 +99,12 @@
           "metadata_path": "/demo/assets/0b2c99828183fcb4f2d742a3c76e5770126f18b0a3bae3f4459a879505ec03e4/metadata.json",
           "fits_path": "/demo/assets/0b2c99828183fcb4f2d742a3c76e5770126f18b0a3bae3f4459a879505ec03e4/original.fits",
           "fits_sha256": "c61cdd18a17878266db3942860f5d3146f64b0a3152342b9bde29a0077369d88",
-          "preview_sha256": "25d0440b524652d4efe3a1e83669a5b1bf8ef33a1ac7c73ebb9cb129522a6abc",
-          "metadata_sha256": "aafd48289f3574e254e8da0df54408e2213d0a840903398170b8f573cee5a75c",
+          "preview_sha256": "d0f10030aa44d34b0cf7a7d3bf174e235a976fb68a24c1ac5e5c2860a9ef4332",
+          "metadata_sha256": "2154024a3fc7dfef3ee85825e387ffccfc41898bf9245cf5d5809bee0bcdb7f8",
           "provenance": {
             "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
             "renderer": "backend.app.fits_image.render_fits",
-            "renderer_sha256": "d42a49115c381d69f595644503d764d2542b2e58531d555068312b14513bdfdf",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
             "versions": {
               "astropy": "8.0.2",
               "numpy": "2.5.4",
@@ -111,19 +114,232 @@
             "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
             "science_values": "original FITS copied byte-for-byte",
             "source_sha256": "c61cdd18a17878266db3942860f5d3146f64b0a3152342b9bde29a0077369d88"
-          }
+          },
+          "acquisition": null
         }
       ]
     },
     {
       "id": "m31",
-      "name": "M31 — Andromeda Galaxy (assets not prepared)",
+      "name": "M31 — Andromeda Galaxy core",
       "ra": 10.684708333333333,
       "dec": 41.26875,
       "coordinate_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
-      "status": "missing",
-      "missing_reason": "No verified local cutouts have been supplied for this target.",
-      "observations": []
+      "science_context": "Three SPHEREx survey passes (July 2025, December 2025, July 2026), each in detector D1 (about 0.75–0.89 µm at the core) and D4 (about 2.4–3.0 µm). D1 and D4 of one exposure are taken at the same moment through a dichroic. Brightness differences between passes follow the wavelength at the target, not time; no variability is claimed.",
+      "status": "ready",
+      "missing_reason": null,
+      "observations": [
+        {
+          "image_id": "33a87ebe34221120948ec7e74b3462c052e57c5e079b851a1b327491c994b1f3",
+          "obs_id": "2025W28_1B_0480_4",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W28_1B_0480_4/D1",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W28_1B/l2b-v20-2025-260/1/level2_2025W28_1B_0480_4D1_spx_l2b-v20-2025-260.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2025-07-09T14:56:47.965Z",
+          "detector": 1,
+          "spectral": {
+            "wavelength_um": 0.7529171979642748,
+            "bandwidth_um": 0.01800488618656174,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/33a87ebe34221120948ec7e74b3462c052e57c5e079b851a1b327491c994b1f3/preview.png",
+          "metadata_path": "/demo/assets/33a87ebe34221120948ec7e74b3462c052e57c5e079b851a1b327491c994b1f3/metadata.json",
+          "fits_path": "/demo/assets/33a87ebe34221120948ec7e74b3462c052e57c5e079b851a1b327491c994b1f3/original.fits",
+          "fits_sha256": "77c0421b6d3748deb3cb5cfc75db9c126a7b4e48c5fa9fe49fac46824f85c0e7",
+          "preview_sha256": "76960e9e136d1d2438660d92794d381bae34d90bdb69efc5922be0aa6e3ed936",
+          "metadata_sha256": "3dbb9a44f44eddedf1e403c00b4227dfa1a72b82c85405172b5bac613d89fc25",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "77c0421b6d3748deb3cb5cfc75db9c126a7b4e48c5fa9fe49fac46824f85c0e7"
+          },
+          "acquisition": null
+        },
+        {
+          "image_id": "feef6ed477f8cb54def8628018092a314f506fda7945bce93932a534db995df0",
+          "obs_id": "2025W28_1B_0480_4",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W28_1B_0480_4/D4",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W28_1B/l2b-v20-2025-260/4/level2_2025W28_1B_0480_4D4_spx_l2b-v20-2025-260.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2025-07-09T14:56:47.965Z",
+          "detector": 4,
+          "spectral": {
+            "wavelength_um": 2.4461511285236694,
+            "bandwidth_um": 0.05883515014890495,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/feef6ed477f8cb54def8628018092a314f506fda7945bce93932a534db995df0/preview.png",
+          "metadata_path": "/demo/assets/feef6ed477f8cb54def8628018092a314f506fda7945bce93932a534db995df0/metadata.json",
+          "fits_path": "/demo/assets/feef6ed477f8cb54def8628018092a314f506fda7945bce93932a534db995df0/original.fits",
+          "fits_sha256": "fc8d60ffb462e67fd8e38bff2d87b1ee49e3ed7479513d00fc4517b99ac99b88",
+          "preview_sha256": "806ec0f74d6016145ce66e2ab7afd80650fdacc936c6eca4e5b437226f06cb83",
+          "metadata_sha256": "9f4b8a0e2c46ad7ef20e46a1444fd28645e8e824daa833de737ecebc3887961c",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "fc8d60ffb462e67fd8e38bff2d87b1ee49e3ed7479513d00fc4517b99ac99b88"
+          },
+          "acquisition": null
+        },
+        {
+          "image_id": "c56c4179485e93d706a423b806f524aa02ede154fb7673e4b8ce92fdbec8445b",
+          "obs_id": "2026W01_1A_0471_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W01_1A_0471_1/D1",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W01_1A/l2b-v22-2026-007/1/level2_2026W01_1A_0471_1D1_spx_l2b-v22-2026-007.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2025-12-31T06:00:22.121Z",
+          "detector": 1,
+          "spectral": {
+            "wavelength_um": 0.8946366516692928,
+            "bandwidth_um": 0.02274766728810831,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/c56c4179485e93d706a423b806f524aa02ede154fb7673e4b8ce92fdbec8445b/preview.png",
+          "metadata_path": "/demo/assets/c56c4179485e93d706a423b806f524aa02ede154fb7673e4b8ce92fdbec8445b/metadata.json",
+          "fits_path": "/demo/assets/c56c4179485e93d706a423b806f524aa02ede154fb7673e4b8ce92fdbec8445b/original.fits",
+          "fits_sha256": "6591bbba39f7e919e90c65a2c5a075f8271b290083506d6ce3f864f47b04a42b",
+          "preview_sha256": "8e95a533ceb5c796dadf6cdb232d1c68af1b50a051ed13eee0cc6f4fc2c32a09",
+          "metadata_sha256": "f0249ce2b562da145b9597ba5892802f38aa7bc3092aefb336590b8c69a579ef",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "6591bbba39f7e919e90c65a2c5a075f8271b290083506d6ce3f864f47b04a42b"
+          },
+          "acquisition": null
+        },
+        {
+          "image_id": "02638fe5db8ab1fb76c7fad7783b1dbeb8df8fe7c445b2892fbe5299791f9519",
+          "obs_id": "2026W01_1A_0471_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W01_1A_0471_1/D4",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W01_1A/l2b-v22-2026-007/4/level2_2026W01_1A_0471_1D4_spx_l2b-v22-2026-007.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2025-12-31T06:00:22.121Z",
+          "detector": 4,
+          "spectral": {
+            "wavelength_um": 2.9801807340734148,
+            "bandwidth_um": 0.0860115315300577,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/02638fe5db8ab1fb76c7fad7783b1dbeb8df8fe7c445b2892fbe5299791f9519/preview.png",
+          "metadata_path": "/demo/assets/02638fe5db8ab1fb76c7fad7783b1dbeb8df8fe7c445b2892fbe5299791f9519/metadata.json",
+          "fits_path": "/demo/assets/02638fe5db8ab1fb76c7fad7783b1dbeb8df8fe7c445b2892fbe5299791f9519/original.fits",
+          "fits_sha256": "39a73c7e45b3d663c136dd1176f27972eb4345c629bbdf98e2968b84e86f0b0e",
+          "preview_sha256": "e8384044c0baba3ccc90a3ae8340e9c60136c8265482798b22e393107268eb1b",
+          "metadata_sha256": "2f64449440b44d5e758364898810882a3ae23ec89cd510813eb3a7f1bd0543e1",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "39a73c7e45b3d663c136dd1176f27972eb4345c629bbdf98e2968b84e86f0b0e"
+          },
+          "acquisition": null
+        },
+        {
+          "image_id": "f6fbe6d097f0ded0dd92a23c65dd92aac5d6d8efe976d4a15721157dd4fc94aa",
+          "obs_id": "2026W28_2A_0117_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W28_2A_0117_1/D1",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W28_2A/l2b-v25-2026-195/1/level2_2026W28_2A_0117_1D1_spx_l2b-v25-2026-195.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2026-07-10T00:02:31.613Z",
+          "detector": 1,
+          "spectral": {
+            "wavelength_um": 0.8935026933510251,
+            "bandwidth_um": 0.022732009415071752,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/f6fbe6d097f0ded0dd92a23c65dd92aac5d6d8efe976d4a15721157dd4fc94aa/preview.png",
+          "metadata_path": "/demo/assets/f6fbe6d097f0ded0dd92a23c65dd92aac5d6d8efe976d4a15721157dd4fc94aa/metadata.json",
+          "fits_path": "/demo/assets/f6fbe6d097f0ded0dd92a23c65dd92aac5d6d8efe976d4a15721157dd4fc94aa/original.fits",
+          "fits_sha256": "88d42086353e66209bcb114504871b0ad979e60273a56511740b77b94eb94e90",
+          "preview_sha256": "a2cdc2175ef98bd2e0f508974bcfb22eae165b9c49b7e3473fae5596cd8a66e9",
+          "metadata_sha256": "cbf156f2f08597aa37045403d0d62f9c11d97020d32b6772df75bce045ff309d",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "88d42086353e66209bcb114504871b0ad979e60273a56511740b77b94eb94e90"
+          },
+          "acquisition": null
+        },
+        {
+          "image_id": "490d400b938e53170c8d1b5e2bde6cc7044fd38f309b9b4516f4573c2e900f21",
+          "obs_id": "2026W28_2A_0117_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W28_2A_0117_1/D4",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W28_2A/l2b-v25-2026-195/4/level2_2026W28_2A_0117_1D4_spx_l2b-v25-2026-195.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2026-07-10T00:02:31.613Z",
+          "detector": 4,
+          "spectral": {
+            "wavelength_um": 2.9751889442602795,
+            "bandwidth_um": 0.0846428943612412,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/490d400b938e53170c8d1b5e2bde6cc7044fd38f309b9b4516f4573c2e900f21/preview.png",
+          "metadata_path": "/demo/assets/490d400b938e53170c8d1b5e2bde6cc7044fd38f309b9b4516f4573c2e900f21/metadata.json",
+          "fits_path": "/demo/assets/490d400b938e53170c8d1b5e2bde6cc7044fd38f309b9b4516f4573c2e900f21/original.fits",
+          "fits_sha256": "5af39570aacfbbfd9036c520b71d3bbcfb93faf91da92a205107da2de4a65c1a",
+          "preview_sha256": "f0d7d4bf48de414866446aa56a108fb69c57923045a132bea77f73458ff4f526",
+          "metadata_sha256": "02e5db1395a640c077a65da2cd7f9a2bf360a736588b276f0339991486bb8ae1",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "5af39570aacfbbfd9036c520b71d3bbcfb93faf91da92a205107da2de4a65c1a"
+          },
+          "acquisition": null
+        }
+      ]
     }
   ]
 }

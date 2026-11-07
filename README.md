@@ -174,7 +174,7 @@ SPHEREx image conventions: [official product guide](https://github.com/Caltech-I
 
 ### Preloaded presentation mode
 
-Open `/?mode=demo` or choose **Demo Mode** in the Data mode selector. Three preserved real SPHEREx cutouts for the M101 region are included; M31 is explicitly marked not prepared. Demo playback uses local PNGs and manifests, with local FastAPI FITS pixel readouts. Live Mode retains the existing IRSA search/cutout pipeline.
+Open `/?mode=demo` or choose **Demo Mode** in the Data mode selector. Three preserved real SPHEREx cutouts for the M101 region and six for the M31 core are included (M31: three survey passes, each in detectors D1 and D4; fetched with `scripts/acquire_m31_demo.py`). Demo playback uses local PNGs and manifests, with local FastAPI FITS pixel readouts. Live Mode retains the existing IRSA search/cutout pipeline.
 
 Validate assets before presenting: `.venv/bin/python scripts/prepare_demo.py --validate frontend/public/demo`. For offline preparation, provenance, deployment and scaling instructions, see [the hybrid demo architecture](docs/demo-architecture.md). PNGs are independently stretched previews; the application makes no validated motion or variability claim.
 

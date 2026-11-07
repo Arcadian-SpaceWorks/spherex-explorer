@@ -24,11 +24,37 @@
     },
     {
       "id": "m31",
-      "name": "M31 \u2014 Andromeda Galaxy (assets not prepared)",
+      "name": "M31 \u2014 Andromeda Galaxy core",
       "ra": 10.684708333333333,
       "dec": 41.26875,
       "coordinate_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
-      "inputs": []
+      "inputs": [
+        {
+          "fits": "../frontend/public/demo/assets/33a87ebe34221120948ec7e74b3462c052e57c5e079b851a1b327491c994b1f3/original.fits",
+          "metadata": "source-records/77c0421b6d3748deb3cb5cfc75db9c126a7b4e48c5fa9fe49fac46824f85c0e7.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/feef6ed477f8cb54def8628018092a314f506fda7945bce93932a534db995df0/original.fits",
+          "metadata": "source-records/fc8d60ffb462e67fd8e38bff2d87b1ee49e3ed7479513d00fc4517b99ac99b88.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/c56c4179485e93d706a423b806f524aa02ede154fb7673e4b8ce92fdbec8445b/original.fits",
+          "metadata": "source-records/6591bbba39f7e919e90c65a2c5a075f8271b290083506d6ce3f864f47b04a42b.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/02638fe5db8ab1fb76c7fad7783b1dbeb8df8fe7c445b2892fbe5299791f9519/original.fits",
+          "metadata": "source-records/39a73c7e45b3d663c136dd1176f27972eb4345c629bbdf98e2968b84e86f0b0e.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/f6fbe6d097f0ded0dd92a23c65dd92aac5d6d8efe976d4a15721157dd4fc94aa/original.fits",
+          "metadata": "source-records/88d42086353e66209bcb114504871b0ad979e60273a56511740b77b94eb94e90.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/490d400b938e53170c8d1b5e2bde6cc7044fd38f309b9b4516f4573c2e900f21/original.fits",
+          "metadata": "source-records/5af39570aacfbbfd9036c520b71d3bbcfb93faf91da92a205107da2de4a65c1a.json"
+        }
+      ],
+      "science_context": "Three SPHEREx survey passes (July 2025, December 2025, July 2026), each in detector D1 (about 0.75\u20130.89 \u00b5m at the core) and D4 (about 2.4\u20133.0 \u00b5m). D1 and D4 of one exposure are taken at the same moment through a dichroic. Brightness differences between passes follow the wavelength at the target, not time; no variability is claimed."
     }
   ]
 }
