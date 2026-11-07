@@ -4,6 +4,8 @@ import CoordinatePanel from './components/CoordinatePanel';
 import ObservationsTable from './components/ObservationsTable';
 import ImageInspector from './components/ImageInspector';
 import TemporalImageExplorer from './components/TemporalImageExplorer';
+import ComparePanel from './components/ComparePanel';
+import { sameObservation } from './compareAdapter';
 import { demoResult, loadDemoManifest } from './demoAdapter';
 import WavelengthFilter from './components/WavelengthFilter';
 import { ALL_FILTER, filterParams, filterDemoResult } from './wavelengths';
@@ -19,6 +21,7 @@ export default function App() {
   const [navigation, setNavigation] = useState(null), [fov, setFov] = useState(null);
   const [result, setResult] = useState(null), [error, setError] = useState(''), [loading, setLoading] = useState(false);
   const [imageObservation, setImageObservation] = useState(null);
+  const [picks, setPicks] = useState({a: null, b: null});
   const request = useRef(null);
   useEffect(() => () => request.current?.abort(), []);
   function chooseDemoTarget(target, scienceNote, activeFilter = ALL_FILTER) {
@@ -32,7 +35,15 @@ export default function App() {
     request.current?.abort(); request.current = null;
     setFilter(ALL_FILTER); setFilterError('');
     setMode(next); setResult(null); setError(''); setLoading(false);
-    setImageObservation(null); setManifest(null); setFov(null);
+    setImageObservation(null); setManifest(null); setFov(null); setPicks({a: null, b: null});
+  }
+  function pick(role, row) {
+    // Choosing a row already in the other slot moves it, so A and B never hold the same observation.
+    setPicks(current => {
+      const other = role === 'a' ? 'b' : 'a';
+      return {...current, [role]: sameObservation(current[role], row) ? null : row,
+        [other]: sameObservation(current[other], row) ? null : current[other]};
+    });
   }
   useEffect(() => {
     if (mode !== 'demo') return;
@@ -46,7 +57,7 @@ export default function App() {
       .finally(() => {if (request.current === controller) setLoading(false);});
     return () => controller.abort();
   }, [mode]);
-  function select(point) {setImageObservation(null); request.current?.abort(); request.current = null; setLoading(false); setSelected(point); setResult(null); setError('');}
+  function select(point) {setPicks({a: null, b: null}); setImageObservation(null); request.current?.abort(); request.current = null; setLoading(false); setSelected(point); setResult(null); setError('');}
   function changeFilter(next, apply) {
     setFilter(next); setFilterError('');
     if (apply && (result || loading || error)) search(next);
@@ -60,7 +71,7 @@ export default function App() {
       if (target) chooseDemoTarget(target, manifest.science_note, activeFilter);
       return;
     }
-    setImageObservation(null);
+    setImageObservation(null); setPicks({a: null, b: null});
     request.current?.abort();
     const controller = new AbortController(); request.current = controller;
     setLoading(true); setResult(null); setError('');
@@ -104,7 +115,11 @@ export default function App() {
       <h2>{manifest?.targets.find(target => target.id === demoTargetId)?.name || 'Preloaded sky region'}</h2>
       {manifest && <p>Target ICRS RA {selected.ra.toFixed(6)}°, Dec {selected.dec.toFixed(6)}°. The cutouts below retain native detector orientation and may have different coverage. Live Mode provides the interactive Aladin sky atlas.</p>}
     </section>}
-    <ObservationsTable mode={mode} result={result} loading={loading} error={error} selectedObservation={imageObservation} onViewImage={setImageObservation}/>
+    <ObservationsTable mode={mode} result={result} loading={loading} error={error} selectedObservation={imageObservation} onViewImage={setImageObservation}
+      compare={mode === 'live' ? {...picks, onPick: pick} : null}/>
+    {mode === 'live' && result?.count > 0 && <ComparePanel key={`${picks.a?.access_url}|${picks.b?.access_url}|${selected.ra}|${selected.dec}`}
+      picks={picks} target={selected} onRemove={role => setPicks(current => ({...current, [role]: null}))}
+      onSwap={() => setPicks(current => ({a: current.b, b: current.a}))}/>}
     <TemporalImageExplorer result={result} loading={loading} error={error} target={selected}/>
     <ImageInspector observation={imageObservation} target={selected}/></main><footer><span>Arcadian SkyTracker · Milestone 02</span><span>Sky atlas by <a href="https://aladin.cds.unistra.fr/AladinLite/">Aladin Lite / CDS</a> · DSS2 imagery · Observations from <a href="https://irsa.ipac.caltech.edu/Missions/spherex.html">NASA/IPAC IRSA</a></span></footer></div>;
 }
