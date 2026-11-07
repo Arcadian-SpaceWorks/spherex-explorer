@@ -31,9 +31,12 @@ def process_fits(operation, **arguments):
 
 def main():
     import resource  # Fedora/Linux deployment; no core dumps for malformed native input.
-    resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
-    resource.setrlimit(resource.RLIMIT_CPU, (55, 55))
-    resource.setrlimit(resource.RLIMIT_AS, (3 * 1024**3, 3 * 1024**3))
+    with contextlib.suppress(ValueError, OSError):
+        resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+    with contextlib.suppress(ValueError, OSError):
+        resource.setrlimit(resource.RLIMIT_CPU, (55, 55))
+    with contextlib.suppress(ValueError, OSError):
+        resource.setrlimit(resource.RLIMIT_AS, (3 * 1024**3, 3 * 1024**3))
     from .fits_image import read_pixel, render_fits, target_info
     arguments = json.load(sys.stdin)
     operation = arguments.pop('operation')

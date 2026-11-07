@@ -81,8 +81,9 @@ export default function ImageInspector({observation, target}) {
       try {
         const response = await fetch('/api/images', {method:'POST', headers:{'Content-Type':'application/json'}, signal:controller.signal,
           body:JSON.stringify({access_url:observation.access_url, ra:target.ra, dec:target.dec})});
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.message || 'This FITS image could not be loaded.');
+        let data = {};
+        try { data = await response.json(); } catch { data = {}; }
+        if (!response.ok) throw new Error(data.message || (response.status >= 500 ? 'The backend image service is unavailable. Make sure backend is running on port 8000.' : 'This FITS image could not be loaded.'));
         if (!cancelled) setMetadata(data);
       } catch (err) {
         if (!cancelled) setError(controller.signal.aborted ? 'Image request timed out. The file may be large; please retry.' : err.message);
@@ -98,7 +99,8 @@ export default function ImageInspector({observation, target}) {
     setPixel(null); setPixelError(''); setPixelLoading(true);
     try {
       const response = await fetch(`/api/images/${metadata.image_id}/pixel?${new URLSearchParams({x,y})}`, {signal:controller.signal});
-      const data = await response.json();
+      let data = {};
+      try { data = await response.json(); } catch { data = {}; }
       if (!response.ok) throw new Error(data.message || 'Pixel readout unavailable.');
       if (pixelRequest.current === controller) setPixel(data);
     } catch (err) {if (!controller.signal.aborted) setPixelError(err.message);}

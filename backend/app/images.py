@@ -1,6 +1,6 @@
 from functools import lru_cache
 import os
-from typing import Annotated
+from typing import Annotated, Optional
 
 from fastapi import APIRouter, Depends, Path, Query
 from fastapi.responses import StreamingResponse
@@ -15,8 +15,8 @@ ImageId = Annotated[str, Path(pattern=r'^[a-f0-9]{64}$')]
 
 class ImageRequest(BaseModel):
     access_url: str = Field(min_length=1, max_length=4096)
-    ra: float | None = Field(default=None, ge=0, lt=360, allow_inf_nan=False)
-    dec: float | None = Field(default=None, ge=-90, le=90, allow_inf_nan=False)
+    ra: Optional[float] = Field(default=None, ge=0, lt=360, allow_inf_nan=False)
+    dec: Optional[float] = Field(default=None, ge=-90, le=90, allow_inf_nan=False)
 
     @model_validator(mode='after')
     def coordinate_pair(self):

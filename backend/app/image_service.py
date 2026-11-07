@@ -86,7 +86,13 @@ class ImageService:
                     fits_url = self.downloader.download(access_url, source)
                     metadata = process_fits('render', path=str(source.resolve()), preview_path=str((working / 'preview.png').resolve()), max_pixels=self.settings.max_pixels)
                     with source.open('rb') as handle:
-                        checksum = hashlib.file_digest(handle, 'sha256').hexdigest()
+                        if hasattr(hashlib, 'file_digest'):
+                            checksum = hashlib.file_digest(handle, 'sha256').hexdigest()
+                        else:
+                            hasher = hashlib.sha256()
+                            for chunk in iter(lambda: handle.read(65536), b''):
+                                hasher.update(chunk)
+                            checksum = hasher.hexdigest()
                     metadata.update(image_id=image_id, access_url=access_url, fits_url=fits_url,
                                     bytes=source.stat().st_size, sha256=checksum,
                                     preview_url=f'/api/images/{image_id}/preview',
