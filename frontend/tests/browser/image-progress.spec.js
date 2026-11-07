@@ -35,7 +35,7 @@ test('progress reports elapsed wait without invented stages; stop/retry ignores 
   await expect(page.getByTestId('fits-target')).toBeVisible();
   await expect(inspector).not.toContainText('SYNTHETIC-STALE-RESPONSE');
   await expect(inspector.getByRole('progressbar')).toHaveCount(0);
-  await page.getByRole('combobox',{name:'Data mode',exact:true}).selectOption('demo');
+  await page.getByRole('radio',{name:/Demo Mode/}).check();
   await expect(page.getByTestId('fits-target')).toBeVisible();
   await expect(inspector).toContainText('Preloaded real SPHEREx cutout');
 });

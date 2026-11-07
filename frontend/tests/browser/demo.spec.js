@@ -21,7 +21,7 @@ async function visiblePreview(page) {
 test('real preloaded playback, local science pixel readout and target changes work with external network blocked', async ({page}) => {
   const traffic = await blockArchive(page);
   await page.goto('/?mode=demo');
-  await expect(page.getByRole('combobox', {name:'Data mode', exact:true})).toHaveValue('demo');
+  await expect(page.getByRole('radio', {name:/Demo Mode/})).toBeChecked();
   await visiblePreview(page);
   await expect(page.getByText('Preloaded data', {exact:true})).toBeVisible();
   await expect(page.getByTestId('sky-map')).toHaveCount(0);
@@ -53,14 +53,14 @@ test('switching to Live Mode clears preloaded data and uses the existing API', a
   await blockArchive(page);
   await page.goto('/?mode=demo');
   await visiblePreview(page);
-  await page.getByRole('combobox', {name:'Data mode', exact:true}).selectOption('live');
+  await page.getByRole('radio', {name:/Live Mode/}).check();
   await expect(page.getByTestId('fits-canvas')).toHaveCount(0);
   await expect(page.getByTestId('time-slider-image')).toHaveCount(0);
   await expect(page.getByTestId('sky-map')).toBeVisible();
   await page.route('**/api/observations?**', route => route.fulfill({json:{status:'live',ra:210,dec:54,count:0,observations:[]}}));
   await page.getByRole('button', {name:'Search SPHEREx Observations'}).click();
   await expect(page.getByText('Live data', {exact:true})).toBeVisible();
-  await page.getByRole('combobox', {name:'Data mode', exact:true}).selectOption('demo');
+  await page.getByRole('radio', {name:/Demo Mode/}).check();
   await visiblePreview(page);
 });
 
