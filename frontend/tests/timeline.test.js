@@ -1,6 +1,21 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { chronologicalFrames, filterTimelineFrames, formatUtcLabel, isSyntheticObservation, parseBoundaryDate, parsePeriodMs, parseUtc, usableAccessUrl, wavelengthLabel } from '../src/timeline.js';
+import {
+  chronologicalFrames,
+  extractAvailableMonths,
+  filterTimelineFrames,
+  formatMonthDate,
+  formatMonthYear,
+  formatUtcLabel,
+  groupFramesByMonth,
+  isSyntheticObservation,
+  parseBoundaryDate,
+  parsePeriodMs,
+  parseUtc,
+  timelapseFilename,
+  usableAccessUrl,
+  wavelengthLabel,
+} from '../src/timeline.js';
 import { loadObservationImage } from '../src/imageAdapter.js';
 
 const url = id => `https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=${id}`;
@@ -72,67 +87,105 @@ test('posts the existing image endpoint and refuses a missing preview', async ()
   );
 });
 
+test('extracts available observation months where pictures were taken', () => {
+  assert.equal(formatMonthDate('2026-05-22T19:40:19.000Z'), 'May 22, 2026');
+  assert.equal(formatMonthYear('2026-05-22T19:40:19.000Z'), 'May 2026');
+
+  const testFrames = [
+    row('m1', '2026-05-22T10:00:00Z'),
+    row('m2', '2026-05-25T11:00:00Z'),
+    row('j1', '2026-06-03T12:00:00Z'),
+    row('j2', '2026-06-24T15:00:00Z'),
+    row('n1', '2026-11-15T09:00:00Z'),
+  ];
+  const months = extractAvailableMonths(testFrames);
+  assert.equal(months.length, 3);
+  assert.equal(months[0].label, 'May 2026');
+  assert.equal(months[0].count, 2);
+  assert.equal(months[0].key, '2026-05');
+  assert.equal(months[1].label, 'June 2026');
+  assert.equal(months[1].count, 2);
+  assert.equal(months[2].label, 'November 2026');
+  assert.equal(months[2].count, 1);
+
+  // Group by month
+  const groups = groupFramesByMonth(testFrames);
+  assert.equal(groups.length, 3);
+});
+
 test('parses boundary dates and converts period units accurately', () => {
   const start = parseBoundaryDate('2025-01-01', false);
   const end = parseBoundaryDate('2025-01-01', true);
   assert.equal(new Date(start).toISOString(), '2025-01-01T00:00:00.000Z');
   assert.equal(new Date(end).toISOString(), '2025-01-01T23:59:59.999Z');
+
+  // Backwards compatibility with time string
+  const withTimeStart = parseBoundaryDate('2025-01-01', '14:30', false);
+  const withTimeEnd = parseBoundaryDate('2025-01-01', '14:30', true);
+  assert.equal(new Date(withTimeStart).toISOString(), '2025-01-01T14:30:00.000Z');
+  assert.equal(new Date(withTimeEnd).toISOString(), '2025-01-01T14:30:59.999Z');
+
   assert.equal(parseBoundaryDate(null), null);
   assert.equal(parseBoundaryDate(''), null);
 
-  assert.equal(parsePeriodMs(5, 'hours'), 5 * 3600 * 1000);
+  assert.equal(parsePeriodMs(6, 'months'), Math.round(6 * 30.4375 * 86400 * 1000));
+  assert.equal(parsePeriodMs(1, 'months'), Math.round(30.4375 * 86400 * 1000));
   assert.equal(parsePeriodMs(1, 'days'), 86400 * 1000);
   assert.equal(parsePeriodMs(3, 'days'), 3 * 86400 * 1000);
   assert.equal(parsePeriodMs(1, 'weeks'), 7 * 86400 * 1000);
-  assert.equal(parsePeriodMs(1, 'months'), Math.round(30.4375 * 86400 * 1000));
-  assert.equal(parsePeriodMs(6, 'years'), Math.round(6 * 365.25 * 86400 * 1000));
-  assert.equal(parsePeriodMs(0, 'days'), 0);
-  assert.equal(parsePeriodMs(-2, 'hours'), 0);
-  assert.equal(parsePeriodMs('invalid', 'days'), 0);
+  assert.equal(parsePeriodMs(1, 'years'), Math.round(365.25 * 86400 * 1000));
+  assert.equal(parsePeriodMs(0, 'months'), 0);
+  assert.equal(parsePeriodMs(-2, 'months'), 0);
+  assert.equal(parsePeriodMs('invalid', 'months'), 0);
 });
 
-test('filters frames by date range and samples by cadence interval', () => {
+test('filters frames by chosen month & year where pictures were taken', () => {
   const observations = [
-    row('d0', '2025-01-01T00:00:00.000'),
-    row('d1', '2025-01-02T00:00:00.000'),
-    row('d2', '2025-01-03T00:00:00.000'),
-    row('d3', '2025-01-04T00:00:00.000'),
-    row('d4', '2025-01-05T00:00:00.000'),
-    row('d6', '2025-01-07T00:00:00.000'),
-    row('d10', '2025-01-11T00:00:00.000'),
+    // May 2026
+    row('m1', '2026-05-22T04:00:00.000'),
+    row('m2', '2026-05-30T04:00:00.000'),
+    // June 2026
+    row('j1', '2026-06-06T04:00:00.000'),
+    row('j2', '2026-06-24T04:00:00.000'),
+    // November 2026 (Survey 2 - ~6 months later)
+    row('n1', '2026-11-20T04:00:00.000'),
   ];
   const { frames } = chronologicalFrames(observations);
 
-  // 1. Unfiltered
-  const unfiltered = filterTimelineFrames(frames);
-  assert.equal(unfiltered.isFiltered, false);
-  assert.equal(unfiltered.frames.length, 7);
+  // 1. Choose May 2026
+  const mayOnly = filterTimelineFrames(frames, { selectedMonthKey: '2026-05' });
+  assert.equal(mayOnly.isFiltered, true);
+  assert.deepEqual(mayOnly.frames.map(f => f.obs_id), ['m1', 'm2']);
 
-  // 2. Date window: 2025-01-02 to 2025-01-05
-  const dateFiltered = filterTimelineFrames(frames, { startDate: '2025-01-02', endDate: '2025-01-05' });
-  assert.equal(dateFiltered.isFiltered, true);
-  assert.deepEqual(dateFiltered.frames.map(f => f.obs_id), ['d1', 'd2', 'd3', 'd4']);
+  // 2. Choose June 2026
+  const juneOnly = filterTimelineFrames(frames, { selectedMonthKey: '2026-06' });
+  assert.equal(juneOnly.isFiltered, true);
+  assert.deepEqual(juneOnly.frames.map(f => f.obs_id), ['j1', 'j2']);
 
-  // 3. Cadence sampling: every 3 days
-  const cadenceFiltered = filterTimelineFrames(frames, { periodMs: parsePeriodMs(3, 'days') });
-  assert.equal(cadenceFiltered.isFiltered, true);
-  // d0 (day 0), d3 (day 3, >= day 3), d6 (day 6, >= day 6), d10 (day 10, >= day 9)
-  assert.deepEqual(cadenceFiltered.frames.map(f => f.obs_id), ['d0', 'd3', 'd6', 'd10']);
+  // 3. Choose Nov 2026
+  const novOnly = filterTimelineFrames(frames, { selectedMonthKey: '2026-11' });
+  assert.equal(novOnly.isFiltered, true);
+  assert.deepEqual(novOnly.frames.map(f => f.obs_id), ['n1']);
 
-  // 4. Combined: date window 2025-01-02 to 2025-01-08 with 3-day cadence
-  const combined = filterTimelineFrames(frames, {
-    startDate: '2025-01-02',
-    endDate: '2025-01-08',
-    periodMs: parsePeriodMs(3, 'days'),
+  // 4. All survey months
+  const allMonths = filterTimelineFrames(frames, { selectedMonthKey: 'all' });
+  assert.equal(allMonths.isFiltered, false);
+  assert.equal(allMonths.frames.length, 5);
+
+  // 5. 6-month survey cadence sampling across all months
+  const sixMonthCadence = filterTimelineFrames(frames, {
+    selectedMonthKey: 'all',
+    enableCadence: true,
+    cadenceValue: 6,
+    cadenceUnit: 'months',
   });
-  assert.equal(combined.isFiltered, true);
-  // in window: d1, d2, d3, d4, d6
-  // cadence 3 days starting at d1: d1 (day 1), d4 (day 4 >= day 4). next threshold day 7 (d6 is day 6 < 7, skipped)
-  assert.deepEqual(combined.frames.map(f => f.obs_id), ['d1', 'd4']);
+  assert.equal(sixMonthCadence.isFiltered, true);
+  // May 2026 (first survey), Nov 2026 (second survey, 6 months later)
+  assert.deepEqual(sixMonthCadence.frames.map(f => f.obs_id), ['m1', 'n1']);
+});
 
-  // 5. No matches (out of range)
-  const empty = filterTimelineFrames(frames, { startDate: '2030-01-01', endDate: '2030-12-31' });
-  assert.equal(empty.isFiltered, true);
-  assert.equal(empty.frames.length, 0);
-  assert.equal(empty.totalArchiveFrames, 7);
+test('generates valid and clean timelapse filenames', () => {
+  assert.equal(timelapseFilename('2026-05', { ra: 210.802, dec: 54.349 }), 'spherex_timelapse_2026-05_ra210.80_dec54.35.webm');
+  assert.equal(timelapseFilename('all', { ra: 100.5, dec: -20.25 }), 'spherex_timelapse_all-months_ra100.50_dec-20.25.webm');
+  assert.equal(timelapseFilename(null, null), 'spherex_timelapse_all-months.webm');
 });

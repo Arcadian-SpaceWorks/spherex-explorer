@@ -20,6 +20,22 @@ export function formatUtcLabel(value) {
   return `${new Date(time).toISOString().replace(/Z$/, '')} UTC`;
 }
 
+export function formatMonthDate(value) {
+  const time = parseUtc(value);
+  if (time == null) return 'Date unavailable';
+  const d = new Date(time);
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return `${months[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`;
+}
+
+export function formatMonthYear(value) {
+  const time = parseUtc(value);
+  if (time == null) return 'Unknown month';
+  const d = new Date(time);
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  return `${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+}
+
 export function usableAccessUrl(value) {
   try {
     const url = new URL(value);
@@ -46,6 +62,17 @@ export function isSyntheticObservation(observation, metadata) {
 
 function identity(observation) {
   return `${observation?.obs_id ?? ''}\0${observation?.energy_bandpassname ?? ''}`;
+}
+
+/**
+ * Generate formatted file name for downloaded timelapse video.
+ */
+export function timelapseFilename(selectedMonthKey = 'all', target = null) {
+  const monthTag = selectedMonthKey && selectedMonthKey !== 'all' ? selectedMonthKey : 'all-months';
+  const ra = target?.ra != null && Number.isFinite(Number(target.ra)) ? `ra${Number(target.ra).toFixed(2)}` : '';
+  const dec = target?.dec != null && Number.isFinite(Number(target.dec)) ? `dec${Number(target.dec).toFixed(2)}` : '';
+  const coordTag = ra && dec ? `_${ra}_${dec}` : '';
+  return `spherex_timelapse_${monthTag}${coordTag}.webm`;
 }
 
 /**
@@ -77,27 +104,126 @@ export function chronologicalFrames(observations) {
 }
 
 /**
- * Parse boundary date strings (e.g. YYYY-MM-DD from date inputs) to UTC epoch ms.
- * When isEnd=true and format is YYYY-MM-DD, encompasses the full end-of-day (23:59:59.999Z).
+ * Extract all unique Months & Years where pictures were actually taken.
  */
-export function parseBoundaryDate(value, isEnd = false) {
-  if (value == null) return null;
-  const text = String(value).trim();
-  if (!text) return null;
-  if (/^\d{4}-\d{2}-\d{2}$/.test(text)) {
-    const iso = isEnd ? `${text}T23:59:59.999Z` : `${text}T00:00:00.000Z`;
+export function extractAvailableMonths(frames) {
+  const list = [];
+  const map = new Map();
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  for (let i = 0; i < (frames || []).length; i++) {
+    const frame = frames[i];
+    const time = parseUtc(frame.observed_at_utc);
+    if (time == null) continue;
+    const d = new Date(time);
+    const year = d.getUTCFullYear();
+    const month = d.getUTCMonth();
+    const key = `${year}-${String(month + 1).padStart(2, '0')}`;
+    const label = `${months[month]} ${year}`;
+    const shortLabel = `${months[month].slice(0, 3)} ${year}`;
+
+    if (!map.has(key)) {
+      const item = {
+        key,
+        year,
+        month,
+        label,
+        shortLabel,
+        count: 0,
+        firstDate: frame.observed_at_utc.slice(0, 10),
+        lastDate: frame.observed_at_utc.slice(0, 10),
+        firstFrameIndex: i,
+      };
+      map.set(key, item);
+      list.push(item);
+    }
+    const entry = map.get(key);
+    entry.count += 1;
+    if (frame.observed_at_utc) entry.lastDate = frame.observed_at_utc.slice(0, 10);
+  }
+  return list;
+}
+
+/**
+ * Group chronological frames by Month & Year for organized date navigation.
+ */
+export function groupFramesByMonth(frames) {
+  const groups = [];
+  const map = new Map();
+
+  for (let i = 0; i < (frames || []).length; i++) {
+    const frame = frames[i];
+    const time = parseUtc(frame.observed_at_utc);
+    let key = 'Undated';
+    let label = 'Undated';
+    let year = 0;
+    let month = 0;
+
+    if (time != null) {
+      const d = new Date(time);
+      year = d.getUTCFullYear();
+      month = d.getUTCMonth();
+      key = `${year}-${String(month + 1).padStart(2, '0')}`;
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      label = `${months[month]} ${year}`;
+    }
+
+    if (!map.has(key)) {
+      const entry = { key, label, year, month, firstIndex: i, frames: [] };
+      map.set(key, entry);
+      groups.push(entry);
+    }
+    map.get(key).frames.push(frame);
+  }
+
+  return groups;
+}
+
+/**
+ * Parse boundary date (YYYY-MM-DD) to UTC epoch ms.
+ * - when isEnd=false: defaults to start of day 00:00:00.000 UTC
+ * - when isEnd=true: defaults to end of day 23:59:59.999 UTC
+ * Backwards compatible if optional time string is provided.
+ */
+export function parseBoundaryDate(dateStr, timeOrIsEnd = false, maybeIsEnd = false) {
+  if (dateStr == null) return null;
+  const d = String(dateStr).trim();
+  if (!d) return null;
+
+  let timeStr = '';
+  let isEnd = false;
+  if (typeof timeOrIsEnd === 'boolean') {
+    isEnd = timeOrIsEnd;
+  } else {
+    timeStr = timeOrIsEnd != null ? String(timeOrIsEnd).trim() : '';
+    isEnd = Boolean(maybeIsEnd);
+  }
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(d)) {
+    let timePart = isEnd ? '23:59:59.999' : '00:00:00.000';
+    if (timeStr) {
+      const match = /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/.exec(timeStr);
+      if (match) {
+        const hh = match[1].padStart(2, '0');
+        const mm = match[2].padStart(2, '0');
+        const ss = (match[3] || (isEnd ? '59' : '00')).padStart(2, '0');
+        timePart = `${hh}:${mm}:${ss}.${isEnd ? '999' : '000'}`;
+      }
+    }
+    const iso = `${d}T${timePart}Z`;
     const time = Date.parse(iso);
     return Number.isFinite(time) ? time : null;
   }
-  const time = parseUtc(text) ?? Date.parse(text);
+
+  const time = parseUtc(d) ?? Date.parse(d);
   return Number.isFinite(time) ? time : null;
 }
 
 /**
  * Convert user-specified cadence period value and unit into milliseconds.
- * Supports hours, days, weeks, months, years. Returns 0 if disabled/invalid.
+ * Supports months, days, weeks, years. Returns 0 if disabled/invalid.
  */
-export function parsePeriodMs(value, unit = 'days') {
+export function parsePeriodMs(value, unit = 'months') {
   const num = Number(value);
   if (!Number.isFinite(num) || num <= 0) return 0;
   switch (unit) {
@@ -106,22 +232,38 @@ export function parsePeriodMs(value, unit = 'days') {
     case 'weeks': return Math.round(num * 7 * 86400 * 1000);
     case 'months': return Math.round(num * 30.4375 * 86400 * 1000);
     case 'years': return Math.round(num * 365.25 * 86400 * 1000);
-    default: return Math.round(num * 86400 * 1000);
+    default: return Math.round(num * 30.4375 * 86400 * 1000);
   }
 }
 
 /**
- * Filter and sample chronological frames by date window [startDate, endDate]
- * and minimum time cadence periodMs.
+ * Filter and sample chronological frames by:
+ * 1. Selected Month & Year (where pictures were taken, e.g. '2026-05' or 'all')
+ * 2. Or Date window [startDate, endDate]
+ * 3. Optional survey cadence interval (e.g. 6 months survey cadence, 1 month, 1 day).
  */
 export function filterTimelineFrames(frames, options = {}) {
-  const { startDate, endDate, periodMs = 0 } = options;
-  const startMs = parseBoundaryDate(startDate, false);
-  const endMs = parseBoundaryDate(endDate, true);
-  const isDateFiltered = startMs != null || endMs != null;
-  const isPeriodFiltered = Number.isFinite(periodMs) && periodMs > 0;
+  const {
+    selectedMonthKey = 'all',
+    startMonthKey = '',
+    endMonthKey = '',
+    startDate,
+    startTime = '',
+    endDate,
+    endTime = '',
+    enableCadence = false,
+    cadenceValue = 6,
+    cadenceUnit = 'months',
+  } = options;
 
-  if (!isDateFiltered && !isPeriodFiltered) {
+  const isMonthSelected = selectedMonthKey && selectedMonthKey !== 'all';
+  const isMonthRange = Boolean(startMonthKey || endMonthKey);
+  const startMs = parseBoundaryDate(startDate, startTime, false);
+  const endMs = parseBoundaryDate(endDate, endTime, true);
+  const isDateFiltered = startMs != null || endMs != null;
+  const isCadenceActive = Boolean(enableCadence) && Number(cadenceValue) > 0;
+
+  if (!isMonthSelected && !isMonthRange && !isDateFiltered && !isCadenceActive) {
     return {
       frames: frames || [],
       totalArchiveFrames: (frames || []).length,
@@ -129,35 +271,91 @@ export function filterTimelineFrames(frames, options = {}) {
     };
   }
 
-  // 1. Date window filtering
+  // 1. Month / Date filtering
   const inWindow = (frames || []).filter(frame => {
     const time = parseUtc(frame.observed_at_utc);
     if (time == null) {
-      return !isDateFiltered && !isPeriodFiltered;
+      return !isMonthSelected && !isMonthRange && !isDateFiltered && !isCadenceActive;
     }
+
+    const monthKey = frame.observed_at_utc ? frame.observed_at_utc.slice(0, 7) : '';
+
+    // Specific Month & Year filter
+    if (isMonthSelected && monthKey !== selectedMonthKey) {
+      return false;
+    }
+
+    // Month range filter
+    if (startMonthKey && monthKey < startMonthKey) return false;
+    if (endMonthKey && monthKey > endMonthKey) return false;
+
+    // Date boundary filter
     if (startMs != null && time < startMs) return false;
     if (endMs != null && time > endMs) return false;
+
     return true;
   });
 
-  // 2. Period / cadence sampling (greedy minimum interval)
-  if (!isPeriodFiltered || inWindow.length <= 1) {
+  // 2. Cadence sampling
+  if (!isCadenceActive || inWindow.length <= 1) {
     return {
       frames: inWindow,
       totalArchiveFrames: (frames || []).length,
-      isFiltered: true,
+      isFiltered: isMonthSelected || isMonthRange || isDateFiltered || isCadenceActive,
     };
   }
 
+  const val = Number(cadenceValue) || 1;
   const sampled = [];
-  let nextThreshold = -Infinity;
 
-  for (const frame of inWindow) {
-    const time = parseUtc(frame.observed_at_utc);
-    if (time == null) continue;
-    if (time >= nextThreshold) {
-      sampled.push(frame);
-      nextThreshold = time + periodMs;
+  if (cadenceUnit === 'months') {
+    let nextAllowedMonthIndex = -Infinity;
+    for (const frame of inWindow) {
+      const time = parseUtc(frame.observed_at_utc);
+      if (time == null) continue;
+      const d = new Date(time);
+      const monthIndex = d.getUTCFullYear() * 12 + d.getUTCMonth();
+      if (monthIndex >= nextAllowedMonthIndex) {
+        sampled.push(frame);
+        nextAllowedMonthIndex = monthIndex + val;
+      }
+    }
+  } else if (cadenceUnit === 'years') {
+    let nextAllowedYear = -Infinity;
+    for (const frame of inWindow) {
+      const time = parseUtc(frame.observed_at_utc);
+      if (time == null) continue;
+      const year = new Date(time).getUTCFullYear();
+      if (year >= nextAllowedYear) {
+        sampled.push(frame);
+        nextAllowedYear = year + val;
+      }
+    }
+  } else if (cadenceUnit === 'days' || cadenceUnit === 'weeks') {
+    const dayStep = cadenceUnit === 'weeks' ? val * 7 : val;
+    let nextAllowedDayIndex = -Infinity;
+
+    for (const frame of inWindow) {
+      const time = parseUtc(frame.observed_at_utc);
+      if (time == null) continue;
+      const dayIndex = Math.floor(time / 86400000);
+      if (dayIndex >= nextAllowedDayIndex) {
+        sampled.push(frame);
+        nextAllowedDayIndex = dayIndex + dayStep;
+      }
+    }
+  } else {
+    const stepHours = val;
+    let nextAllowedHourIndex = -Infinity;
+
+    for (const frame of inWindow) {
+      const time = parseUtc(frame.observed_at_utc);
+      if (time == null) continue;
+      const hourIndex = Math.floor(time / 3600000);
+      if (hourIndex >= nextAllowedHourIndex) {
+        sampled.push(frame);
+        nextAllowedHourIndex = hourIndex + stepHours;
+      }
     }
   }
 

@@ -12,13 +12,35 @@ From the repository root:
 ./scripts/setup.sh
 ```
 
-Run these in separate terminals:
+## Quick Start (Single Terminal)
+
+From the repository root, start both the FastAPI backend and Vite frontend with one command:
 
 ```bash
+./start.sh
+```
+
+*(or run `npm start`)*
+
+This starts:
+- **Frontend UI**: [http://127.0.0.1:5173](http://127.0.0.1:5173)
+- **FastAPI Backend**: [http://127.0.0.1:8000](http://127.0.0.1:8000) (API Docs: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs))
+
+Press **`Ctrl+C`** in the terminal to cleanly shut down both servers at once.
+
+---
+
+## Alternative: Run in Separate Terminals
+
+If you prefer running the backend and frontend separately for isolated debugging:
+
+```bash
+# Terminal 1: Backend
 ./scripts/backend.sh
 ```
 
 ```bash
+# Terminal 2: Frontend
 ./scripts/frontend.sh
 ```
 

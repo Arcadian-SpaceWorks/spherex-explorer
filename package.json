@@ -1,0 +1,13 @@
+{
+  "name": "spherex-explorer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "NASA SPHEREx Sky Explorer — Public temporal web tool and astrometry candidate spotter",
+  "scripts": {
+    "start": "./scripts/start.sh",
+    "dev": "./scripts/start.sh",
+    "setup": "./scripts/setup.sh",
+    "test": "npm --prefix frontend test",
+    "build": "npm --prefix frontend run build"
+  }
+}
