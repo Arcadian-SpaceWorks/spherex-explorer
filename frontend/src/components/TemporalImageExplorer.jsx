@@ -16,18 +16,14 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
   const sequence = useMemo(() => chronologicalFrames(loading ? [] : result?.observations), [loading, result]);
 
   const [selectedMonthKey, setSelectedMonthKey] = useState('all');
-  const [enableCadence, setEnableCadence] = useState(true);
+  const [enableCadence, setEnableCadence] = useState(false);
   const [cadenceValue, setCadenceValue] = useState(6);
   const [cadenceUnit, setCadenceUnit] = useState('months');
   const [isPlaying, setIsPlaying] = useState(false);
 
   const availableMonths = useMemo(() => {
-    // Strictly extract 6-month survey epochs when survey cadence is active
-    const frames = enableCadence
-      ? filterTimelineFrames(sequence.frames, { enableCadence: true, cadenceValue: 6, cadenceUnit: 'months' }).frames
-      : sequence.frames;
-    return extractAvailableMonths(frames);
-  }, [sequence.frames, enableCadence]);
+    return extractAvailableMonths(sequence.frames);
+  }, [sequence.frames]);
 
   const [timelapseState, setTimelapseState] = useState({
     loading: false,
@@ -72,7 +68,7 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
 
   function resetFilters() {
     setSelectedMonthKey('all');
-    setEnableCadence(true);
+    setEnableCadence(false);
     setCadenceValue(6);
     setCadenceUnit('months');
     setIsPlaying(false);
@@ -307,14 +303,30 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
       : !result ? <p className="empty">Search SPHEREx observations for the selected point to build a time sequence.</p>
       : !sequence.frames.length ? <p className="empty">{result.count ? 'None of the returned observations include a usable image link.' : 'No observations were returned for this point, so there is no time sequence.'}</p>
       : <>
+        {/* Mission Deployment Status Callout */}
+        <div className="mission-deployment-callout" data-testid="mission-deployment-callout">
+          <div className="deployment-badge-row">
+            <span className="survey-cadence-badge">🛰️ Mission Deployed Months</span>
+            <span className="survey-dates-tag">
+              {availableMonths.map(m => m.label).join(' & ') || 'Survey 1'}
+              {sequence.frames[0]?.observed_at_utc && sequence.frames[sequence.frames.length - 1]?.observed_at_utc && (
+                ` (${formatMonthDate(sequence.frames[0].observed_at_utc)} – ${formatMonthDate(sequence.frames[sequence.frames.length - 1].observed_at_utc)})`
+              )}
+            </span>
+          </div>
+          <p className="deployment-explanation">
+            NASA's SPHEREx mission maps the entire sky once every 6 months. For this celestial coordinate, all photos taken during the mission's deployment to date are from <strong>Survey 1 ({availableMonths.map(m => m.label).join(' and ')})</strong>, where multiple dithered spectral exposures were captured across several weeks. You can explore each deployed month below, or sample by 6-month survey epochs as subsequent surveys are released.
+          </p>
+        </div>
+
         <div className="time-filters" aria-label="Choose observation month and year where pictures were taken">
           {/* Observation Month & Year Selector */}
           <div className="time-filter-row">
             <div className="time-filter-field month-selector-field">
               <label htmlFor="time-filter-month">
-                <span>Observation month & year (where pictures WERE taken)</span>
+                <span>Deployed observation month & year (where pictures WERE taken)</span>
                 <span className="date-hint">
-                  {selectedMonthObj ? `${selectedMonthObj.count} photos taken` : `${availableMonths.length} survey month${availableMonths.length === 1 ? '' : 's'} available`}
+                  {selectedMonthObj ? `${selectedMonthObj.count} photos taken in ${selectedMonthObj.label}` : `${availableMonths.length} deployed month${availableMonths.length === 1 ? '' : 's'} available`}
                 </span>
               </label>
               <div className="month-selector-controls">
@@ -328,10 +340,10 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
                     setIsPlaying(false);
                   }}
                 >
-                  <option value="all">All Survey Months ({sequence.frames.length} total observations)</option>
+                  <option value="all">All Deployed Months ({sequence.frames.length} total observations)</option>
                   {availableMonths.map(m => (
                     <option key={m.key} value={m.key}>
-                      {m.label} ({m.count} observations taken from {formatMonthDate(m.firstDate)} to {formatMonthDate(m.lastDate)})
+                      {m.label} ({m.count} photos taken from {formatMonthDate(m.firstDate)} to {formatMonthDate(m.lastDate)})
                     </option>
                   ))}
                 </select>
@@ -347,7 +359,7 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
 
           {/* Quick Month Pills */}
           <div className="month-pills-bar" aria-label="Available observation months">
-            <span className="month-pills-title">Choose month:</span>
+            <span className="month-pills-title">Choose deployed month:</span>
             <div className="month-pills-group" role="tablist">
               <button
                 type="button"
@@ -359,7 +371,7 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
                   setIsPlaying(false);
                 }}
               >
-                <span>All Survey Months</span>
+                <span>All Deployed Months</span>
                 <span className="month-pill-badge">{sequence.frames.length}</span>
               </button>
               {availableMonths.map(m => {
@@ -429,6 +441,13 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
                 <div className="cadence-presets">
                   <button
                     type="button"
+                    className={`preset-btn ${!enableCadence ? 'active' : ''}`}
+                    onClick={() => setEnableCadence(false)}
+                  >
+                    All Deployed Photos ({sequence.frames.length} Dithers)
+                  </button>
+                  <button
+                    type="button"
                     className={`preset-btn highlight ${enableCadence && cadenceValue === 6 && cadenceUnit === 'months' ? 'active' : ''}`}
                     onClick={() => {
                       setEnableCadence(true);
@@ -449,13 +468,6 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
                   >
                     12 Months (Annual)
                   </button>
-                  <button
-                    type="button"
-                    className={`preset-btn ${!enableCadence ? 'active' : ''}`}
-                    onClick={() => setEnableCadence(false)}
-                  >
-                    All Survey Dithers (Raw Observations)
-                  </button>
                 </div>
               </div>
             </div>
@@ -463,8 +475,8 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
 
           <div className="time-filter-summary" data-testid="time-filter-summary">
             Showing {activeSequence.frames.length} of {sequence.frames.length} observations
-            {selectedMonthObj ? ` taken in ${selectedMonthObj.label} (${formatMonthDate(selectedMonthObj.firstDate)} – ${formatMonthDate(selectedMonthObj.lastDate)})` : ' across all survey months'}
-            {enableCadence ? ` · Cadence: every ${cadenceValue} ${cadenceUnit}` : ' · Showing every observation in selected month'}
+            {selectedMonthObj ? ` taken in ${selectedMonthObj.label} (${formatMonthDate(selectedMonthObj.firstDate)} – ${formatMonthDate(selectedMonthObj.lastDate)})` : ' across all deployed months'}
+            {enableCadence ? ` · Cadence: every ${cadenceValue} ${cadenceUnit} (${activeSequence.frames.length === 1 ? 'Survey 1 baseline · Survey 2 pending NASA release' : `${activeSequence.frames.length} survey epochs`})` : ' · Showing every raw exposure'}
           </div>
         </div>
 
