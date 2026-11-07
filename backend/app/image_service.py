@@ -72,9 +72,17 @@ class ImageService:
         path.touch()
         return path, metadata
 
-    def prepare(self, access_url, ra=None, dec=None):
+    def prepare(self, access_url, ra=None, dec=None, cutout_deg=None):
         validate_url(access_url)
-        image_id = hashlib.sha256(('render-v1:' + access_url).encode()).hexdigest()
+        cutout = None
+        if cutout_deg is not None:
+            if ra is None or dec is None:
+                raise ImageError('A cutout needs a target RA and Dec.', 400, 'invalid_cutout')
+            cutout = (round(float(ra), 6), round(float(dec), 6), round(float(cutout_deg), 4))
+            cache_key = f'render-v1-cutout:{access_url}|{cutout[0]:.6f}|{cutout[1]:.6f}|{cutout[2]:.4f}'
+        else:
+            cache_key = 'render-v1:' + access_url
+        image_id = hashlib.sha256(cache_key.encode()).hexdigest()
         with self.transaction():
             self._prune()
             cached = (self.settings.cache_dir / image_id / 'metadata.json').is_file()
@@ -83,11 +91,13 @@ class ImageService:
                 with tempfile.TemporaryDirectory(prefix='.part-', dir=self.settings.cache_dir) as temporary:
                     working = Path(temporary)
                     source = working / 'original.fits'
-                    fits_url = self.downloader.download(access_url, source)
+                    fits_url = (self.downloader.download(access_url, source, cutout=cutout) if cutout
+                                else self.downloader.download(access_url, source))
                     metadata = process_fits('render', path=str(source.resolve()), preview_path=str((working / 'preview.png').resolve()), max_pixels=self.settings.max_pixels)
                     with source.open('rb') as handle:
                         checksum = hashlib.file_digest(handle, 'sha256').hexdigest()
                     metadata.update(image_id=image_id, access_url=access_url, fits_url=fits_url,
+                                    cutout=({'ra': cutout[0], 'dec': cutout[1], 'size_deg': cutout[2]} if cutout else None),
                                     bytes=source.stat().st_size, sha256=checksum,
                                     preview_url=f'/api/images/{image_id}/preview',
                                     original_url=f'/api/images/{image_id}/original')

@@ -2,11 +2,12 @@
 from dataclasses import dataclass
 from io import BytesIO
 import ipaddress
+import math
 import os
 from pathlib import Path
 import socket
 import time
-from urllib.parse import unquote, urljoin, urlsplit
+from urllib.parse import unquote, urljoin, urlsplit, urlunsplit
 
 from astropy.io.votable import parse_single_table
 import numpy as np
@@ -63,6 +64,24 @@ def validate_url(url):
     except (ValueError, TypeError):
         raise ImageError('Only HTTPS SPHEREx product URLs on irsa.ipac.caltech.edu are allowed.', 400, 'unsafe_url')
     return url
+
+
+def add_cutout_query(url, ra, dec, size_deg):
+    """IRSA image-server cutout: append center/size to a SPHEREx product URL.
+
+    This is the cutout method in IRSA's SPHEREx data-access documentation. Only validated
+    finite numbers are formatted into the query, and the result is re-validated.
+    """
+    validate_url(url)
+    parts = urlsplit(url)
+    if parts.query or not unquote(parts.path).startswith('/ibe/data/spherex/'):
+        raise ImageError('Cutouts are only available for IRSA SPHEREx image-server products.', 422, 'cutout_unsupported')
+    values = (ra, dec, size_deg)
+    if (not all(isinstance(v, (int, float)) and math.isfinite(v) for v in values)
+            or not 0 <= ra < 360 or not -90 <= dec <= 90 or not 0 < size_deg <= 1):
+        raise ImageError('Invalid cutout parameters.', 400, 'invalid_cutout')
+    query = f'center={ra:.6f},{dec:.6f}&size={size_deg:.4f}deg'
+    return validate_url(urlunsplit(parts._replace(query=query)))
 
 
 def check_public_dns(url):
@@ -123,7 +142,8 @@ class IRSAImageDownloader:
                 raise ImageError('IRSA could not deliver this image. Please retry.') from exc
         raise ImageError('Too many IRSA redirects.')
 
-    def download(self, access_url, destination):
+    def download(self, access_url, destination, cutout=None):
+        """cutout=(ra, dec, size_deg) requests a small IRSA cutout instead of the full file."""
         validate_url(access_url)
         deadline = time.monotonic() + self.settings.download_seconds
         # Disable environment proxies and .netrc credentials for this public-data client.
@@ -134,6 +154,8 @@ class IRSAImageDownloader:
                 payload = BytesIO()
                 self._stream(session, access_url, payload, 2 * 1024 * 1024, deadline)
                 fits_url = self.resolve_datalink(payload.getvalue())
+            if cutout is not None:
+                fits_url = add_cutout_query(fits_url, *cutout)
             try:
                 with Path(destination).open('wb') as output:
                     resolved_url = self._stream(session, fits_url, output, self.settings.max_bytes, deadline)

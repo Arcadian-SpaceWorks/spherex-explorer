@@ -99,9 +99,18 @@ Search the archive as before, then click **View Image** or select a row (Enter/S
 
 The existing setup and launch commands still apply. Re-run `./scripts/setup.sh` after updating to install the added Pillow dependency.
 
+### Quick cutouts (default) and full detector images
+
+By default the inspector asks IRSA for a **cutout**: a small square (0.3 degrees wide) centred on your selected target, instead of the whole detector file. IRSA's cutout method is to append `?center=RA,DEC&size=0.3000deg` to the product URL that DataLink returns, so the backend does exactly that (see `add_cutout_query` in `backend/app/image_download.py`). Cutouts are much smaller than full files (about 4 MB in our first live test) and load in roughly 20 seconds. The **Full detector image (slow)** button restores the previous behaviour.
+
+- The cutout is saved and served like any other image, with its own cache entry (the cache key includes the target and size). The downloaded FITS is the cutout, not the full file, and the UI labels it as such with its source URL.
+- A cutout is still an IRSA product: the host and path allowlist applies to the cutout URL too, and only validated finite numbers are placed in the query.
+- If the server is busy with another file, the UI waits a few seconds and retries (up to four times) instead of failing immediately.
+- Not verified against live IRSA in the test suite (tests mock the network). Run `.venv/bin/python scripts/smoke_cutout.py` once with internet to check it end to end. Check in particular whether wavelength readouts are available in cutout files.
+
 ### Image endpoints and limits
 
-`POST /api/images` accepts `{ "access_url": "<actual IRSA metadata URL>", "ra": 210.80227, "dec": 54.34895 }`. RA/Dec are optional as a pair and used only for locating the selected target. The response contains the image identifier, preview/original URLs, HDU inventory, scaling, WCS metadata, image-center readout and target position.
+`POST /api/images` accepts `{ "access_url": "<actual IRSA metadata URL>", "ra": 210.80227, "dec": 54.34895 }`. RA/Dec are optional as a pair and used only for locating the selected target. Add `"cutout_deg": 0.3` (0.02 to 1.0, requires RA/Dec) to request an IRSA cutout of that width instead of the full file. The response contains the image identifier, preview/original URLs, HDU inventory, scaling, WCS metadata, image-center readout and target position.
 
 - `GET /api/images/{id}/preview`: derived RGBA PNG.
 - `GET /api/images/{id}/original`: original FITS attachment, streamed from disk.
