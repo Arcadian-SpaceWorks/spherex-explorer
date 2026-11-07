@@ -292,12 +292,14 @@ def overlap_fraction(a, b):
     return float((a.valid & b.valid).mean())
 
 
-def validate(a, b, mode, *, overlap=None, settings=DEFAULT_SETTINGS):
+def validate(a, b, mode, *, overlap=None, require_overlap=True, settings=DEFAULT_SETTINGS):
     """Decide whether two frames may be compared. Returns ACCEPT / WARN / REJECT with reasons.
 
     time: same detector, >= 1 h apart, target wavelengths within 0.02 um, overlap >= 90%.
           A wavelength mismatch is a WARN (blink only); the other failures are REJECT.
     wavelength: same exposure or within 1 h, at different wavelengths. Never a difference image.
+    With require_overlap=False and no overlap given (e.g. pair suggestions made before any
+    alignment), the overlap rule is skipped; it is applied when the pair is actually compared.
     """
     if mode not in MODES:
         raise ValueError(f'mode must be one of {MODES}')
@@ -334,7 +336,8 @@ def validate(a, b, mode, *, overlap=None, settings=DEFAULT_SETTINGS):
             add('wavelength_match', 'info', f'Target wavelengths agree within {delta:.3f} um.',
                 delta_um=delta, limit_um=limit)
         if overlap is None:
-            add('overlap_not_measured', 'warn', 'Overlap has not been measured yet.')
+            if require_overlap:
+                add('overlap_not_measured', 'warn', 'Overlap has not been measured yet.')
         elif overlap <= 0:
             add('no_overlap', 'reject', 'The images share no valid pixels.', overlap=overlap)
         elif overlap < settings.min_overlap:
@@ -352,7 +355,8 @@ def validate(a, b, mode, *, overlap=None, settings=DEFAULT_SETTINGS):
             add('same_wavelength', 'reject', f'The images are at the same wavelength (within {limit:g} um); '
                 'use time mode instead.', delta_um=delta, limit_um=limit)
         if overlap is None:
-            add('overlap_not_measured', 'warn', 'Overlap has not been measured yet.')
+            if require_overlap:
+                add('overlap_not_measured', 'warn', 'Overlap has not been measured yet.')
         elif overlap <= 0:
             add('no_overlap', 'reject', 'The images share no valid pixels.', overlap=overlap)
         elif overlap < settings.min_overlap:
