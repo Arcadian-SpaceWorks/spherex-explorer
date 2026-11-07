@@ -17,11 +17,15 @@ class ImageRequest(BaseModel):
     access_url: str = Field(min_length=1, max_length=4096)
     ra: float | None = Field(default=None, ge=0, lt=360, allow_inf_nan=False)
     dec: float | None = Field(default=None, ge=-90, le=90, allow_inf_nan=False)
+    # Optional: ask IRSA for a small square cutout (width in degrees) centred on ra/dec.
+    cutout_deg: float | None = Field(default=None, ge=0.02, le=1.0, allow_inf_nan=False)
 
     @model_validator(mode='after')
     def coordinate_pair(self):
         if (self.ra is None) != (self.dec is None):
             raise ValueError('Provide both target RA and Dec, or neither.')
+        if self.cutout_deg is not None and self.ra is None:
+            raise ValueError('A cutout needs a target RA and Dec.')
         return self
 
 
@@ -32,7 +36,7 @@ def get_image_service():
 
 @router.post('')
 def prepare_image(request: ImageRequest, service=Depends(get_image_service)):
-    return service.prepare(request.access_url, request.ra, request.dec)
+    return service.prepare(request.access_url, request.ra, request.dec, request.cutout_deg)
 
 
 def asset_response(image_id, kind, service):
