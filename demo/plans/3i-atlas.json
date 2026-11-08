@@ -8,6 +8,8 @@
     "science_context": "The third known interstellar object. Twelve exposures over 3.3 hours on 14 December 2025 in detector D5 (about 3.8–4.4 µm, a range that includes the 4.26 µm CO₂ band) and six simultaneous D2 frames (about 1.1–1.65 µm). Every cutout has the same sky centre, so the stars stay fixed while the comet crosses about 0.16° (roughly 95 pixels) of the field. The marker shows IRSA’s predicted comet position for each exposure, not a measured position. IRSA warns of low signal-to-noise at many wavelengths, and the comet’s brightness changes with the wavelength at its position."
   },
   "cutout_deg": 0.437,
+  "grid_deg": 0.3,
+  "min_grid_coverage": 0.95,
   "wavelength_match_um": 0.02,
   "discovery_table": "demo/discovery/3i-atlas.vot",
   "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
@@ -47,6 +49,7 @@
       "sha256": "a6090ba87b16f9b4afe2fb5327f9af2b16d295802f6b2750885a14e65ef8db2e",
       "wavelength_um_at_centre": 1.2173081931511047,
       "wavelength_um_at_marker": 1.2165231998741652,
+      "grid_coverage": 0.9985,
       "predicted": [
         167.27908911453292,
         5.121576578325088
@@ -64,6 +67,7 @@
       "sha256": "76bfebf0b3b18487aa342c9288f70383ed0ca61880e63d063d913a31ca76ae84",
       "wavelength_um_at_centre": 3.9584583581980066,
       "wavelength_um_at_marker": 3.95751545918269,
+      "grid_coverage": 0.9873,
       "predicted": [
         167.27908911453292,
         5.121576578325088
@@ -81,6 +85,7 @@
       "sha256": "fef7fffb5e2cb8c06642dd9837de29146368585e69afed07e0ce00dee595b2c5",
       "wavelength_um_at_centre": 3.9931668179556143,
       "wavelength_um_at_marker": 3.992232995754371,
+      "grid_coverage": 0.9905,
       "predicted": [
         167.27744067241156,
         5.122151278393035
@@ -98,6 +103,7 @@
       "sha256": "6bb0e8b404d92b8e9ad11c65617615c7b77d359c53d347b29a5c0e4a872c3c5d",
       "wavelength_um_at_centre": 1.2761120375122028,
       "wavelength_um_at_marker": 1.275328807398227,
+      "grid_coverage": 0.9993,
       "predicted": [
         167.27579224044294,
         5.12272596967069
@@ -115,6 +121,7 @@
       "sha256": "75768b82419ddfacc257563b2e3cdbbea08a3925ae2247258267ce76499cb278",
       "wavelength_um_at_centre": 4.028137152871131,
       "wavelength_um_at_marker": 4.027233695779073,
+      "grid_coverage": 0.9899,
       "predicted": [
         167.27579224044294,
         5.12272596967069
@@ -132,6 +139,7 @@
       "sha256": "2480eed5e7e38fd15ffbf74ea02e1807ec3308d95eeaad5447dd23bd35cc5c91",
       "wavelength_um_at_centre": 4.0634018048011615,
       "wavelength_um_at_marker": 4.062525330314805,
+      "grid_coverage": 0.9872,
       "predicted": [
         167.27414377886691,
         5.123300666018959
@@ -149,6 +157,7 @@
       "sha256": "fa8a8132a57c431739078af072c5b465c595692a1d41f513d3575ec12ebd6cfe",
       "wavelength_um_at_centre": 4.097320794336699,
       "wavelength_um_at_marker": 4.097283521742396,
+      "grid_coverage": 0.9899,
       "predicted": [
         167.20665303736263,
         5.146825168641826
@@ -166,6 +175,7 @@
       "sha256": "f83d50ab6a40e2fdf44e783ec7936b9dad5cf19fcaceec2df56da3e060293708",
       "wavelength_um_at_centre": 1.3361153619900599,
       "wavelength_um_at_marker": 1.3360826172772124,
+      "grid_coverage": 0.9989,
       "predicted": [
         167.20665302521547,
         5.146825172875038
@@ -183,6 +193,7 @@
       "sha256": "e39bdb010fed69ac9e8fd847862450a09e053599c323bfd0fc327292c4cad25c",
       "wavelength_um_at_centre": 4.133152265429516,
       "wavelength_um_at_marker": 4.13313499914493,
+      "grid_coverage": 0.9895,
       "predicted": [
         167.20500444973925,
         5.14739968815294
@@ -200,6 +211,7 @@
       "sha256": "76ffb1c76462aa59eb9971100644902869836d720ec79f3f2f90d0622b8ebf7b",
       "wavelength_um_at_centre": 4.169008149951871,
       "wavelength_um_at_marker": 4.169011136195612,
+      "grid_coverage": 0.9889,
       "predicted": [
         167.20335587130242,
         5.147974199186135
@@ -217,6 +229,7 @@
       "sha256": "a9ce8668589817936347f6acba6b9823b4400449e2c296e96fc41c79de099566",
       "wavelength_um_at_centre": 1.434421436379306,
       "wavelength_um_at_marker": 1.4344445051630605,
+      "grid_coverage": 0.999,
       "predicted": [
         167.20170730314166,
         5.148548701361233
@@ -234,6 +247,7 @@
       "sha256": "c9de92a14c83a8d230325bf062291b18afb9d60f2b9c4e2495da675454f76e0e",
       "wavelength_um_at_centre": 4.2050489690568496,
       "wavelength_um_at_marker": 4.205072571582743,
+      "grid_coverage": 0.9902,
       "predicted": [
         167.20170730314166,
         5.148548701361233
@@ -251,6 +265,7 @@
       "sha256": "65bdc700a3ae6e9f9316c7eae4c9187fbc0eee07f1f6a338177a8dc0a817e0c3",
       "wavelength_um_at_centre": 4.239973025109654,
       "wavelength_um_at_marker": 4.240891167155771,
+      "grid_coverage": 0.9908,
       "predicted": [
         167.13087450913795,
         5.173227913957699
@@ -268,6 +283,7 @@
       "sha256": "2a34d18b8f1d407c09a221a708be1999a199754bc1c954757bbbae24a91999ac",
       "wavelength_um_at_centre": 1.5033178102137668,
       "wavelength_um_at_marker": 1.5042653851682746,
+      "grid_coverage": 0.9979,
       "predicted": [
         167.12922579980165,
         5.173802232742921
@@ -285,6 +301,7 @@
       "sha256": "3c0cf94a6870eb8ff3f9b5102db249efdbfd31bc60bfb1535425cf753bbaba6f",
       "wavelength_um_at_centre": 4.276535232583684,
       "wavelength_um_at_marker": 4.277465555235858,
+      "grid_coverage": 0.9913,
       "predicted": [
         167.12922579980165,
         5.173802232742921
@@ -302,6 +319,7 @@
       "sha256": "51fdafaa53f71bce38969b262432b9a89a759435dc9d7bf71f10de955ff65d21",
       "wavelength_um_at_centre": 4.3132953187679135,
       "wavelength_um_at_marker": 4.3142522474891605,
+      "grid_coverage": 0.9906,
       "predicted": [
         167.127577087617,
         5.174376547217039
@@ -319,6 +337,7 @@
       "sha256": "34589a8ea80e2df38ce59330a65c9695039575737df3544f0f6353d885eb59fe",
       "wavelength_um_at_centre": 1.5773388139206128,
       "wavelength_um_at_marker": 1.5783061719241263,
+      "grid_coverage": 0.9993,
       "predicted": [
         167.12592838474777,
         5.174950853142384
@@ -336,6 +355,7 @@
       "sha256": "f9ab9188e1764fa8226a1b66e0359e9bb87ffc943a8f3493f07dccd2f632fa7f",
       "wavelength_um_at_centre": 4.350174207496115,
       "wavelength_um_at_marker": 4.351148788503947,
+      "grid_coverage": 0.9933,
       "predicted": [
         167.12592838474777,
         5.174950853142384

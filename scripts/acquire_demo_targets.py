@@ -10,8 +10,9 @@ Every step is deterministic and resumable:
                  demo/acquired/<target>/ (git-ignored). A staged or already published frame is never
                  downloaded again.
   3. select      Per-epoch quotas. Pairs across epochs whose wavelength at the target agrees within
-                 0.02 um (the pairs /api/compare can difference) are kept first, longest baseline
-                 first; the rest are spread in time. Simultaneous partner detectors (the same exposure
+                 0.02 um and that both cover at least 95% of the 0.3 deg comparison grid (the pairs
+                 /api/compare can difference) are kept first, longest baseline first; the rest are
+                 spread in time, preferring frames that cover the grid. Simultaneous partner detectors (the same exposure
                  through the dichroic) are then added.
 
 Writes demo/source-records/<sha256>.json, demo/plans/<target>.json (every candidate, whether it was
@@ -47,8 +48,12 @@ from backend.app.analysis.compare import CompareSettings, cutout_size_for_grid  
 from backend.app.demo import digest  # noqa: E402
 from scripts.discover_demo import CANDIDATES, COMET, read_table  # noqa: E402
 
-CUTOUT_DEG = round(cutout_size_for_grid(0.3), 4)
+GRID_DEG = 0.3  # The comparison grid of /api/compare (frontend COMPARE_SIZE_DEG).
+CUTOUT_DEG = round(cutout_size_for_grid(GRID_DEG), 4)
 MATCH_UM = CompareSettings().max_wavelength_delta_um
+# A frame must cover this much of the grid to seed a matched pair: two such frames overlap by at
+# least 90%, the minimum /api/compare needs. Targets near a detector edge (LVF band edges) fail it.
+MIN_COVERAGE = 0.95
 DISCOVERY = ROOT / 'demo' / 'discovery'
 PLANS = ROOT / 'demo' / 'plans'
 ACQUIRED = ROOT / 'demo' / 'acquired'
@@ -212,6 +217,14 @@ def predicted_position(config, row):
     return None
 
 
+def grid_coverage(path, centre):
+    """Fraction of the north-up comparison grid around centre with valid data in this frame,
+    computed with the same loading and resampling as /api/compare."""
+    from backend.app.analysis.compare import align, common_grid, load_frame
+    frame = load_frame(str(path), centre[0], centre[1], CUTOUT_DEG)  # As compare_files loads it.
+    return round(float(align([frame], common_grid(centre[0], centre[1], GRID_DEG))[0].valid.mean()), 4)
+
+
 # ---------- step 2: download ----------
 
 def published_index():
@@ -239,6 +252,9 @@ def stage(key, config, item, centre, images, published, table_sha):
     if record_path.exists() and original.exists():
         record = json.loads(record_path.read_text())
         if digest(original) == record['sha256']:
+            if 'grid_coverage' not in record['measured']:  # Staged before coverage was measured.
+                record['measured']['grid_coverage'] = grid_coverage(original, centre)
+                record_path.write_text(json.dumps(record, indent=2) + '\n')
             return record, 'staged'
     folder.mkdir(parents=True, exist_ok=True)
     source = published.get((access_url, ra, dec, CUTOUT_DEG))
@@ -308,16 +324,16 @@ def check_and_describe(key, config, item, meta, original, centre, table_sha):
         discovery_sha256=table_sha,
         measured=dict(wavelength_um_at_centre=(at_centre.get('spectral') or {}).get('wavelength_um'),
                       wavelength_um_at_marker=(marker.get('spectral') or {}).get('wavelength_um'),
-                      marker_pixel=[marker['x'], marker['y']]),
+                      marker_pixel=[marker['x'], marker['y']], grid_coverage=grid_coverage(original, centre)),
     )
     return record
 
 
 # ---------- step 3: select ----------
 
-def choose(frames, quotas, seed_pairs, match_um=MATCH_UM):
+def choose(frames, quotas, seed_pairs, match_um=MATCH_UM, min_coverage=MIN_COVERAGE):
     """Pick frames per (epoch, detector) quota. frames: dicts with key, epoch, detector, mjd,
-    wavelength_um and keep. Returns {key: reason}. Deterministic."""
+    wavelength_um, coverage (of the comparison grid) and keep. Returns {key: reason}. Deterministic."""
     chosen = {}
     by_key = {f['key']: f for f in frames}
     order = {e: i for i, e in enumerate(dict.fromkeys(f['epoch'] for f in sorted(frames, key=lambda f: f['mjd'])))}
@@ -326,8 +342,13 @@ def choose(frames, quotas, seed_pairs, match_um=MATCH_UM):
         taken = sum(1 for k in chosen if by_key[k]['epoch'] == f['epoch'] and by_key[k]['detector'] == f['detector'])
         return taken < quotas[(f['epoch'], f['detector'])]
 
+    def covers(f):
+        return f.get('coverage', 1.0) >= min_coverage
+
     def delta(a, b):
-        return None if a['wavelength_um'] is None or b['wavelength_um'] is None else abs(a['wavelength_um'] - b['wavelength_um'])
+        if a['wavelength_um'] is None or b['wavelength_um'] is None or not (covers(a) and covers(b)):
+            return None  # Not a usable difference pair.
+        return abs(a['wavelength_um'] - b['wavelength_um'])
 
     def label(f):
         return f'{f["obs_id"]} D{f["detector"]} ({f["epoch"]})'
@@ -368,11 +389,13 @@ def choose(frames, quotas, seed_pairs, match_um=MATCH_UM):
                 deltas = [d for d in (delta(f, g) for g in others) if d is not None]
                 matches = sum(d <= match_um for d in deltas)
                 gap = min((abs(f['mjd'] - g['mjd']) for g in same), default=math.inf)
-                return (matches, gap, -min(deltas, default=math.inf), -f['mjd'], f['key'])
+                return (covers(f), matches, gap, -min(deltas, default=math.inf), -f['mjd'], f['key'])
             best = max(options, key=score)
-            matches, gap, closest = score(best)[:3]
+            matches, gap, closest = score(best)[1:4]
             if len(pool) <= quotas[(epoch, detector)]:
                 reason = 'every candidate of this epoch and detector is kept'
+            elif not covers(best):
+                reason = f'no candidate left that covers {min_coverage:.0%} of the comparison grid'
             elif matches:
                 reason = f'wavelength at the target matches {matches} frame(s) of another epoch'
             elif same:
@@ -415,7 +438,8 @@ def run(key, images, published):
         if record:
             staged.append(dict(item, record=record))
     frames = [dict(key=s['record']['sha256'], obs_id=s['record']['observation_id'], epoch=s['epoch'], detector=s['detector'],
-                   mjd=s['record']['archive_t_min'], wavelength_um=s['record']['measured']['wavelength_um_at_centre'], keep=s['keep'])
+                   mjd=s['record']['archive_t_min'], wavelength_um=s['record']['measured']['wavelength_um_at_centre'],
+                   coverage=s['record']['measured']['grid_coverage'], keep=s['keep'])
               for s in staged]
     quotas = {}
     for group in config['groups']:
@@ -445,13 +469,14 @@ def run(key, images, published):
     plan = dict(
         target=dict(id=key, name=config['name'], ra=centre[0], dec=centre[1], coordinate_source=config['coordinate_source'],
                     science_context=config['science_context']),
-        cutout_deg=CUTOUT_DEG, wavelength_match_um=MATCH_UM, discovery_table=os.path.relpath(table_path, ROOT), discovery_sha256=table_sha,
+        cutout_deg=CUTOUT_DEG, grid_deg=GRID_DEG, min_grid_coverage=MIN_COVERAGE, wavelength_match_um=MATCH_UM, discovery_table=os.path.relpath(table_path, ROOT), discovery_sha256=table_sha,
         rules=dict(epochs=config['epochs'], releases=sorted(config['releases']), groups=config['groups'], seed_pairs=config['seed_pairs']),
         frames=[dict(obs_id=s['record']['observation_id'], detector=s['detector'], epoch=s['epoch'],
                      observed_at_utc=s['record']['observed_at_utc'], data_release=s['record']['data_release'],
                      calibration=s['record']['calibration'], sha256=s['record']['sha256'],
                      wavelength_um_at_centre=s['record']['measured']['wavelength_um_at_centre'],
                      wavelength_um_at_marker=s['record']['measured']['wavelength_um_at_marker'],
+                     grid_coverage=s['record']['measured']['grid_coverage'],
                      predicted=(None if s['record']['predicted_ra'] is None else [s['record']['predicted_ra'], s['record']['predicted_dec']]),
                      selected=s['record']['sha256'] in reasons, reason=reasons.get(s['record']['sha256'], 'not selected'))
                 for s in sorted(staged + partners, key=lambda s: (s['record']['archive_t_min'], s['detector']))],

@@ -111,3 +111,12 @@ def test_committed_plans_match_their_selection():
         assert len(selected) == len(plan['inputs']), path.name
         assert not plan['failures'], path.name
         assert all(f['reason'] != 'not selected' for f in selected)
+
+
+def test_a_frame_clipped_at_a_detector_edge_never_seeds_a_pair():
+    # The best wavelength match covers too little of the comparison grid to be differenced.
+    frames = [dict(frame('edge', 'early', 0.0, 2.411), coverage=0.40), dict(frame('full', 'early', 1.0, 1.873), coverage=1.0),
+              dict(frame('late-edge', 'late', 365.0, 2.411), coverage=1.0), dict(frame('late-full', 'late', 366.0, 1.879), coverage=0.99)]
+    reasons = choose(frames, {('early', 3): 1, ('late', 3): 1}, seed_pairs=1)
+    assert sorted(reasons) == ['full', 'late-full']
+    assert 'within 0.0060 µm' in reasons['full']
