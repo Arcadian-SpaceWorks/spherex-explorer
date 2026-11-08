@@ -12,6 +12,8 @@ app = FastAPI(title='Arcadian SkyTracker API', version='0.2.0')
 app.include_router(images_router)
 app.include_router(demo_router)
 app.include_router(compare_router)
+from .validation_api import router as validation_router
+app.include_router(validation_router)
 
 
 @app.exception_handler(ImageError)

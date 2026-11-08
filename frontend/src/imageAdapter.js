@@ -1,3 +1,4 @@
+import {requestComparison} from './compareAdapter.js';
 import { loadDemoImage } from './demoAdapter.js';
 import { recordFromMetadata } from './targetWavelengths.js';
 
@@ -37,8 +38,13 @@ export async function loadObservationImage(observation, target, options = {}) {
   return data;
 }
 
-async function prepareObservationImage(observation, target, {signal, fetchImpl = fetch, full = false, client = 'time-slider'} = {}) {
-  if (observation.demo) return loadDemoImage(observation, {signal, fetchImpl});
+async function prepareObservationImage(observation, target, {signal, fetchImpl = fetch, full = false, client = 'time-slider', trackingView} = {}) {
+  if (observation.demo) {
+    const base=await loadDemoImage(observation,{signal,fetchImpl});
+    if (!trackingView) return base;
+    const result=await requestComparison({a:observation,b:observation,target,mode:'time',signal,fetchImpl,trackingView});
+    return {...base,preview_url:result.previews.a,tracking:result.moving_target,tracking_grid:result.grid};
+  }
   let response;
   try {
     response = await fetchImpl('/api/images', {

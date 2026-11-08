@@ -1,3 +1,4 @@
+import DetectionLab from './components/DetectionLab';
 import DemoTargetSummary from './components/DemoTargetSummary';
 import { useRef, useState, useEffect } from 'react';
 import SkyMap from './components/SkyMap';
@@ -29,8 +30,9 @@ export default function App() {
     const {params} = filterParams(activeFilter);
     const next = filterDemoResult(demoResult(target, scienceNote), params);
     setFilter(activeFilter); setFilterError('');
+    setPicks({a:null,b:null});
     setDemoTargetId(target.id); setSelected({ra:target.ra, dec:target.dec}); setNavigation({ra:target.ra, dec:target.dec});
-    setResult(next); setError(''); setImageObservation(next.observations[0] || null); setPicks({a: null, b: null});
+    setResult(next); setError(''); setImageObservation(next.observations[0] || null);
   }
   function changeMode(next) {
     request.current?.abort(); request.current = null;
@@ -123,9 +125,10 @@ export default function App() {
     </section>}
     <ObservationsTable mode={mode} result={result} loading={loading} error={error} selectedObservation={imageObservation} onViewImage={setImageObservation}
       compare={{...picks, onPick: pick}} target={selected}/>
-    {result?.count > 0 && <ComparePanel key={`${mode}|${picks.a?.access_url}|${picks.b?.access_url}|${selected.ra}|${selected.dec}`}
-      picks={picks} target={selected} demo={mode === 'demo'} onRemove={role => setPicks(current => ({...current, [role]: null}))}
+    {result?.count > 0 && <ComparePanel key={`${picks.a?.access_url}|${picks.b?.access_url}|${selected.ra}|${selected.dec}`}
+      picks={picks} target={selected} onRemove={role => setPicks(current => ({...current, [role]: null}))}
       onSwap={() => setPicks(current => ({a: current.b, b: current.a}))}/>}
+    {import.meta.env.VITE_ENABLE_DETECTION_LAB === 'true' && <DetectionLab/>}
     <TemporalImageExplorer result={result} loading={loading} error={error} target={selected}/>
     <ImageInspector observation={imageObservation} target={selected}/></main><footer><span>Arcadian SkyTracker · Milestone 02</span><span>Sky atlas by <a href="https://aladin.cds.unistra.fr/AladinLite/">Aladin Lite / CDS</a> · DSS2 imagery · Observations from <a href="https://irsa.ipac.caltech.edu/Missions/spherex.html">NASA/IPAC IRSA</a></span></footer></div>;
 }

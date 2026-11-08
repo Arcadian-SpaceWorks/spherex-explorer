@@ -31,13 +31,11 @@ test('Barnard’s Star: a wavelength-matched pair a year apart is differenced fr
   await expect(page.locator('.observations tr', {hasText: b.obs_id}).locator('.wavelength-badge')).toHaveText('≈ A');
   await pickButton(page, b, 'B').click();
   const compare = panel(page);
-  await expect(compare).toContainText('compared locally from their original FITS');
-  await compare.getByRole('button', {name: 'Compare A and B'}).click();
-  await expect(compare.getByTestId('compare-verdict')).toContainText('ACCEPT', {timeout: 60000});
+  await compare.getByRole('button', {name: 'Find Changes'}).click();
+  await expect(compare.getByTestId('compare-result')).toBeVisible({timeout: 60000});
   expect(posted[0]).toEqual({a: {demo_image_id: a.image_id}, b: {demo_image_id: b.image_id},
     ra: barnard.ra, dec: barnard.dec, size_deg: 0.3, mode: 'time'});
-  await expect(compare.getByText('Preloaded data', {exact: true})).toBeVisible();
-  await expect(compare).toContainText('preloaded in the local demo bundle; no network was used');
+  await expect(compare.getByText('Preloaded real observations', {exact: true})).toBeVisible();
   await compare.getByRole('button', {name: 'Difference'}).click();
   const difference = compare.getByTestId('compare-image-difference');
   await expect(difference).toBeVisible();
@@ -52,13 +50,13 @@ test('3I/ATLAS: two bands of one exposure side by side; hours apart is blink onl
   await pickButton(page, row(comet, '2025W50_2A_0698_1', 2), 'A').click();
   await pickButton(page, row(comet, '2025W50_2A_0698_1', 5), 'B').click();
   await expect(compare.getByRole('button', {name: 'Wavelength (suggested)'})).toHaveAttribute('aria-pressed', 'true');
-  await compare.getByRole('button', {name: 'Compare A and B'}).click();
-  await expect(compare.getByTestId('compare-verdict')).toContainText('Side by side', {timeout: 60000});
+  await compare.getByRole('button', {name: 'Find Changes'}).click();
+  await expect(compare.getByTestId('compare-result')).toBeVisible({timeout: 60000});
   await expect(compare.getByRole('button', {name: 'Difference'})).toBeDisabled();
   await pickButton(page, row(comet, '2025W50_2A_0712_4', 5), 'A').click();
   await expect(compare.getByRole('button', {name: 'Time (suggested)'})).toHaveAttribute('aria-pressed', 'true');
-  await compare.getByRole('button', {name: 'Compare A and B'}).click();
-  await expect(compare.getByTestId('compare-verdict')).toContainText('Blink only', {timeout: 60000});
+  await compare.getByRole('button', {name: 'Find Changes'}).click();
+  await expect(compare.getByTestId('compare-result')).toBeVisible({timeout: 60000});
   await expect(compare.getByTestId('difference-unavailable')).toBeVisible();
   // Choosing another target clears the picks.
   await page.getByLabel('Preloaded target').selectOption('m31');

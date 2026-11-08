@@ -118,6 +118,11 @@ def test_accepted_time_pair_returns_aligned_previews_difference_and_provenance(s
         assert png(client, data['previews'][role]).shape == (176, 176, 4)
     assert any('No motion' in note for note in data['notes'])
     assert data['cache_hit'] is False
+    assert data['context'] == 'real_observation_comparison'
+    assert data['detection']['status'] == 'unavailable'
+    assert data['detection']['candidates'] == []
+    assert any('PSF' in reason for reason in data['detection']['reasons'])
+    assert any('Spectral response' in reason for reason in data['detection']['reasons'])
 
 
 def test_wavelength_mismatch_warns_and_never_makes_a_difference_image(setup):
@@ -167,6 +172,8 @@ def test_small_cutouts_are_reported_not_hidden(setup):
 @pytest.mark.parametrize('change, status', [
     (lambda b: b['a'].update(image_id='a' * 64), 422),  # Both image_id and access_url.
     (lambda b: b.update(mode='motion'), 422),
+    (lambda b: b.update(context='synthetic_injection_validation'), 422),
+    (lambda b: b.update(evidence={'calibration_verified': True, 'psf_verified': True}), 422),
     (lambda b: b.update(size_deg=0.9), 422),
     (lambda b: b.update(ra=400), 422),
     (lambda b: b.update(zodi_subtract=True), 422),  # Unknown fields are refused.
@@ -230,8 +237,8 @@ def test_a_matched_demo_pair_is_differenced_offline(demo_client):
     result = response.json()
     assert result['decision'] == 'ACCEPT' and result['previews']['difference']
     assert result['overlap_fraction'] > 0.95
-    assert all(frame['demo'] and frame['provenance']['source'] == 'irsa_cutout' for frame in result['frames'])
-    assert 'preloaded in the local demo bundle; no network was used' in result['notes'][0]
+    assert all(frame['demo'] and frame['provenance']['source'] == 'verified_local_irsa_cutout' for frame in result['frames'])
+    assert 'verified local assets' in result['notes'][0]
     assert png(demo_client, result['previews']['difference']).shape[:2] == (176, 176)
 
 
@@ -258,5 +265,5 @@ def test_a_corrupted_demo_fits_is_refused(tmp_path):
     target, image_id = demo_image('m31', '2026W01_1A_0471_1', 1)
     (root / 'assets' / image_id / 'original.fits').write_bytes(b'not the original')
     service = CompareService(images=None, settings=CompareCacheSettings(cache_dir=tmp_path / 'compare', entries=3, ttl=600), demo_root=root)
-    with pytest.raises(ImageError, match='Preloaded science data unavailable'):
+    with pytest.raises(ImageError, match='Preloaded observation unavailable'):
         service.compare({'demo_image_id': image_id}, {'demo_image_id': image_id}, target['ra'], target['dec'], 0.3, 'time')

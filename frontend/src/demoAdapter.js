@@ -58,7 +58,7 @@ export function demoResult(target, scienceNote) {
     obs_id: row.obs_id, access_url: row.access_url, access_format: 'application/fits (preloaded cutout)',
     observed_at_utc: row.observed_at_utc, energy_bandpassname: `SPHEREx-D${row.detector}`,
     obs_collection: row.acquisition?.data_release || 'Preloaded IRSA SPHEREx', s_ra: null, s_dec: null, em_min: row.acquisition?.archive_em_min_m ?? null, em_max: row.acquisition?.archive_em_max_m ?? null, t_exptime: null,
-    demo: row,
+    demo: row, demo_target_id: target.id,
   }))).frames;
   return {mode: 'demo', status: target.status, ra: target.ra, dec: target.dec, count: observations.length, truncated: false, observations, science_note: scienceNote};
 }

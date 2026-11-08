@@ -74,6 +74,7 @@ class Frame:
     zodi: np.ndarray | None = None
     provenance: dict = field(default_factory=dict)
     diagnostics: dict = field(default_factory=dict)
+    variance: np.ndarray | None = None
 
     @property
     def band(self):
@@ -106,6 +107,7 @@ class AlignedFrame:
     frame: Frame
     data: np.ndarray
     valid: np.ndarray
+    variance: np.ndarray | None = None
 
 
 @dataclass(frozen=True)
@@ -223,11 +225,42 @@ def load_frame(path, ra, dec, size_deg, *, source='file', settings=DEFAULT_SETTI
             obs_id = keyword('OBSID')
             detector = finite(keyword('DETECTOR'))
             observed_at_utc, mjd = _observed(keyword)
+            if str(keyword('TIMESYS') or 'UTC').strip().upper() != 'UTC' or (mjd is not None and not math.isfinite(mjd)):
+                observed_at_utc, mjd = None, None
+            variance = None
+            variance_array = None
+            from .diagnostics import local_psf
+            psf_diagnostics = local_psf(hdul, hdu, x, y)
+            if 'VARIANCE' in hdul and hdul['VARIANCE'].shape == data.shape:
+                values = np.asarray(hdul['VARIANCE'].data)
+                selected = values[valid & np.isfinite(values) & (values > 0)]
+                variance = {'positive_finite_fraction': float((np.isfinite(values) & (values > 0) & valid).mean()),
+                            'median': float(np.median(selected)) if selected.size else None,
+                            'units': str(hdul['VARIANCE'].header.get('BUNIT', ''))}
+                try:
+                    if u.Unit(variance['units']) == (u.MJy/u.sr)**2:
+                        variance_array=np.where(valid & np.isfinite(values) & (values>0),values,np.nan)
+                except ValueError:
+                    pass
+            samples = []
+            for sx, sy in ((x,y), (max(0,x-10),y), (min(width-1,x+10),y), (x,max(0,y-10)), (x,min(height-1,y+10))):
+                sample = wavelength_at(hdu, hdul, sx, sy)
+                if sample: samples.append(sample['wavelength_um'])
+            science_metadata = {'local_psf': psf_diagnostics, 'pipeline_version': str(keyword('VERSION') or ''),
+                                'calibrated_spectral_maps_available': 'CWAVE' in hdul and 'CBAND' in hdul,
+                                'approximate_wavelength_samples_um': samples,
+                                'variance': variance,
+                                'psf_shape': list(hdul['PSF'].shape) if 'PSF' in hdul else None,
+                                'physical_unit': str(keyword('BUNIT') or ''),
+                                'variance_available': 'VARIANCE' in hdul,
+                                'psf_available': 'PSF' in hdul,
+                                'flags_available': 'FLAGS' in hdul}
 
         cut_options = dict(position=target, size=size_deg * u.deg, wcs=wcs, mode='partial')
         try:
             cut = Cutout2D(np.where(valid, data, np.nan), fill_value=np.nan, **cut_options)
             valid_cut = Cutout2D(valid.astype(np.float32), fill_value=0, **cut_options).data > .5
+            variance_cut = Cutout2D(variance_array, fill_value=np.nan, **cut_options).data if variance_array is not None else None
             zodi_cut = Cutout2D(zodi, fill_value=np.nan, **cut_options).data if zodi is not None else None
         except NoOverlapError as exc:
             raise FrameError('target_outside', 'The requested cutout does not overlap this image.') from exc
@@ -237,6 +270,7 @@ def load_frame(path, ra, dec, size_deg, *, source='file', settings=DEFAULT_SETTI
     good = cut_data[valid_cut]
     core = cut_data[_box(tx, ty, settings.core_box_px)]
     diagnostics = {
+        **science_metadata,
         'sky_level': float(np.percentile(good, 5)) if good.size else None,
         'zodi_median': float(np.nanmedian(zodi_cut)) if zodi_cut is not None and np.isfinite(zodi_cut).any() else None,
         'core_median': float(np.nanmedian(core)) if np.isfinite(core).any() else None,
@@ -251,7 +285,7 @@ def load_frame(path, ra, dec, size_deg, *, source='file', settings=DEFAULT_SETTI
                  observed_at_utc=observed_at_utc, mjd=mjd,
                  wavelength_um=spectral['wavelength_um'] if spectral else None,
                  bandwidth_um=spectral['bandwidth_um'] if spectral else None,
-                 zodi=zodi_cut, provenance=provenance, diagnostics=diagnostics)
+                 zodi=zodi_cut, provenance=provenance, diagnostics=diagnostics, variance=variance_cut)
 
 
 def common_grid(ra, dec, size_deg, pixel_scale_arcsec=SPHEREX_PIXEL_SCALE_ARCSEC):
@@ -283,7 +317,8 @@ def align(frames, grid):
             coverage = reproject_interp((frame.valid.astype(np.float64), frame.wcs), grid.wcs,
                                         shape_out=grid.shape, order='bilinear', return_footprint=False)
         valid = (footprint > 0) & np.isfinite(data) & (np.nan_to_num(coverage) >= 1 - 1e-6)
-        aligned.append(AlignedFrame(frame=frame, data=np.where(valid, data, np.nan), valid=valid))
+        from .diagnostics import reproject_variance
+        aligned.append(AlignedFrame(frame=frame, data=np.where(valid, data, np.nan), valid=valid, variance=reproject_variance(frame, grid)))
     return aligned
 
 
@@ -315,6 +350,8 @@ def validate(a, b, mode, *, overlap=None, require_overlap=True, settings=DEFAULT
     limit = settings.max_wavelength_delta_um
 
     if mode == 'time':
+        if same_exposure:
+            add('duplicate_observation', 'reject', 'Identical observation IDs cannot establish temporal change.')
         if a.detector is None or b.detector is None or a.detector != b.detector:
             add('band_mismatch', 'reject', 'Time comparison needs two images from the same detector.',
                 band_a=a.band, band_b=b.band)
