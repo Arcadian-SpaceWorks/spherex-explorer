@@ -1,0 +1,1495 @@
+{
+  "purpose": "Real-file diagnostic execution; ranking prioritizes visual-subtraction eligibility then overlap. No pair is scientifically certified.",
+  "region_size_deg": 0.1,
+  "observations": {
+    "2026W01_1A_0471_1_D1": {
+      "obs_id": "2026W01_1A_0471_1",
+      "band": "SPHEREx-D1",
+      "detector": 1,
+      "observed_at_utc": "2025-12-31T06:00:22.121",
+      "mjd": 61040.25025603009,
+      "wavelength_um": 0.8945705766937562,
+      "bandwidth_um": 0.022743872458790903,
+      "diagnostics": {
+        "local_psf": {
+          "status": "measured",
+          "plane": 57,
+          "original_detector_pixel": [
+            376.95711507577926,
+            1098.8318727125436
+          ],
+          "rms_width_native_pixels": 0.4992003100324342,
+          "oversampling": 10.0,
+          "negative_absolute_mass_fraction": 9.085112662177153e-10,
+          "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+        },
+        "pipeline_version": "6.5.4+psffix1",
+        "calibrated_spectral_maps_available": false,
+        "approximate_wavelength_samples_um": [
+          0.8945705766937562,
+          0.8947031270844977,
+          0.8944380263030146,
+          0.8963789668079694,
+          0.892762186579543
+        ],
+        "variance": {
+          "positive_finite_fraction": 0.99761962890625,
+          "median": 0.0025483451317995787,
+          "units": "MJy2 / sr2"
+        },
+        "psf_shape": [
+          121,
+          101,
+          101
+        ],
+        "physical_unit": "MJy / sr",
+        "variance_available": true,
+        "psf_available": true,
+        "flags_available": true,
+        "sky_level": 4.737492775917054,
+        "zodi_median": 0.1565609574317932,
+        "core_median": 50.98153114318848,
+        "core_box_px": 20,
+        "valid_fraction": 0.9979238754325259,
+        "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+      },
+      "provenance": {
+        "source": "verified_local_irsa_cutout",
+        "file_name": "original.fits",
+        "sha256": "6591bbba39f7e919e90c65a2c5a075f8271b290083506d6ce3f864f47b04a42b",
+        "cutout_deg": 0.1456639969244288,
+        "wavelength_source": "WCS-WAVE / alternate WCS W"
+      }
+    },
+    "2026W28_2A_0117_1_D1": {
+      "obs_id": "2026W28_2A_0117_1",
+      "band": "SPHEREx-D1",
+      "detector": 1,
+      "observed_at_utc": "2026-07-10T00:02:31.613",
+      "mjd": 61231.00175478009,
+      "wavelength_um": 0.893464517205212,
+      "bandwidth_um": 0.02273089119186174,
+      "diagnostics": {
+        "local_psf": {
+          "status": "measured",
+          "plane": 59,
+          "original_detector_pixel": [
+            756.2489291596353,
+            1084.7008276583235
+          ],
+          "rms_width_native_pixels": 0.49604486565084904,
+          "oversampling": 10.0,
+          "negative_absolute_mass_fraction": 1.674385297079084e-09,
+          "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+        },
+        "pipeline_version": "6.5.7",
+        "calibrated_spectral_maps_available": false,
+        "approximate_wavelength_samples_um": [
+          0.893464517205212,
+          0.8935414110607197,
+          0.8933935221235139,
+          0.8952701470980033,
+          0.8916588873124208
+        ],
+        "variance": {
+          "positive_finite_fraction": 0.9975183823529412,
+          "median": 0.002698508556932211,
+          "units": "MJy2 / sr2"
+        },
+        "psf_shape": [
+          121,
+          101,
+          101
+        ],
+        "physical_unit": "MJy / sr",
+        "variance_available": true,
+        "psf_available": true,
+        "flags_available": true,
+        "sky_level": 4.682892274856568,
+        "zodi_median": 0.15218138694763184,
+        "core_median": 51.5196418762207,
+        "core_box_px": 20,
+        "valid_fraction": 0.998477508650519,
+        "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+      },
+      "provenance": {
+        "source": "verified_local_irsa_cutout",
+        "file_name": "original.fits",
+        "sha256": "88d42086353e66209bcb114504871b0ad979e60273a56511740b77b94eb94e90",
+        "cutout_deg": 0.1456639969244288,
+        "wavelength_source": "WCS-WAVE / alternate WCS W"
+      }
+    },
+    "2026W26_1A_0500_1_D2": {
+      "obs_id": "2026W26_1A_0500_1",
+      "band": "SPHEREx-D2",
+      "detector": 2,
+      "observed_at_utc": "2026-06-24T03:19:00.063",
+      "mjd": 61215.13819517361,
+      "wavelength_um": 1.489988171739384,
+      "bandwidth_um": 0.03645982019042382,
+      "diagnostics": {
+        "local_psf": {
+          "status": "measured",
+          "plane": 22,
+          "original_detector_pixel": [
+            37.814901481031804,
+            546.0946527383941
+          ],
+          "rms_width_native_pixels": 0.5145328500795012,
+          "oversampling": 10.0,
+          "negative_absolute_mass_fraction": 2.1273938166643802e-09,
+          "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+        },
+        "pipeline_version": "6.5.7",
+        "calibrated_spectral_maps_available": false,
+        "approximate_wavelength_samples_um": [
+          1.489988171739384,
+          1.4902897283839343,
+          1.4896866150948331,
+          1.4931060189990284,
+          1.486870324479739
+        ],
+        "variance": {
+          "positive_finite_fraction": 0.9982456961077845,
+          "median": 0.00023768399842083454,
+          "units": "MJy2 / sr2"
+        },
+        "psf_shape": [
+          121,
+          101,
+          101
+        ],
+        "physical_unit": "MJy / sr",
+        "variance_available": true,
+        "psf_available": true,
+        "flags_available": true,
+        "sky_level": 0.31407407224178313,
+        "zodi_median": 0.12670935690402985,
+        "core_median": 1.9358044266700745,
+        "core_box_px": 20,
+        "valid_fraction": 0.9514363885088919,
+        "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+      },
+      "provenance": {
+        "source": "verified_existing_cache",
+        "file_name": "original.fits",
+        "sha256": "48ffc23cdb21b3e45fbe245a4ed22ec1091a938bfe16ef0759dd041924b12214",
+        "cutout_deg": 0.1456639969244288,
+        "wavelength_source": "WCS-WAVE / alternate WCS W"
+      }
+    },
+    "2025W19_2B_0346_1_D2": {
+      "obs_id": "2025W19_2B_0346_1",
+      "band": "SPHEREx-D2",
+      "detector": 2,
+      "observed_at_utc": "2025-05-10T17:04:37.741",
+      "mjd": 60805.711547928244,
+      "wavelength_um": 1.50641873138115,
+      "bandwidth_um": 0.03695268870639086,
+      "diagnostics": {
+        "local_psf": {
+          "status": "measured",
+          "plane": 31,
+          "original_detector_pixel": [
+            1782.924705056147,
+            474.5068687910492
+          ],
+          "rms_width_native_pixels": 0.5025443217650272,
+          "oversampling": 10.0,
+          "negative_absolute_mass_fraction": 3.4101796941854445e-09,
+          "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+        },
+        "pipeline_version": "6.4+psffix1",
+        "calibrated_spectral_maps_available": false,
+        "approximate_wavelength_samples_um": [
+          1.50641873138115,
+          1.506171786469464,
+          1.5066656762928359,
+          1.509518483051225,
+          1.503318979711075
+        ],
+        "variance": {
+          "positive_finite_fraction": 0.9995480371900827,
+          "median": 0.0002877612132579088,
+          "units": "MJy2 / sr2"
+        },
+        "psf_shape": [
+          121,
+          101,
+          101
+        ],
+        "physical_unit": "MJy / sr",
+        "variance_available": true,
+        "psf_available": true,
+        "flags_available": true,
+        "sky_level": 0.31508340686559677,
+        "zodi_median": 0.11962958797812462,
+        "core_median": 2.060756206512451,
+        "core_box_px": 20,
+        "valid_fraction": 0.999452804377565,
+        "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+      },
+      "provenance": {
+        "source": "verified_existing_cache",
+        "file_name": "original.fits",
+        "sha256": "dc797469c495020f63637edb8eb94883528ac768707be4d6b67846753508c668",
+        "cutout_deg": 0.1456639969244288,
+        "wavelength_source": "WCS-WAVE / alternate WCS W"
+      }
+    },
+    "2026W01_1A_0471_1_D4": {
+      "obs_id": "2026W01_1A_0471_1",
+      "band": "SPHEREx-D4",
+      "detector": 4,
+      "observed_at_utc": "2025-12-31T06:00:22.121",
+      "mjd": 61040.25025603009,
+      "wavelength_um": 2.9799262419335486,
+      "bandwidth_um": 0.08600368541129758,
+      "diagnostics": {
+        "local_psf": {
+          "status": "measured",
+          "plane": 57,
+          "original_detector_pixel": [
+            381.6346672135627,
+            1088.3923822523063
+          ],
+          "rms_width_native_pixels": 0.6234622411788424,
+          "oversampling": 10.0,
+          "negative_absolute_mass_fraction": 6.060205115510087e-10,
+          "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+        },
+        "pipeline_version": "6.5.4+psffix1",
+        "calibrated_spectral_maps_available": false,
+        "approximate_wavelength_samples_um": [
+          2.9799262419335486,
+          2.9804165933399376,
+          2.979435890527159,
+          2.9868685211090877,
+          2.9729839627580086
+        ],
+        "variance": {
+          "positive_finite_fraction": 0.9927412533640907,
+          "median": 0.001441911910660565,
+          "units": "MJy2 / sr2"
+        },
+        "psf_shape": [
+          121,
+          101,
+          101
+        ],
+        "physical_unit": "MJy / sr",
+        "variance_available": true,
+        "psf_available": true,
+        "flags_available": true,
+        "sky_level": 3.8451677799224853,
+        "zodi_median": 0.07177110016345978,
+        "core_median": 43.67806625366211,
+        "core_box_px": 20,
+        "valid_fraction": 0.9930795847750865,
+        "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+      },
+      "provenance": {
+        "source": "verified_local_irsa_cutout",
+        "file_name": "original.fits",
+        "sha256": "39a73c7e45b3d663c136dd1176f27972eb4345c629bbdf98e2968b84e86f0b0e",
+        "cutout_deg": 0.1456639969244288,
+        "wavelength_source": "WCS-WAVE / alternate WCS W"
+      }
+    },
+    "2026W28_2A_0117_1_D4": {
+      "obs_id": "2026W28_2A_0117_1",
+      "band": "SPHEREx-D4",
+      "detector": 4,
+      "observed_at_utc": "2026-07-10T00:02:31.613",
+      "mjd": 61231.00175478009,
+      "wavelength_um": 2.975124211882185,
+      "bandwidth_um": 0.08464294286786585,
+      "diagnostics": {
+        "local_psf": {
+          "status": "measured",
+          "plane": 59,
+          "original_detector_pixel": [
+            760.5404991048792,
+            1073.6066555146497
+          ],
+          "rms_width_native_pixels": 0.6048150503479696,
+          "oversampling": 10.0,
+          "negative_absolute_mass_fraction": 5.288369395173298e-11,
+          "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+        },
+        "pipeline_version": "6.5.7",
+        "calibrated_spectral_maps_available": false,
+        "approximate_wavelength_samples_um": [
+          2.975124211882185,
+          2.975317934123779,
+          2.974930489640589,
+          2.982028155967096,
+          2.9682202677972724
+        ],
+        "variance": {
+          "positive_finite_fraction": 0.9931525735294118,
+          "median": 0.0014713627751916647,
+          "units": "MJy2 / sr2"
+        },
+        "psf_shape": [
+          121,
+          101,
+          101
+        ],
+        "physical_unit": "MJy / sr",
+        "variance_available": true,
+        "psf_available": true,
+        "flags_available": true,
+        "sky_level": 3.753979444503784,
+        "zodi_median": 0.07740961760282516,
+        "core_median": 43.73359489440918,
+        "core_box_px": 20,
+        "valid_fraction": 0.9930795847750865,
+        "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+      },
+      "provenance": {
+        "source": "verified_local_irsa_cutout",
+        "file_name": "original.fits",
+        "sha256": "5af39570aacfbbfd9036c520b71d3bbcfb93faf91da92a205107da2de4a65c1a",
+        "cutout_deg": 0.1456639969244288,
+        "wavelength_source": "WCS-WAVE / alternate WCS W"
+      }
+    },
+    "2025W28_1B_0480_4_D1": {
+      "obs_id": "2025W28_1B_0480_4",
+      "band": "SPHEREx-D1",
+      "detector": 1,
+      "observed_at_utc": "2025-07-09T14:56:47.965",
+      "mjd": 60865.622777372686,
+      "wavelength_um": 0.750226543343256,
+      "bandwidth_um": 0.017893505969132622,
+      "diagnostics": {
+        "local_psf": {
+          "status": "measured",
+          "plane": 113,
+          "original_detector_pixel": [
+            670.7820398834546,
+            1946.6910980536009
+          ],
+          "rms_width_native_pixels": 0.48133739652480106,
+          "oversampling": 10.0,
+          "negative_absolute_mass_fraction": 5.957039306281331e-09,
+          "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+        },
+        "pipeline_version": "6.4+psffix1",
+        "calibrated_spectral_maps_available": false,
+        "approximate_wavelength_samples_um": [
+          0.750226543343256,
+          0.7502971326490153,
+          0.7501559540374965,
+          0.7517483270108267,
+          0.7487047596756851
+        ],
+        "variance": {
+          "positive_finite_fraction": 0.9996628515659658,
+          "median": 0.002670750953257084,
+          "units": "MJy2 / sr2"
+        },
+        "psf_shape": [
+          121,
+          101,
+          101
+        ],
+        "physical_unit": "MJy / sr",
+        "variance_available": true,
+        "psf_available": true,
+        "flags_available": true,
+        "sky_level": 3.5451558113098147,
+        "zodi_median": 0.14352138340473175,
+        "core_median": 40.150421142578125,
+        "core_box_px": 20,
+        "valid_fraction": 1.0,
+        "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+      },
+      "provenance": {
+        "source": "verified_local_irsa_cutout",
+        "file_name": "original.fits",
+        "sha256": "77c0421b6d3748deb3cb5cfc75db9c126a7b4e48c5fa9fe49fac46824f85c0e7",
+        "cutout_deg": 0.1456639969244288,
+        "wavelength_source": "WCS-WAVE / alternate WCS W"
+      }
+    },
+    "2026W26_1A_0178_1_D2": {
+      "obs_id": "2026W26_1A_0178_1",
+      "band": "SPHEREx-D2",
+      "detector": 2,
+      "observed_at_utc": "2026-06-22T20:21:33.190",
+      "mjd": 61213.84830081018,
+      "wavelength_um": 1.4206876720174488,
+      "bandwidth_um": 0.03423622224979701,
+      "diagnostics": {
+        "local_psf": {
+          "status": "measured",
+          "plane": 44,
+          "original_detector_pixel": [
+            41.950042166746265,
+            776.6434264816512
+          ],
+          "rms_width_native_pixels": 0.5113328523799481,
+          "oversampling": 10.0,
+          "negative_absolute_mass_fraction": 1.9164128062243435e-09,
+          "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+        },
+        "pipeline_version": "6.5.7",
+        "calibrated_spectral_maps_available": false,
+        "approximate_wavelength_samples_um": [
+          1.4206876720174488,
+          1.4209748080062223,
+          1.420400536028675,
+          1.4236412864815557,
+          1.4177340575533417
+        ],
+        "variance": {
+          "positive_finite_fraction": 0.9980354532163743,
+          "median": 0.00024296155606862158,
+          "units": "MJy2 / sr2"
+        },
+        "psf_shape": [
+          121,
+          101,
+          101
+        ],
+        "physical_unit": "MJy / sr",
+        "variance_available": true,
+        "psf_available": true,
+        "flags_available": true,
+        "sky_level": 0.2965448260307312,
+        "zodi_median": 0.12295696139335632,
+        "core_median": 1.9025969505310059,
+        "core_box_px": 20,
+        "valid_fraction": 0.9982216142270862,
+        "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+      },
+      "provenance": {
+        "source": "verified_existing_cache",
+        "file_name": "original.fits",
+        "sha256": "8900d9188bdd062d0c1a6c9bae4e48b43c8e81bb0e0e79c8a6d80bae25f65684",
+        "cutout_deg": 0.1456639969244288,
+        "wavelength_source": "WCS-WAVE / alternate WCS W"
+      }
+    },
+    "2026W21_2A_0213_2_D5": {
+      "obs_id": "2026W21_2A_0213_2",
+      "band": "SPHEREx-D5",
+      "detector": 5,
+      "observed_at_utc": "2026-05-22T19:40:19.088",
+      "mjd": 61182.81966537037,
+      "wavelength_um": 4.3664085865163385,
+      "bandwidth_um": 0.038066789811051834,
+      "diagnostics": {
+        "local_psf": {
+          "status": "measured",
+          "plane": 9,
+          "original_detector_pixel": [
+            1671.8390632209553,
+            180.08711586722728
+          ],
+          "rms_width_native_pixels": 0.5907147606667204,
+          "oversampling": 10.0,
+          "negative_absolute_mass_fraction": 8.366501269563287e-09,
+          "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+        },
+        "pipeline_version": "6.5.7",
+        "calibrated_spectral_maps_available": false,
+        "approximate_wavelength_samples_um": [
+          4.3664085865163385,
+          4.3661815648355145,
+          4.366635608197163,
+          4.369646107258655,
+          4.363171065774022
+        ],
+        "variance": {
+          "positive_finite_fraction": 0.9968039772727273,
+          "median": 0.001204530126415193,
+          "units": "MJy2 / sr2"
+        },
+        "psf_shape": [
+          121,
+          101,
+          101
+        ],
+        "physical_unit": "MJy / sr",
+        "variance_available": true,
+        "psf_available": true,
+        "flags_available": true,
+        "sky_level": 0.24877627491950988,
+        "zodi_median": 0.16674605011940002,
+        "core_median": 0.7895892560482025,
+        "core_box_px": 20,
+        "valid_fraction": 0.9969550173010381,
+        "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+      },
+      "provenance": {
+        "source": "verified_local_irsa_cutout",
+        "file_name": "original.fits",
+        "sha256": "ed0095a308611f6650c7b5a5d34b78ed371317b4801fe10f6b00aae386724aac",
+        "cutout_deg": 0.1456639969244288,
+        "wavelength_source": "WCS-WAVE / alternate WCS W"
+      }
+    },
+    "2026W21_2A_0213_3_D5": {
+      "obs_id": "2026W21_2A_0213_3",
+      "band": "SPHEREx-D5",
+      "detector": 5,
+      "observed_at_utc": "2026-05-22T19:42:28.021",
+      "mjd": 61182.82115765046,
+      "wavelength_um": 4.4037273627698035,
+      "bandwidth_um": 0.038548964938894224,
+      "diagnostics": {
+        "local_psf": {
+          "status": "measured",
+          "plane": 9,
+          "original_detector_pixel": [
+            1669.9131602074322,
+            64.68692243015013
+          ],
+          "rms_width_native_pixels": 0.5907147606667204,
+          "oversampling": 10.0,
+          "negative_absolute_mass_fraction": 8.366501269563287e-09,
+          "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+        },
+        "pipeline_version": "6.5.7",
+        "calibrated_spectral_maps_available": false,
+        "approximate_wavelength_samples_um": [
+          4.4037273627698035,
+          4.40350785151597,
+          4.403946874023636,
+          4.406965008852931,
+          4.400489716686673
+        ],
+        "variance": {
+          "positive_finite_fraction": 0.9969721889952153,
+          "median": 0.0012825075536966324,
+          "units": "MJy2 / sr2"
+        },
+        "psf_shape": [
+          121,
+          101,
+          101
+        ],
+        "physical_unit": "MJy / sr",
+        "variance_available": true,
+        "psf_available": true,
+        "flags_available": true,
+        "sky_level": 0.2592999875545502,
+        "zodi_median": 0.17645502090454102,
+        "core_median": 0.7884300947189331,
+        "core_box_px": 20,
+        "valid_fraction": 0.9975086505190311,
+        "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+      },
+      "provenance": {
+        "source": "verified_local_irsa_cutout",
+        "file_name": "original.fits",
+        "sha256": "c61cdd18a17878266db3942860f5d3146f64b0a3152342b9bde29a0077369d88",
+        "cutout_deg": 0.1456639969244288,
+        "wavelength_source": "WCS-WAVE / alternate WCS W"
+      }
+    },
+    "2025W28_1B_0480_4_D4": {
+      "obs_id": "2025W28_1B_0480_4",
+      "band": "SPHEREx-D4",
+      "detector": 4,
+      "observed_at_utc": "2025-07-09T14:56:47.965",
+      "mjd": 60865.622777372686,
+      "wavelength_um": 2.4418998486951624,
+      "bandwidth_um": 0.0543470946942823,
+      "diagnostics": {
+        "local_psf": {
+          "status": "measured",
+          "plane": 113,
+          "original_detector_pixel": [
+            676.826972495507,
+            1935.0724476715427
+          ],
+          "rms_width_native_pixels": 0.5893606344262704,
+          "oversampling": 10.0,
+          "negative_absolute_mass_fraction": 2.784955321910587e-10,
+          "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+        },
+        "pipeline_version": "6.4+psffix1",
+        "calibrated_spectral_maps_available": false,
+        "approximate_wavelength_samples_um": [
+          2.4418998486951624,
+          2.442127431661364,
+          2.441738516934081,
+          2.4455768733735597,
+          2.4382228240167647
+        ],
+        "variance": {
+          "positive_finite_fraction": 0.7040906017579446,
+          "median": 0.002488137222826481,
+          "units": "MJy2 / sr2"
+        },
+        "psf_shape": [
+          121,
+          101,
+          101
+        ],
+        "physical_unit": "MJy / sr",
+        "variance_available": true,
+        "psf_available": true,
+        "flags_available": true,
+        "sky_level": 4.481456899642945,
+        "zodi_median": 0.09589317440986633,
+        "core_median": 46.98572540283203,
+        "core_box_px": 20,
+        "valid_fraction": 0.9215224913494809,
+        "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+      },
+      "provenance": {
+        "source": "verified_local_irsa_cutout",
+        "file_name": "original.fits",
+        "sha256": "fc8d60ffb462e67fd8e38bff2d87b1ee49e3ed7479513d00fc4517b99ac99b88",
+        "cutout_deg": 0.1456639969244288,
+        "wavelength_source": "WCS-WAVE / alternate WCS W"
+      }
+    }
+  },
+  "attempts": [
+    {
+      "rank_for_visual_comparison": 1,
+      "observations": [
+        "2026W01_1A_0471_1_D1",
+        "2026W28_2A_0117_1_D1"
+      ],
+      "validation": {
+        "mode": "time",
+        "decision": "ACCEPT",
+        "difference_allowed": true,
+        "wavelength_delta_um": 0.0011060594885441422,
+        "time_separation_hours": 4578.03596999991,
+        "overlap_fraction": 0.9859235851766733,
+        "reasons": [
+          {
+            "code": "wavelength_match",
+            "severity": "info",
+            "detail": "Target wavelengths agree within 0.001 um.",
+            "values": {
+              "delta_um": 0.0011060594885441422,
+              "limit_um": 0.02
+            }
+          }
+        ]
+      },
+      "overlap_fraction": 0.9859235851766733,
+      "exploratory_difference": {
+        "offset": 0.0502987269991344,
+        "scale": 1.0,
+        "scale_matched": false,
+        "robust_noise": 0.4716031185047768,
+        "overlap_fraction": 0.9859235851766733,
+        "n_pixels": 3432,
+        "display": {
+          "method": "linear",
+          "limit": 2.2859821257226813,
+          "zero_gray": 128,
+          "meaning": "Mid-gray is no change; lighter means brighter in B, darker means fainter in B."
+        }
+      },
+      "scientific_outcome": "VISUAL DIFFERENCES ONLY",
+      "candidate_screening": "not_performed",
+      "registration": {
+        "status": "diagnostic_only",
+        "matches": 1,
+        "median_shift_xy_pixels": [
+          0.0,
+          0.0
+        ],
+        "rms_separation_pixels": 0.0,
+        "limitation": "Integer-pixel image peaks; matching can be biased by morphology, PSF or wavelength. Stationarity and source identity are unverified."
+      },
+      "variance": {
+        "method": "sum of squared bilinear weights for each independent input; then A+B",
+        "valid_pixels": 3432,
+        "median_difference_variance": 0.017990647970896598,
+        "units": "(MJy/sr)^2",
+        "limitation": "Diagonal variance only; input/output covariance, background-fit error and calibration systematics are not modeled. Not used as calibrated significance."
+      },
+      "blocking_checks": [
+        {
+          "code": "units",
+          "passed": true,
+          "explanation": "Both images use surface brightness in MJy/sr."
+        },
+        {
+          "code": "variance",
+          "passed": true,
+          "explanation": "Variance is propagated through bilinear resampling when usable; correlated noise and PSF matching remain unmodeled."
+        },
+        {
+          "code": "spectral_calibration",
+          "passed": false,
+          "explanation": "Calibrated per-pixel wavelength and response equivalence have not been established. WCS-WAVE values are approximate visualization metadata."
+        },
+        {
+          "code": "psf",
+          "passed": false,
+          "explanation": "PSF models are recorded, but spatially varying PSF matching has not been validated."
+        },
+        {
+          "code": "registration",
+          "passed": false,
+          "explanation": "The images were mapped to the same sky grid; stationary reference sources have not verified the alignment."
+        },
+        {
+          "code": "calibration",
+          "passed": false,
+          "explanation": "Matching units or pipeline versions do not establish matching photometric calibration."
+        }
+      ]
+    },
+    {
+      "rank_for_visual_comparison": 2,
+      "observations": [
+        "2026W26_1A_0500_1_D2",
+        "2025W19_2B_0346_1_D2"
+      ],
+      "validation": {
+        "mode": "time",
+        "decision": "ACCEPT",
+        "difference_allowed": true,
+        "wavelength_delta_um": 0.016430559641765985,
+        "time_separation_hours": 9826.239533888816,
+        "overlap_fraction": 0.9844872163171502,
+        "reasons": [
+          {
+            "code": "wavelength_match",
+            "severity": "info",
+            "detail": "Target wavelengths agree within 0.016 um.",
+            "values": {
+              "delta_um": 0.016430559641765985,
+              "limit_um": 0.02
+            }
+          }
+        ]
+      },
+      "overlap_fraction": 0.9844872163171502,
+      "exploratory_difference": {
+        "offset": 0.0352710147079911,
+        "scale": 1.0,
+        "scale_matched": false,
+        "robust_noise": 0.03983634595775348,
+        "overlap_fraction": 0.9844872163171502,
+        "n_pixels": 3427,
+        "display": {
+          "method": "linear",
+          "limit": 0.3236443864536506,
+          "zero_gray": 128,
+          "meaning": "Mid-gray is no change; lighter means brighter in B, darker means fainter in B."
+        }
+      },
+      "scientific_outcome": "VISUAL DIFFERENCES ONLY",
+      "candidate_screening": "not_performed",
+      "registration": {
+        "status": "diagnostic_only",
+        "matches": 3,
+        "median_shift_xy_pixels": [
+          0.0,
+          0.0
+        ],
+        "rms_separation_pixels": 0.5773502691896257,
+        "limitation": "Integer-pixel image peaks; matching can be biased by morphology, PSF or wavelength. Stationarity and source identity are unverified."
+      },
+      "variance": {
+        "method": "sum of squared bilinear weights for each independent input; then A+B",
+        "valid_pixels": 3427,
+        "median_difference_variance": 0.0009545473933044817,
+        "units": "(MJy/sr)^2",
+        "limitation": "Diagonal variance only; input/output covariance, background-fit error and calibration systematics are not modeled. Not used as calibrated significance."
+      },
+      "blocking_checks": [
+        {
+          "code": "units",
+          "passed": true,
+          "explanation": "Both images use surface brightness in MJy/sr."
+        },
+        {
+          "code": "variance",
+          "passed": true,
+          "explanation": "Variance is propagated through bilinear resampling when usable; correlated noise and PSF matching remain unmodeled."
+        },
+        {
+          "code": "spectral_calibration",
+          "passed": false,
+          "explanation": "Calibrated per-pixel wavelength and response equivalence have not been established. WCS-WAVE values are approximate visualization metadata."
+        },
+        {
+          "code": "psf",
+          "passed": false,
+          "explanation": "PSF models are recorded, but spatially varying PSF matching has not been validated."
+        },
+        {
+          "code": "registration",
+          "passed": false,
+          "explanation": "The images were mapped to the same sky grid; stationary reference sources have not verified the alignment."
+        },
+        {
+          "code": "calibration",
+          "passed": false,
+          "explanation": "Matching units or pipeline versions do not establish matching photometric calibration."
+        }
+      ]
+    },
+    {
+      "rank_for_visual_comparison": 3,
+      "observations": [
+        "2026W01_1A_0471_1_D4",
+        "2026W28_2A_0117_1_D4"
+      ],
+      "validation": {
+        "mode": "time",
+        "decision": "ACCEPT",
+        "difference_allowed": true,
+        "wavelength_delta_um": 0.004802030051363815,
+        "time_separation_hours": 4578.03596999991,
+        "overlap_fraction": 0.9434070669347888,
+        "reasons": [
+          {
+            "code": "wavelength_match",
+            "severity": "info",
+            "detail": "Target wavelengths agree within 0.005 um.",
+            "values": {
+              "delta_um": 0.004802030051363815,
+              "limit_um": 0.02
+            }
+          }
+        ]
+      },
+      "overlap_fraction": 0.9434070669347888,
+      "exploratory_difference": {
+        "offset": 0.01852143928159844,
+        "scale": 1.0,
+        "scale_matched": false,
+        "robust_noise": 0.2685552837341629,
+        "overlap_fraction": 0.9434070669347888,
+        "n_pixels": 3284,
+        "display": {
+          "method": "linear",
+          "limit": 5.34832980655051,
+          "zero_gray": 128,
+          "meaning": "Mid-gray is no change; lighter means brighter in B, darker means fainter in B."
+        }
+      },
+      "scientific_outcome": "VISUAL DIFFERENCES ONLY",
+      "candidate_screening": "not_performed",
+      "registration": {
+        "status": "diagnostic_only",
+        "matches": 1,
+        "median_shift_xy_pixels": [
+          0.0,
+          0.0
+        ],
+        "rms_separation_pixels": 0.0,
+        "limitation": "Integer-pixel image peaks; matching can be biased by morphology, PSF or wavelength. Stationarity and source identity are unverified."
+      },
+      "variance": {
+        "method": "sum of squared bilinear weights for each independent input; then A+B",
+        "valid_pixels": 3284,
+        "median_difference_variance": 0.011115315080364048,
+        "units": "(MJy/sr)^2",
+        "limitation": "Diagonal variance only; input/output covariance, background-fit error and calibration systematics are not modeled. Not used as calibrated significance."
+      },
+      "blocking_checks": [
+        {
+          "code": "units",
+          "passed": true,
+          "explanation": "Both images use surface brightness in MJy/sr."
+        },
+        {
+          "code": "variance",
+          "passed": true,
+          "explanation": "Variance is propagated through bilinear resampling when usable; correlated noise and PSF matching remain unmodeled."
+        },
+        {
+          "code": "spectral_calibration",
+          "passed": false,
+          "explanation": "Calibrated per-pixel wavelength and response equivalence have not been established. WCS-WAVE values are approximate visualization metadata."
+        },
+        {
+          "code": "psf",
+          "passed": false,
+          "explanation": "PSF models are recorded, but spatially varying PSF matching has not been validated."
+        },
+        {
+          "code": "registration",
+          "passed": false,
+          "explanation": "The images were mapped to the same sky grid; stationary reference sources have not verified the alignment."
+        },
+        {
+          "code": "calibration",
+          "passed": false,
+          "explanation": "Matching units or pipeline versions do not establish matching photometric calibration."
+        }
+      ]
+    },
+    {
+      "rank_for_visual_comparison": 4,
+      "observations": [
+        "2025W28_1B_0480_4_D1",
+        "2026W28_2A_0117_1_D1"
+      ],
+      "validation": {
+        "mode": "time",
+        "decision": "WARN",
+        "difference_allowed": false,
+        "wavelength_delta_um": 0.14323797386195602,
+        "time_separation_hours": 8769.095457777672,
+        "overlap_fraction": 0.993105429474289,
+        "reasons": [
+          {
+            "code": "wavelength_mismatch",
+            "severity": "warn",
+            "detail": "The target was seen at wavelengths 0.143 um apart (limit 0.02 um). Brightness differences may come from wavelength, not time. Blink only.",
+            "values": {
+              "delta_um": 0.14323797386195602,
+              "limit_um": 0.02
+            }
+          }
+        ]
+      },
+      "overlap_fraction": 0.993105429474289,
+      "exploratory_difference": null,
+      "scientific_outcome": "IMAGES CANNOT BE RELIABLY COMPARED",
+      "candidate_screening": "not_performed",
+      "registration": {
+        "status": "diagnostic_only",
+        "matches": 1,
+        "median_shift_xy_pixels": [
+          0.0,
+          0.0
+        ],
+        "rms_separation_pixels": 0.0,
+        "limitation": "Integer-pixel image peaks; matching can be biased by morphology, PSF or wavelength. Stationarity and source identity are unverified."
+      },
+      "variance": {
+        "method": "sum of squared bilinear weights for each independent input; then A+B",
+        "valid_pixels": 3457,
+        "median_difference_variance": 0.017143267556768847,
+        "units": "(MJy/sr)^2",
+        "limitation": "Diagonal variance only; input/output covariance, background-fit error and calibration systematics are not modeled. Not used as calibrated significance."
+      },
+      "blocking_checks": [
+        {
+          "code": "units",
+          "passed": true,
+          "explanation": "Both images use surface brightness in MJy/sr."
+        },
+        {
+          "code": "variance",
+          "passed": true,
+          "explanation": "Variance is propagated through bilinear resampling when usable; correlated noise and PSF matching remain unmodeled."
+        },
+        {
+          "code": "spectral_calibration",
+          "passed": false,
+          "explanation": "Calibrated per-pixel wavelength and response equivalence have not been established. WCS-WAVE values are approximate visualization metadata."
+        },
+        {
+          "code": "psf",
+          "passed": false,
+          "explanation": "PSF models are recorded, but spatially varying PSF matching has not been validated."
+        },
+        {
+          "code": "registration",
+          "passed": false,
+          "explanation": "The images were mapped to the same sky grid; stationary reference sources have not verified the alignment."
+        },
+        {
+          "code": "calibration",
+          "passed": false,
+          "explanation": "Matching units or pipeline versions do not establish matching photometric calibration."
+        }
+      ]
+    },
+    {
+      "rank_for_visual_comparison": 5,
+      "observations": [
+        "2025W28_1B_0480_4_D1",
+        "2026W01_1A_0471_1_D1"
+      ],
+      "validation": {
+        "mode": "time",
+        "decision": "WARN",
+        "difference_allowed": false,
+        "wavelength_delta_um": 0.14434403335050017,
+        "time_separation_hours": 4191.059487777762,
+        "overlap_fraction": 0.9928181557023844,
+        "reasons": [
+          {
+            "code": "wavelength_mismatch",
+            "severity": "warn",
+            "detail": "The target was seen at wavelengths 0.144 um apart (limit 0.02 um). Brightness differences may come from wavelength, not time. Blink only.",
+            "values": {
+              "delta_um": 0.14434403335050017,
+              "limit_um": 0.02
+            }
+          }
+        ]
+      },
+      "overlap_fraction": 0.9928181557023844,
+      "exploratory_difference": null,
+      "scientific_outcome": "IMAGES CANNOT BE RELIABLY COMPARED",
+      "candidate_screening": "not_performed",
+      "registration": {
+        "status": "diagnostic_only",
+        "matches": 1,
+        "median_shift_xy_pixels": [
+          0.0,
+          0.0
+        ],
+        "rms_separation_pixels": 0.0,
+        "limitation": "Integer-pixel image peaks; matching can be biased by morphology, PSF or wavelength. Stationarity and source identity are unverified."
+      },
+      "variance": {
+        "method": "sum of squared bilinear weights for each independent input; then A+B",
+        "valid_pixels": 3456,
+        "median_difference_variance": 0.017102799227434323,
+        "units": "(MJy/sr)^2",
+        "limitation": "Diagonal variance only; input/output covariance, background-fit error and calibration systematics are not modeled. Not used as calibrated significance."
+      },
+      "blocking_checks": [
+        {
+          "code": "units",
+          "passed": true,
+          "explanation": "Both images use surface brightness in MJy/sr."
+        },
+        {
+          "code": "variance",
+          "passed": true,
+          "explanation": "Variance is propagated through bilinear resampling when usable; correlated noise and PSF matching remain unmodeled."
+        },
+        {
+          "code": "spectral_calibration",
+          "passed": false,
+          "explanation": "Calibrated per-pixel wavelength and response equivalence have not been established. WCS-WAVE values are approximate visualization metadata."
+        },
+        {
+          "code": "psf",
+          "passed": false,
+          "explanation": "PSF models are recorded, but spatially varying PSF matching has not been validated."
+        },
+        {
+          "code": "registration",
+          "passed": false,
+          "explanation": "The images were mapped to the same sky grid; stationary reference sources have not verified the alignment."
+        },
+        {
+          "code": "calibration",
+          "passed": false,
+          "explanation": "Matching units or pipeline versions do not establish matching photometric calibration."
+        }
+      ]
+    },
+    {
+      "rank_for_visual_comparison": 6,
+      "observations": [
+        "2026W26_1A_0178_1_D2",
+        "2025W19_2B_0346_1_D2"
+      ],
+      "validation": {
+        "mode": "time",
+        "decision": "WARN",
+        "difference_allowed": false,
+        "wavelength_delta_um": 0.08573105936370107,
+        "time_separation_hours": 9795.28206916654,
+        "overlap_fraction": 0.9890835966676242,
+        "reasons": [
+          {
+            "code": "wavelength_mismatch",
+            "severity": "warn",
+            "detail": "The target was seen at wavelengths 0.086 um apart (limit 0.02 um). Brightness differences may come from wavelength, not time. Blink only.",
+            "values": {
+              "delta_um": 0.08573105936370107,
+              "limit_um": 0.02
+            }
+          }
+        ]
+      },
+      "overlap_fraction": 0.9890835966676242,
+      "exploratory_difference": null,
+      "scientific_outcome": "IMAGES CANNOT BE RELIABLY COMPARED",
+      "candidate_screening": "not_performed",
+      "registration": {
+        "status": "diagnostic_only",
+        "matches": 3,
+        "median_shift_xy_pixels": [
+          0.0,
+          0.0
+        ],
+        "rms_separation_pixels": 0.5773502691896257,
+        "limitation": "Integer-pixel image peaks; matching can be biased by morphology, PSF or wavelength. Stationarity and source identity are unverified."
+      },
+      "variance": {
+        "method": "sum of squared bilinear weights for each independent input; then A+B",
+        "valid_pixels": 3443,
+        "median_difference_variance": 0.0009467098986159994,
+        "units": "(MJy/sr)^2",
+        "limitation": "Diagonal variance only; input/output covariance, background-fit error and calibration systematics are not modeled. Not used as calibrated significance."
+      },
+      "blocking_checks": [
+        {
+          "code": "units",
+          "passed": true,
+          "explanation": "Both images use surface brightness in MJy/sr."
+        },
+        {
+          "code": "variance",
+          "passed": true,
+          "explanation": "Variance is propagated through bilinear resampling when usable; correlated noise and PSF matching remain unmodeled."
+        },
+        {
+          "code": "spectral_calibration",
+          "passed": false,
+          "explanation": "Calibrated per-pixel wavelength and response equivalence have not been established. WCS-WAVE values are approximate visualization metadata."
+        },
+        {
+          "code": "psf",
+          "passed": false,
+          "explanation": "PSF models are recorded, but spatially varying PSF matching has not been validated."
+        },
+        {
+          "code": "registration",
+          "passed": false,
+          "explanation": "The images were mapped to the same sky grid; stationary reference sources have not verified the alignment."
+        },
+        {
+          "code": "calibration",
+          "passed": false,
+          "explanation": "Matching units or pipeline versions do not establish matching photometric calibration."
+        }
+      ]
+    },
+    {
+      "rank_for_visual_comparison": 7,
+      "observations": [
+        "2026W26_1A_0178_1_D2",
+        "2026W26_1A_0500_1_D2"
+      ],
+      "validation": {
+        "mode": "time",
+        "decision": "WARN",
+        "difference_allowed": false,
+        "wavelength_delta_um": 0.06930049972193508,
+        "time_separation_hours": 30.9574647222762,
+        "overlap_fraction": 0.9813272048261994,
+        "reasons": [
+          {
+            "code": "wavelength_mismatch",
+            "severity": "warn",
+            "detail": "The target was seen at wavelengths 0.069 um apart (limit 0.02 um). Brightness differences may come from wavelength, not time. Blink only.",
+            "values": {
+              "delta_um": 0.06930049972193508,
+              "limit_um": 0.02
+            }
+          }
+        ]
+      },
+      "overlap_fraction": 0.9813272048261994,
+      "exploratory_difference": null,
+      "scientific_outcome": "IMAGES CANNOT BE RELIABLY COMPARED",
+      "candidate_screening": "not_performed",
+      "registration": {
+        "status": "diagnostic_only",
+        "matches": 3,
+        "median_shift_xy_pixels": [
+          0.0,
+          0.0
+        ],
+        "rms_separation_pixels": 0.816496580927726,
+        "limitation": "Integer-pixel image peaks; matching can be biased by morphology, PSF or wavelength. Stationarity and source identity are unverified."
+      },
+      "variance": {
+        "method": "sum of squared bilinear weights for each independent input; then A+B",
+        "valid_pixels": 3416,
+        "median_difference_variance": 0.0009384348654694133,
+        "units": "(MJy/sr)^2",
+        "limitation": "Diagonal variance only; input/output covariance, background-fit error and calibration systematics are not modeled. Not used as calibrated significance."
+      },
+      "blocking_checks": [
+        {
+          "code": "units",
+          "passed": true,
+          "explanation": "Both images use surface brightness in MJy/sr."
+        },
+        {
+          "code": "variance",
+          "passed": true,
+          "explanation": "Variance is propagated through bilinear resampling when usable; correlated noise and PSF matching remain unmodeled."
+        },
+        {
+          "code": "spectral_calibration",
+          "passed": false,
+          "explanation": "Calibrated per-pixel wavelength and response equivalence have not been established. WCS-WAVE values are approximate visualization metadata."
+        },
+        {
+          "code": "psf",
+          "passed": false,
+          "explanation": "PSF models are recorded, but spatially varying PSF matching has not been validated."
+        },
+        {
+          "code": "registration",
+          "passed": false,
+          "explanation": "The images were mapped to the same sky grid; stationary reference sources have not verified the alignment."
+        },
+        {
+          "code": "calibration",
+          "passed": false,
+          "explanation": "Matching units or pipeline versions do not establish matching photometric calibration."
+        }
+      ]
+    },
+    {
+      "rank_for_visual_comparison": 8,
+      "observations": [
+        "2026W21_2A_0213_2_D5",
+        "2026W21_2A_0213_3_D5"
+      ],
+      "validation": {
+        "mode": "time",
+        "decision": "REJECT",
+        "difference_allowed": false,
+        "wavelength_delta_um": 0.037318776253465025,
+        "time_separation_hours": 0.03581472218502313,
+        "overlap_fraction": 0.9755817293881068,
+        "reasons": [
+          {
+            "code": "too_close_in_time",
+            "severity": "reject",
+            "detail": "The images are 0.04 h apart; at least 1 h is required.",
+            "values": {
+              "hours": 0.03581472218502313,
+              "minimum_hours": 1.0
+            }
+          },
+          {
+            "code": "wavelength_mismatch",
+            "severity": "warn",
+            "detail": "The target was seen at wavelengths 0.037 um apart (limit 0.02 um). Brightness differences may come from wavelength, not time. Blink only.",
+            "values": {
+              "delta_um": 0.037318776253465025,
+              "limit_um": 0.02
+            }
+          }
+        ]
+      },
+      "overlap_fraction": 0.9755817293881068,
+      "exploratory_difference": null,
+      "scientific_outcome": "IMAGES CANNOT BE RELIABLY COMPARED",
+      "candidate_screening": "not_performed",
+      "registration": {
+        "status": "diagnostic_only",
+        "matches": 3,
+        "median_shift_xy_pixels": [
+          0.0,
+          0.0
+        ],
+        "rms_separation_pixels": 0.5773502691896257,
+        "limitation": "Integer-pixel image peaks; matching can be biased by morphology, PSF or wavelength. Stationarity and source identity are unverified."
+      },
+      "variance": {
+        "method": "sum of squared bilinear weights for each independent input; then A+B",
+        "valid_pixels": 3396,
+        "median_difference_variance": 0.001800431450270476,
+        "units": "(MJy/sr)^2",
+        "limitation": "Diagonal variance only; input/output covariance, background-fit error and calibration systematics are not modeled. Not used as calibrated significance."
+      },
+      "blocking_checks": [
+        {
+          "code": "units",
+          "passed": true,
+          "explanation": "Both images use surface brightness in MJy/sr."
+        },
+        {
+          "code": "variance",
+          "passed": true,
+          "explanation": "Variance is propagated through bilinear resampling when usable; correlated noise and PSF matching remain unmodeled."
+        },
+        {
+          "code": "spectral_calibration",
+          "passed": false,
+          "explanation": "Calibrated per-pixel wavelength and response equivalence have not been established. WCS-WAVE values are approximate visualization metadata."
+        },
+        {
+          "code": "psf",
+          "passed": false,
+          "explanation": "PSF models are recorded, but spatially varying PSF matching has not been validated."
+        },
+        {
+          "code": "registration",
+          "passed": false,
+          "explanation": "The images were mapped to the same sky grid; stationary reference sources have not verified the alignment."
+        },
+        {
+          "code": "calibration",
+          "passed": false,
+          "explanation": "Matching units or pipeline versions do not establish matching photometric calibration."
+        }
+      ]
+    },
+    {
+      "rank_for_visual_comparison": 9,
+      "observations": [
+        "2025W28_1B_0480_4_D4",
+        "2026W01_1A_0471_1_D4"
+      ],
+      "validation": {
+        "mode": "time",
+        "decision": "WARN",
+        "difference_allowed": false,
+        "wavelength_delta_um": 0.5380263932383862,
+        "time_separation_hours": 4191.059487777762,
+        "overlap_fraction": 0.9597816719333525,
+        "reasons": [
+          {
+            "code": "wavelength_mismatch",
+            "severity": "warn",
+            "detail": "The target was seen at wavelengths 0.538 um apart (limit 0.02 um). Brightness differences may come from wavelength, not time. Blink only.",
+            "values": {
+              "delta_um": 0.5380263932383862,
+              "limit_um": 0.02
+            }
+          }
+        ]
+      },
+      "overlap_fraction": 0.9597816719333525,
+      "exploratory_difference": null,
+      "scientific_outcome": "IMAGES CANNOT BE RELIABLY COMPARED",
+      "candidate_screening": "not_performed",
+      "registration": {
+        "status": "diagnostic_only",
+        "matches": 1,
+        "median_shift_xy_pixels": [
+          0.0,
+          0.0
+        ],
+        "rms_separation_pixels": 0.0,
+        "limitation": "Integer-pixel image peaks; matching can be biased by morphology, PSF or wavelength. Stationarity and source identity are unverified."
+      },
+      "variance": {
+        "method": "sum of squared bilinear weights for each independent input; then A+B",
+        "valid_pixels": 3341,
+        "median_difference_variance": 0.014354516867050342,
+        "units": "(MJy/sr)^2",
+        "limitation": "Diagonal variance only; input/output covariance, background-fit error and calibration systematics are not modeled. Not used as calibrated significance."
+      },
+      "blocking_checks": [
+        {
+          "code": "units",
+          "passed": true,
+          "explanation": "Both images use surface brightness in MJy/sr."
+        },
+        {
+          "code": "variance",
+          "passed": true,
+          "explanation": "Variance is propagated through bilinear resampling when usable; correlated noise and PSF matching remain unmodeled."
+        },
+        {
+          "code": "spectral_calibration",
+          "passed": false,
+          "explanation": "Calibrated per-pixel wavelength and response equivalence have not been established. WCS-WAVE values are approximate visualization metadata."
+        },
+        {
+          "code": "psf",
+          "passed": false,
+          "explanation": "PSF models are recorded, but spatially varying PSF matching has not been validated."
+        },
+        {
+          "code": "registration",
+          "passed": false,
+          "explanation": "The images were mapped to the same sky grid; stationary reference sources have not verified the alignment."
+        },
+        {
+          "code": "calibration",
+          "passed": false,
+          "explanation": "Matching units or pipeline versions do not establish matching photometric calibration."
+        }
+      ]
+    },
+    {
+      "rank_for_visual_comparison": 10,
+      "observations": [
+        "2025W28_1B_0480_4_D4",
+        "2026W28_2A_0117_1_D4"
+      ],
+      "validation": {
+        "mode": "time",
+        "decision": "WARN",
+        "difference_allowed": false,
+        "wavelength_delta_um": 0.5332243631870224,
+        "time_separation_hours": 8769.095457777672,
+        "overlap_fraction": 0.9560471128985923,
+        "reasons": [
+          {
+            "code": "wavelength_mismatch",
+            "severity": "warn",
+            "detail": "The target was seen at wavelengths 0.533 um apart (limit 0.02 um). Brightness differences may come from wavelength, not time. Blink only.",
+            "values": {
+              "delta_um": 0.5332243631870224,
+              "limit_um": 0.02
+            }
+          }
+        ]
+      },
+      "overlap_fraction": 0.9560471128985923,
+      "exploratory_difference": null,
+      "scientific_outcome": "IMAGES CANNOT BE RELIABLY COMPARED",
+      "candidate_screening": "not_performed",
+      "registration": {
+        "status": "diagnostic_only",
+        "matches": 1,
+        "median_shift_xy_pixels": [
+          0.0,
+          0.0
+        ],
+        "rms_separation_pixels": 0.0,
+        "limitation": "Integer-pixel image peaks; matching can be biased by morphology, PSF or wavelength. Stationarity and source identity are unverified."
+      },
+      "variance": {
+        "method": "sum of squared bilinear weights for each independent input; then A+B",
+        "valid_pixels": 3328,
+        "median_difference_variance": 0.014102729659449474,
+        "units": "(MJy/sr)^2",
+        "limitation": "Diagonal variance only; input/output covariance, background-fit error and calibration systematics are not modeled. Not used as calibrated significance."
+      },
+      "blocking_checks": [
+        {
+          "code": "units",
+          "passed": true,
+          "explanation": "Both images use surface brightness in MJy/sr."
+        },
+        {
+          "code": "variance",
+          "passed": true,
+          "explanation": "Variance is propagated through bilinear resampling when usable; correlated noise and PSF matching remain unmodeled."
+        },
+        {
+          "code": "spectral_calibration",
+          "passed": false,
+          "explanation": "Calibrated per-pixel wavelength and response equivalence have not been established. WCS-WAVE values are approximate visualization metadata."
+        },
+        {
+          "code": "psf",
+          "passed": false,
+          "explanation": "PSF models are recorded, but spatially varying PSF matching has not been validated."
+        },
+        {
+          "code": "registration",
+          "passed": false,
+          "explanation": "The images were mapped to the same sky grid; stationary reference sources have not verified the alignment."
+        },
+        {
+          "code": "calibration",
+          "passed": false,
+          "explanation": "Matching units or pipeline versions do not establish matching photometric calibration."
+        }
+      ]
+    }
+  ]
+}

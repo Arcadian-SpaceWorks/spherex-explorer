@@ -18,13 +18,14 @@ CompareId = Annotated[str, Path(pattern=r'^[a-f0-9]{64}$')]
 class ImageRef(BaseModel):
     """Exactly one of: an image already in the image cache, or an IRSA SPHEREx product URL."""
     model_config = ConfigDict(extra='forbid')
+    demo_image_id: str | None = Field(default=None, pattern=r'^[a-f0-9]{64}$')
     image_id: str | None = Field(default=None, pattern=r'^[a-f0-9]{64}$')
     access_url: str | None = Field(default=None, min_length=1, max_length=4096)
 
     @model_validator(mode='after')
     def exactly_one(self):
-        if (self.image_id is None) == (self.access_url is None):
-            raise ValueError('Give exactly one of image_id or access_url.')
+        if sum(v is not None for v in (self.image_id, self.access_url, self.demo_image_id)) != 1:
+            raise ValueError('Give exactly one of image_id, demo_image_id or access_url.')
         return self
 
 

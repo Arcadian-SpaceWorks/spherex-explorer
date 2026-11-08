@@ -59,14 +59,14 @@ const panel = page => page.getByRole('region', {name: 'Image comparison'});
 test('pick A and B, compare in time mode, switch side by side, blink and difference', async ({page}) => {
   const posted = await setup(page);
   const compare = panel(page);
-  await expect(compare.getByRole('button', {name: 'Compare A and B'})).toBeDisabled();
+  await expect(compare.getByRole('button', {name: 'Find Changes'})).toBeDisabled();
   await pickButton(page, rows[1], 'A').click();
   await pickButton(page, rows[0], 'B').click();
   await expect(compare.getByTestId('compare-slot-a')).toContainText('SYNTHETIC-JAN');
   await expect(compare.getByTestId('compare-slot-b')).toContainText('SYNTHETIC-JUL');
   await expect(compare.getByRole('button', {name: 'Time (suggested)'})).toHaveAttribute('aria-pressed', 'true');
-  await compare.getByRole('button', {name: 'Compare A and B'}).click();
-  await expect(compare.getByTestId('compare-verdict')).toContainText('ACCEPT');
+  await compare.getByRole('button', {name: 'Find Changes'}).click();
+  await expect(compare.getByTestId('compare-verdict')).toContainText('VISUAL DIFFERENCES ONLY');
   expect(posted[0]).toEqual({a: {access_url: rows[1].access_url}, b: {access_url: rows[0].access_url},
     ra: 210.80227, dec: 54.34895, size_deg: 0.3, mode: 'time'});
   await expect(compare.getByTestId('compare-image-a')).toBeVisible();
@@ -90,12 +90,12 @@ test('wavelength mismatch gives WARN with the difference tab disabled and separa
   const compare = panel(page);
   await pickButton(page, rows[3], 'A').click();
   await pickButton(page, rows[1], 'B').click();
-  await compare.getByRole('button', {name: 'Compare A and B'}).click();
-  await expect(compare.getByTestId('compare-verdict')).toContainText('WARN');
-  await expect(compare.getByTestId('compare-verdict')).toContainText('Blink only');
+  await compare.getByRole('button', {name: 'Find Changes'}).click();
+  await expect(compare.getByTestId('compare-verdict')).toContainText('IMAGES CANNOT BE RELIABLY COMPARED');
+  await expect(compare.getByTestId('compare-verdict')).toContainText('IMAGES CANNOT BE RELIABLY COMPARED');
   await expect(compare).toContainText('0.145 um apart');
   await expect(compare.getByRole('button', {name: 'Difference'})).toBeDisabled();
-  await expect(compare.getByTestId('difference-unavailable')).toContainText('Blink only');
+  await expect(compare.getByTestId('difference-unavailable')).toContainText('Differences are unavailable');
   await expect(compare).toContainText('own brightness scale');
 });
 
@@ -105,11 +105,11 @@ test('two detectors of one exposure suggest wavelength mode and are never subtra
   await pickButton(page, rows[1], 'A').click();
   await pickButton(page, rows[2], 'B').click();
   await expect(compare.getByRole('button', {name: 'Wavelength (suggested)'})).toHaveAttribute('aria-pressed', 'true');
-  await compare.getByRole('button', {name: 'Compare A and B'}).click();
-  await expect(compare.getByTestId('compare-verdict')).toContainText('Side by side');
+  await compare.getByRole('button', {name: 'Find Changes'}).click();
+  await expect(compare.getByTestId('compare-verdict')).toContainText('IMAGES CANNOT BE RELIABLY COMPARED');
   expect(posted[0].mode).toBe('wavelength');
   await expect(compare.getByRole('button', {name: 'Difference'})).toBeDisabled();
-  await expect(compare.getByTestId('difference-unavailable')).toContainText('never subtracted');
+  await expect(compare.getByTestId('difference-unavailable')).toContainText('Differences are unavailable');
   // Switching to time mode for two detectors warns before anything is sent.
   await compare.getByRole('button', {name: 'Time', exact: true}).click();
   await expect(compare.getByRole('note').filter({hasText: 'Different detectors'})).toBeVisible();
@@ -129,7 +129,7 @@ test('picking, moving, swapping and clearing keep A and B distinct', async ({pag
   await expect(compare.getByTestId('compare-slot-b')).toContainText('SYNTHETIC-JAN');
   await compare.getByRole('button', {name: 'Remove A'}).click();
   await expect(compare.getByTestId('compare-slot-a')).toContainText('Not chosen');
-  await expect(compare.getByRole('button', {name: 'Compare A and B'})).toBeDisabled();
+  await expect(compare.getByRole('button', {name: 'Find Changes'})).toBeDisabled();
   // A new search clears both picks.
   await page.getByRole('button', {name: 'Search SPHEREx Observations'}).click();
   await expect(compare.getByTestId('compare-slot-b')).toContainText('Not chosen');
@@ -146,23 +146,23 @@ test('errors are explicit and the comparison can be retried; stop waiting cancel
   const compare = panel(page);
   await pickButton(page, rows[1], 'A').click();
   await pickButton(page, rows[0], 'B').click();
-  await compare.getByRole('button', {name: 'Compare A and B'}).click();
+  await compare.getByRole('button', {name: 'Find Changes'}).click();
   await expect(compare.getByRole('alert')).toContainText('IRSA could not deliver this image');
-  await compare.getByRole('button', {name: 'Compare again'}).click();
+  await compare.getByRole('button', {name: 'Find Changes'}).click();
   await expect(compare.getByTestId('download-progress')).toBeVisible();
   await compare.getByRole('button', {name: 'Stop waiting'}).click();
   await expect(compare.getByTestId('download-progress')).toHaveCount(0);
   await expect(compare.getByTestId('compare-result')).toHaveCount(0);
-  await compare.getByRole('button', {name: 'Compare A and B'}).click();  // Nothing shown after stopping.
-  await expect(compare.getByTestId('compare-verdict')).toContainText('ACCEPT');
+  await compare.getByRole('button', {name: 'Find Changes'}).click();  // Nothing shown after stopping.
+  await expect(compare.getByTestId('compare-verdict')).toContainText('VISUAL DIFFERENCES ONLY');
 });
 
 test('demo mode has no compare buttons; the panel fits a phone screen', async ({page}) => {
   await setup(page);
   await pickButton(page, rows[1], 'A').click();
   await pickButton(page, rows[0], 'B').click();
-  await panel(page).getByRole('button', {name: 'Compare A and B'}).click();
-  await expect(panel(page).getByTestId('compare-verdict')).toContainText('ACCEPT');
+  await panel(page).getByRole('button', {name: 'Find Changes'}).click();
+  await expect(panel(page).getByTestId('compare-verdict')).toContainText('VISUAL DIFFERENCES ONLY');
   await page.setViewportSize({width: 390, height: 844});
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   await page.getByRole('radio', {name: /Demo Mode/}).check();
@@ -199,8 +199,8 @@ test('wavelength at target: measured on demand, from comparisons, and same-wavel
   // A comparison records both images; a row on the same detector within 0.02 um of A is marked.
   await pickButton(page, rows[1], 'A').click();
   await pickButton(page, rows[0], 'B').click();
-  await panel(page).getByRole('button', {name: 'Compare A and B'}).click();
-  await expect(panel(page).getByTestId('compare-verdict')).toContainText('ACCEPT');
+  await panel(page).getByRole('button', {name: 'Find Changes'}).click();
+  await expect(panel(page).getByTestId('compare-verdict')).toContainText('VISUAL DIFFERENCES ONLY');
   expect(posted).toHaveLength(1);
   await expect(cell(rows[1]).getByTestId('target-wavelength')).toHaveText('0.8946');
   await expect(cell(rows[1]).locator('.wavelength-badge')).toHaveText('A');
@@ -220,9 +220,26 @@ test('scientific eligibility remains unavailable for accepted visual comparisons
   await pickButton(page, rows[1], 'A').click();
   await pickButton(page, rows[0], 'B').click();
   const compare = panel(page);
-  await compare.getByRole('button', {name: 'Detect Changes — check scientific eligibility'}).click();
+  await compare.getByRole('button', {name: 'Find Changes'}).click();
   await expect(compare).toContainText('Visual comparison only — scientific change detection unavailable.');
+  await compare.getByText('How did we reach this conclusion?', {exact:true}).click();
   await expect(compare).toContainText('PSF equivalence is unverified.');
   await compare.getByRole('button', {name: 'Difference', exact: true}).click();
   await expect(compare.getByTestId('compare-image-difference')).toBeVisible();
+});
+
+test('candidate rendering uses measured grid coordinates and keyboard controls (mocked screening)', async ({page}) => {
+  // ENGINEERING FIXTURE ONLY: normal real-data API does not accept caller-supplied evidence.
+  await setup(page, {compare: (route, body) => route.fulfill({json: {
+    ...compareResult(body), context: 'real_observation_comparison',
+    detection: {status: 'screened', conclusion: 'One residual candidate needs independent follow-up.', reasons:[],limitations:[],
+      candidates:[{id:'C1',x:20,y:30,ra:10.5,dec:41.2,peak_residual:2.3,uncertainty:null,interpretation:'Positive residual candidate',quality_flags:['empirical_noise_only']}]}
+  }})});
+  await pickButton(page, rows[1], 'A').click();await pickButton(page, rows[0], 'B').click();
+  const compare=panel(page);await compare.getByRole('button',{name:'Find Changes',exact:true}).click();
+  await expect(compare.getByTestId('compare-verdict')).toContainText('POSSIBLE CHANGE FOUND');
+  const marker=compare.getByRole('button',{name:'Select candidate C1'});
+  await expect(marker).toHaveAttribute('cx','20.5');await expect(marker).toHaveAttribute('cy','145.5');
+  await marker.focus();await page.keyboard.press('Enter');
+  await expect(compare.getByRole('status')).toContainText('10.500000, 41.200000');
 });

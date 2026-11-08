@@ -12,8 +12,8 @@ export const SIMULTANEOUS_HOURS = 1;
 // Same tolerance as the server's time-mode rule (CompareSettings.max_wavelength_delta_um).
 export const WAVELENGTH_MATCH_UM = 0.02;
 export const MODES = {
-  time: {label: 'Time', description: 'Same detector at different dates. A difference image is made only when the wavelengths at the target agree.'},
-  wavelength: {label: 'Wavelength', description: 'Different detectors of the same exposure. Shown side by side or blinked, never subtracted.'},
+  time: {label: 'Time', description: 'Compare the same infrared band at different dates. We check whether image differences can be interpreted.'},
+  wavelength: {label: 'Wavelength', description: 'Compare different infrared colors from the same observing period. Color differences do not establish a change over time.'},
 };
 
 export function detectorOf(row) {
@@ -74,11 +74,12 @@ function errorMessage(data, status) {
 }
 
 export async function requestComparison({a, b, target, mode, signal, fetchImpl = fetch}) {
+  if (mode === 'time' && parseUtc(a.observed_at_utc) != null && parseUtc(b.observed_at_utc) != null && parseUtc(a.observed_at_utc) > parseUtc(b.observed_at_utc)) [a,b]=[b,a];
   let response;
   try {
     response = await fetchImpl('/api/compare', {
       method: 'POST', signal, headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({a: {access_url: a.access_url}, b: {access_url: b.access_url},
+      body: JSON.stringify({a: a.demo ? {demo_image_id: a.demo.image_id} : {access_url: a.access_url}, b: b.demo ? {demo_image_id: b.demo.image_id} : {access_url: b.access_url},
         ra: target.ra, dec: target.dec, size_deg: COMPARE_SIZE_DEG, mode}),
     });
   } catch (err) {
@@ -97,4 +98,22 @@ export async function requestComparison({a, b, target, mode, signal, fetchImpl =
       : {status: 'unavailable'});
   }
   return data;
+}
+
+/** Preliminary shortlist only; the server decides scientific eligibility from FITS data. */
+export function previousEpoch(frames, index) {
+  const current=frames[index];
+  if (!current || detectorOf(current)==null) return null;
+  const release=row=>(row.demo?.source_url || row.access_url || '').match(/spherex[_/](qr[123])/i)?.[1] || row.obs_collection;
+  const wavelength=row=>row.demo?.spectral?.wavelength_um;
+  const candidates=frames.slice(0,index).filter(row=>{
+    const hours=hoursApart(row,current);
+    if (hours==null || hours<1 || detectorOf(row)!==detectorOf(current) || release(row)!==release(current) || row.obs_collection!==current.obs_collection || sameObservation(row,current)) return false;
+    const wa=wavelength(row),wb=wavelength(current);
+    return wa==null || wb==null || Math.abs(wa-wb)<=.02;
+  });
+  // Prefer known close target wavelengths; unknown response is never certified by this ranking.
+  const delta=row=>wavelength(row)!=null && wavelength(current)!=null ? Math.abs(wavelength(row)-wavelength(current)) : Infinity;
+  candidates.sort((a,b)=>delta(a)-delta(b) || hoursApart(a,current)-hoursApart(b,current));
+  return candidates[0] || null;
 }

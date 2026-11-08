@@ -1,3 +1,5 @@
+import ComparePanel, {ComparisonResult} from './ComparePanel';
+import {previousEpoch} from '../compareAdapter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { chronologicalFrames, parseUtc, formatUtcLabel, isSyntheticObservation, wavelengthLabel } from '../timeline';
 import { loadObservationImage } from '../imageAdapter';
@@ -37,6 +39,25 @@ function TimelapseExport({frames, target, mode}) {
     {state.status === 'done' && <p className="result-note">Saved <a href={state.url} download={state.name} data-testid="timelapse-download">{state.name}</a> ({(state.bytes / 1024).toFixed(0)} KiB). One second per observation.</p>}
     {state.status === 'error' && <p className="error" role="alert">{state.message}</p>}
     <p className="result-note">The video carries its own caveats on every frame: {CAVEATS.join(' ')}</p>
+  </div>;
+}
+
+
+function EpochComparison({frames, index, target}) {
+  const previous=previousEpoch(frames,index), current=frames[index];
+  const [opened,setOpened]=useState(null), [cache,setCache]=useState({});
+  const key=previous ? `${target.ra}|${target.dec}|${previous.access_url}|${current.access_url}` : null;
+  const targetKey=`${target.ra}|${target.dec}`;
+  return <div aria-label="Epoch change analysis" role="region">
+    <h3>Compare real epochs</h3>
+    <p>{previous ? `Earlier same-detector observation: ${previous.obs_id}. This is a preliminary shortlist; the comparison checks scientific compatibility.` : 'No earlier observation with the same detector, collection and at least one hour separation is available in this sequence.'}</p>
+    {previous && <button onClick={()=>setOpened(key)} disabled={opened===key}>Compare with previous observation</button>}
+    {cache[key] && <p>{cache[key].detection?.conclusion}</p>}
+    {Object.entries(cache).filter(([id])=>id.startsWith(targetKey+'|')).map(([id,data])=><button key={id} onClick={()=>setOpened(id)}>Assessed pair: {data.frames.map(f=>f.obs_id).join(' → ')}</button>)}
+    {opened!==key && cache[opened] && opened.startsWith(targetKey+'|') && <div><h4>Previously assessed pair</h4><ComparisonResult key={opened} result={cache[opened]}/></div>}
+    {previous && opened===key && <ComparePanel key={key} picks={{a:previous,b:current}} target={target}
+      onRemove={()=>setOpened(null)} onSwap={()=>setOpened(null)} initialResult={cache[key]}
+      onResult={data=>setCache(old=>Object.fromEntries([...Object.entries(old).filter(([id])=>id!==key),[key,data]].slice(-6)))}/>}
   </div>;
 }
 
@@ -128,6 +149,7 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
         {playing && <p className="result-note" role="status" data-testid="playback-status">{settled ? `Playing: step ${displayIndex + 1} of ${sequence.frames.length}.` : `Playing: waiting for step ${displayIndex + 1} to load before moving on.`}</p>}
         <div className="time-ends"><span>{formatUtcLabel(sequence.frames[0].observed_at_utc)}</span><span>{formatUtcLabel(sequence.frames[sequence.frames.length - 1].observed_at_utc)}</span></div>
         <p className="result-note">Slider positions are ordered by archive time. A large gap between observations is still a single step.</p>
+        <EpochComparison frames={sequence.frames} index={displayIndex} target={target}/>
         <TimelapseExport frames={sequence.frames} target={target} mode={result?.mode}/>
         <p className="image-science-note">These are raw observation images. They are not spatially registered, and this slider does not detect moving objects or subtract frames.</p>
         {bandpasses.length > 1 && <p className="image-science-note">This sequence mixes bandpasses ({bandpasses.join(', ')}). Those images are not spectrally equivalent.</p>}

@@ -40,7 +40,7 @@ class CompareCacheSettings:
 
 
 def _notes(result, frames):
-    notes = ['Real NASA/IPAC IRSA SPHEREx data, downloaded through this server\'s image cache. '
+    notes = ['Real NASA/IPAC IRSA SPHEREx data from verified local assets or the image cache. '
              'No motion, variability or discovery is claimed.']
     if result['stretch']['shared']:
         notes.append('A and B share one brightness scale, for visual comparison; this does not establish photometric equivalence.')
@@ -64,6 +64,23 @@ class CompareService:
         self.slots = threading.BoundedSemaphore(max_active)
 
     def _resolve(self, ref, ra, dec, size_deg):
+        if ref.get('demo_image_id'):
+            from .demo import DEFAULT_ROOT, validate_bundle, asset_path, digest
+            try:
+                manifest = validate_bundle(DEFAULT_ROOT, check_files=False)
+                observation = next((o for t in manifest.targets for o in t.observations if o.image_id == ref['demo_image_id']), None)
+                if observation is None:
+                    raise ValueError('Unknown preloaded observation')
+                path = asset_path(DEFAULT_ROOT, observation.fits_path)
+                if digest(path) != observation.fits_sha256:
+                    raise ValueError('Preloaded FITS checksum mismatch')
+                from urllib.parse import parse_qs, urlsplit
+                size = float(parse_qs(urlsplit(observation.source_url).query)['size'][0].removesuffix('deg'))
+                return {'image_id': observation.image_id, 'sha256': observation.fits_sha256,
+                        'access_url': observation.access_url, 'fits_url': observation.source_url,
+                        'cutout': {'size_deg': size}, '_demo_path': path}
+            except (ValueError, OSError, KeyError) as exc:
+                raise ImageError('Preloaded observation unavailable or failed verification.', 422, 'demo_invalid') from exc
         if ref.get('image_id'):
             return self.images.metadata(ref['image_id'])
         return self.images.prepare(ref['access_url'], ra, dec, round(cutout_size_for_grid(size_deg), 4))
@@ -96,7 +113,7 @@ class CompareService:
             raise ImageError('The comparison service is busy. Please retry shortly.', 503, 'compare_busy')
         try:
             inputs = [self._resolve(ref, ra, dec, size_deg) for ref in (a, b)]
-            key = json.dumps({'v': 'compare-v2-scientific-gate', 'a': inputs[0]['sha256'], 'b': inputs[1]['sha256'],
+            key = json.dumps({'v': 'compare-v5-final-real-analysis', 'a': inputs[0]['sha256'], 'b': inputs[1]['sha256'],
                               'ra': round(ra, 6), 'dec': round(dec, 6), 'size': round(size_deg, 4),
                               'mode': mode, 'match_scale': bool(match_scale)}, sort_keys=True)
             compare_id = hashlib.sha256(key.encode()).hexdigest()
@@ -108,12 +125,15 @@ class CompareService:
             with tempfile.TemporaryDirectory(prefix='.part-', dir=self.settings.cache_dir) as temporary:
                 working = Path(temporary)
                 for role, meta in zip('ab', inputs):
-                    self.images.copy_original(meta['image_id'], working / f'{role}.fits')
+                    if meta.get('_demo_path'):
+                        shutil.copyfile(meta['_demo_path'], working / f'{role}.fits')
+                    else:
+                        self.images.copy_original(meta['image_id'], working / f'{role}.fits')
                 result = process_fits('compare', path_a=str((working / 'a.fits').resolve()),
                                       path_b=str((working / 'b.fits').resolve()), ra=ra, dec=dec,
                                       size_deg=size_deg, mode=mode, out_dir=str(working.resolve()),
-                                      source_a='irsa_cutout' if inputs[0].get('cutout') else 'irsa_full_file',
-                                      source_b='irsa_cutout' if inputs[1].get('cutout') else 'irsa_full_file',
+                                      source_a='verified_local_irsa_cutout' if inputs[0].get('_demo_path') else ('irsa_cutout' if inputs[0].get('cutout') else 'irsa_full_file'),
+                                      source_b='verified_local_irsa_cutout' if inputs[1].get('_demo_path') else ('irsa_cutout' if inputs[1].get('cutout') else 'irsa_full_file'),
                                       match_scale=bool(match_scale))
                 for role in 'ab':
                     (working / f'{role}.fits').unlink()  # Keep only small derived products.

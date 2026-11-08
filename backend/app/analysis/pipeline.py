@@ -3,7 +3,9 @@
 Runs inside the isolated FITS worker process (see fits_worker.py). No network access.
 """
 from pathlib import Path
-from .detection import detect_changes
+from dataclasses import replace
+from astropy import units as u
+from .real_assessment import assess_real_pair
 
 import numpy as np
 from PIL import Image
@@ -11,7 +13,7 @@ from PIL import Image
 from ..fits_image import stretch_pixels
 from ..image_download import ImageError
 from .compare import (
-    FrameError, align, common_grid, cutout_size_for_grid, difference, load_frame, overlap_fraction, validate,
+    FrameError, Reason, align, common_grid, cutout_size_for_grid, difference, load_frame, overlap_fraction, validate,
 )
 
 PREVIEWS = {'a': 'a.png', 'b': 'b.png', 'difference': 'difference.png'}
@@ -47,6 +49,14 @@ def compare_files(path_a, path_b, ra, dec, size_deg, mode, out_dir, source_a='fi
     a, b = align(frames, grid)
     overlap = overlap_fraction(a, b)
     check = validate(a.frame, b.frame, mode, overlap=overlap)
+    if check.difference_allowed:
+        try:
+            units_ok=all(u.Unit(f.diagnostics.get('physical_unit','')) == u.MJy/u.sr for f in frames)
+        except ValueError:
+            units_ok=False
+        if not units_ok:
+            check=replace(check, decision='REJECT', difference_allowed=False,
+                          reasons=check.reasons+(Reason('incompatible_units','reject','A meaningful subtraction requires both images in MJy/sr.'),))
     out = Path(out_dir)
 
     # One shared scale only when the pair may be compared directly; otherwise each frame gets
@@ -76,6 +86,6 @@ def compare_files(path_a, path_b, ra, dec, size_deg, mode, out_dir, source_a='fi
             'stretch': {'method': 'asinh', 'percentiles': [1, 99], 'shared': shared,
                         'a': scalings['a'], 'b': scalings['b']},
             'difference': diff_summary,
-            'detection': detect_changes(a, b, grid, check),
+            'detection': assess_real_pair(a, b, grid, check),
             'previews': {role: name for role, name in PREVIEWS.items()
                          if role != 'difference' or diff_summary is not None}}

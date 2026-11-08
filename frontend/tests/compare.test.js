@@ -59,3 +59,13 @@ test('requestComparison reports server messages, validation errors and broken re
   await assert.rejects(call(reply(200, {decision: 'MAYBE'})), /incomplete/);
   await assert.rejects(call(async () => {throw new TypeError('offline');}), /could not be reached/);
 });
+
+test('time comparisons order dates before requesting After minus Before', async () => {
+  let sent;
+  await requestComparison({a:jul,b:jan,target:{ra:10,dec:40},mode:'time',fetchImpl:async(url,options)=>{
+    sent=JSON.parse(options.body);
+    return {ok:true,json:async()=>({decision:'ACCEPT',previews:{a:'/a',b:'/b'},frames:[{},{}]})};
+  }});
+  assert.equal(sent.a.access_url,jan.access_url);
+  assert.equal(sent.b.access_url,jul.access_url);
+});

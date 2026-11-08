@@ -1,4 +1,5 @@
 import {test,expect} from '@playwright/test';
+test.skip(process.env.VITE_ENABLE_DETECTION_LAB !== 'true', 'Developer lab requires explicit feature flag');
 test('offline real-background controlled experiments and candidate overlays',async({page})=>{
   await page.route('**/*',route=>{
     const url=new URL(route.request().url());
