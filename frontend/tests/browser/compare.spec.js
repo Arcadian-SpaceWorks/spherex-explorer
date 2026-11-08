@@ -157,7 +157,7 @@ test('errors are explicit and the comparison can be retried; stop waiting cancel
   await expect(compare.getByTestId('compare-verdict')).toContainText('VISUAL DIFFERENCES ONLY');
 });
 
-test('demo mode has no compare buttons; the panel fits a phone screen', async ({page}) => {
+test('demo observations can be compared and the panel fits a phone screen', async ({page}) => {
   await setup(page);
   await pickButton(page, rows[1], 'A').click();
   await pickButton(page, rows[0], 'B').click();
@@ -167,8 +167,8 @@ test('demo mode has no compare buttons; the panel fits a phone screen', async ({
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   await page.getByRole('radio', {name: /Demo Mode/}).check();
   await expect(page.getByRole('button', {name: 'View Image'}).first()).toBeVisible();
-  await expect(page.getByRole('button', {name: /for comparison$/})).toHaveCount(0);
-  await expect(panel(page)).toHaveCount(0);
+  await expect(page.getByRole('button', {name: /for comparison$/})).toHaveCount(6);
+  await expect(panel(page)).toHaveCount(1);
 });
 
 test('A/B buttons stay visible without scrolling the wide table', async ({page}) => {

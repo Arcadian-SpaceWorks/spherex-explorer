@@ -20,14 +20,21 @@ for (const target of manifest.targets.filter(t=>t.status==='ready')) {
    const row=target.observations[i];
    if(i) await explorer.getByRole('button',{name:'Next observation'}).click();
    const image=explorer.getByTestId('time-slider-image');
-   await expect(image).toHaveAttribute('src',row.preview_path);
-   await expect.poll(()=>image.evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
+   if(target.id==='3i-atlas') {
+    await expect(image.locator('image')).toHaveAttribute('href',/\/api\/compare\//,{timeout:30000});
+    await expect(image.locator('circle')).toHaveCount(1);
+   } else {
+    await expect(image).toHaveAttribute('src',row.preview_path);
+    await expect.poll(()=>image.evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
+   }
    await expect(explorer.getByTestId('time-slider-id')).toHaveText(`Observation ${row.obs_id}`);
    await expect(explorer).toContainText(formatUtcLabel(row.observed_at_utc));
    if(row.acquisition) await expect(explorer).toContainText(row.acquisition.calibration);
   }
   await expect(page.locator('.image-inspector')).toContainText(target.observations[0].obs_id);
-  if(target.id==='3i-atlas') await expect(page.getByTestId('demo-coverage')).toContainText('Moving-target-centered tracking');
+  if(target.id==='3i-atlas') await expect(page.getByTestId('demo-coverage')).toContainText('Fixed-sky playback registers');
+  if(target.id==='barnard') await expect(page.getByTestId('mixed-releases')).toContainText('2 data releases (QR2, QR3)');
+  if(target.id==='m31') await expect(page.getByTestId('mixed-releases')).toHaveCount(0);
   expect(forbidden).toEqual([]);
  });
 }
@@ -35,7 +42,7 @@ test('unprepared science candidates are clearly unavailable offline',async({page
  await page.goto('/?mode=demo');
  for(const id of ['barnard','wise0855']){
   const target=manifest.targets.find(t=>t.id===id);
-  if(!target) continue;
+  if(!target || target.status!=='missing') continue;
   await page.getByLabel('Preloaded target').selectOption(id);
   await expect(page.getByText(target.missing_reason,{exact:true})).toBeVisible();
   await expect(page.getByTestId('time-slider')).toHaveCount(0);

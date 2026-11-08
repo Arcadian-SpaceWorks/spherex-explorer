@@ -1,0 +1,2 @@
+# FITS science products are binary. Preserve their exact bytes and forbid text merges.
+*.fits binary

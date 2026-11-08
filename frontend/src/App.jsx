@@ -30,6 +30,7 @@ export default function App() {
     const {params} = filterParams(activeFilter);
     const next = filterDemoResult(demoResult(target, scienceNote), params);
     setFilter(activeFilter); setFilterError('');
+    setPicks({a:null,b:null});
     setDemoTargetId(target.id); setSelected({ra:target.ra, dec:target.dec}); setNavigation({ra:target.ra, dec:target.dec});
     setResult(next); setError(''); setImageObservation(next.observations[0] || null);
   }
@@ -123,8 +124,8 @@ export default function App() {
       {manifest && <p>Reference ICRS RA {selected.ra.toFixed(6)}°, Dec {selected.dec.toFixed(6)}°. For tracking targets this reference is the first prepared frame; each image records its own center. The cutouts below retain native detector orientation and may have different coverage. Live Mode provides the interactive Aladin sky atlas.</p>}
     </section>}
     <ObservationsTable mode={mode} result={result} loading={loading} error={error} selectedObservation={imageObservation} onViewImage={setImageObservation}
-      compare={mode === 'live' ? {...picks, onPick: pick} : null} target={selected}/>
-    {mode === 'live' && result?.count > 0 && <ComparePanel key={`${picks.a?.access_url}|${picks.b?.access_url}|${selected.ra}|${selected.dec}`}
+      compare={{...picks, onPick: pick}} target={selected}/>
+    {result?.count > 0 && <ComparePanel key={`${picks.a?.access_url}|${picks.b?.access_url}|${selected.ra}|${selected.dec}`}
       picks={picks} target={selected} onRemove={role => setPicks(current => ({...current, [role]: null}))}
       onSwap={() => setPicks(current => ({a: current.b, b: current.a}))}/>}
     {import.meta.env.VITE_ENABLE_DETECTION_LAB === 'true' && <DetectionLab/>}

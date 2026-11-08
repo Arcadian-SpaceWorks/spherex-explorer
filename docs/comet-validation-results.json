@@ -1,0 +1,1635 @@
+{
+  "context": "real_observation_comparison",
+  "frames": [
+    {
+      "prediction": {
+        "ra": 167.27908911453292,
+        "dec": 5.121576578325088,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0685_1",
+        "observed_at_utc": "2025-12-14T04:26:46.211Z",
+        "detector": 2
+      },
+      "fits_sha256": "a6090ba87b16f9b4afe2fb5327f9af2b16d295802f6b2750885a14e65ef8db2e",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/2/level2_2025W50_2A_0685_1D2_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0685_1",
+        "band": "SPHEREx-D2",
+        "detector": 2,
+        "observed_at_utc": "2025-12-14T04:26:46.211",
+        "mjd": 61023.18525707176,
+        "wavelength_um": 1.2165231998741652,
+        "bandwidth_um": 0.029270387969297606,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 93,
+            "original_detector_pixel": [
+              977.6514063863148,
+              1484.5588924347098
+            ],
+            "rms_width_native_pixels": 0.49711561431771123,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 5.870352204340179e-09,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            1.2165231998741652,
+            1.2165456701786845,
+            1.216500729569646,
+            1.219002778901232,
+            1.2140436208470986
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.9996504134241245,
+            "median": 0.0005287736421450973,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.3982142791152,
+          "zodi_median": 0.3464304208755493,
+          "core_median": 0.6676077842712402,
+          "core_box_px": 20,
+          "valid_fraction": 0.9991836734693877,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "a6090ba87b16f9b4afe2fb5327f9af2b16d295802f6b2750885a14e65ef8db2e",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "unconfirmed_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 0.5502510666847229,
+        "empirical_noise": 0.06767247952222824,
+        "peak_contrast": 124.24121339733719,
+        "units": "MJy / sr",
+        "candidate_ra": 167.27840555729887,
+        "candidate_dec": 5.121338044835278,
+        "offset_from_prediction_pixels": 0.42216775343491103,
+        "peak_surface_brightness_excess": 8.40771096944809,
+        "positional_uncertainty_arcsec": null
+      }
+    },
+    {
+      "prediction": {
+        "ra": 167.27908911453292,
+        "dec": 5.121576578325088,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0685_1",
+        "observed_at_utc": "2025-12-14T04:26:46.211Z",
+        "detector": 5
+      },
+      "fits_sha256": "76bfebf0b3b18487aa342c9288f70383ed0ca61880e63d063d913a31ca76ae84",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0685_1D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0685_1",
+        "band": "SPHEREx-D5",
+        "detector": 5,
+        "observed_at_utc": "2025-12-14T04:26:46.211",
+        "mjd": 61023.18525707176,
+        "wavelength_um": 3.95751545918269,
+        "bandwidth_um": 0.036518767426185365,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 82,
+            "original_detector_pixel": [
+              982.073369946836,
+              1474.229081772829
+            ],
+            "rms_width_native_pixels": 0.5536772992336745,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 3.0722235866420533e-10,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            3.95751545918269,
+            3.9575655353997887,
+            3.95746538296559,
+            3.9604965664147693,
+            3.954534351950609
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.996612548828125,
+            "median": 0.0011337564792484045,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.22275948375463486,
+          "zodi_median": 0.21150879561901093,
+          "core_median": 0.31924869120121,
+          "core_box_px": 20,
+          "valid_fraction": 0.9951020408163266,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "76bfebf0b3b18487aa342c9288f70383ed0ca61880e63d063d913a31ca76ae84",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "unconfirmed_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 0.29660099744796753,
+        "empirical_noise": 0.03686918125748634,
+        "peak_contrast": 25.57370066800962,
+        "units": "MJy / sr",
+        "candidate_ra": 167.27885954647994,
+        "candidate_dec": 5.121446719749751,
+        "offset_from_prediction_pixels": 0.1536670706036884,
+        "peak_surface_brightness_excess": 0.9428814053535461,
+        "positional_uncertainty_arcsec": null
+      }
+    },
+    {
+      "prediction": {
+        "ra": 167.27744067241156,
+        "dec": 5.122151278393035,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0685_2",
+        "observed_at_utc": "2025-12-14T04:28:55.142Z",
+        "detector": 5
+      },
+      "fits_sha256": "fef7fffb5e2cb8c06642dd9837de29146368585e69afed07e0ce00dee595b2c5",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0685_2D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0685_2",
+        "band": "SPHEREx-D5",
+        "detector": 5,
+        "observed_at_utc": "2025-12-14T04:28:55.142",
+        "mjd": 61023.186749328706,
+        "wavelength_um": 3.992232995754371,
+        "bandwidth_um": 0.03666550758912758,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 82,
+            "original_detector_pixel": [
+              980.996313288513,
+              1359.0844166434183
+            ],
+            "rms_width_native_pixels": 0.5536772992336745,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 3.0722235866420533e-10,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            3.992232995754371,
+            3.9922816777294052,
+            3.992184313779337,
+            3.9952709899740566,
+            3.989195001534686
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.9971200980392156,
+            "median": 0.0011811635922640562,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.23059946298599243,
+          "zodi_median": 0.22078511118888855,
+          "core_median": 0.3216698169708252,
+          "core_box_px": 20,
+          "valid_fraction": 0.996734693877551,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "fef7fffb5e2cb8c06642dd9837de29146368585e69afed07e0ce00dee595b2c5",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "unconfirmed_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 0.2967180609703064,
+        "empirical_noise": 0.03908699929118156,
+        "peak_contrast": 28.587177757545525,
+        "units": "MJy / sr",
+        "candidate_ra": 167.27646480497552,
+        "candidate_dec": 5.122323286828907,
+        "offset_from_prediction_pixels": 0.5779118162905721,
+        "peak_surface_brightness_excess": 1.1173869967460632,
+        "positional_uncertainty_arcsec": null
+      }
+    },
+    {
+      "prediction": {
+        "ra": 167.27579224044294,
+        "dec": 5.12272596967069,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0685_3",
+        "observed_at_utc": "2025-12-14T04:31:04.072Z",
+        "detector": 2
+      },
+      "fits_sha256": "6bb0e8b404d92b8e9ad11c65617615c7b77d359c53d347b29a5c0e4a872c3c5d",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/2/level2_2025W50_2A_0685_3D2_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0685_3",
+        "band": "SPHEREx-D2",
+        "detector": 2,
+        "observed_at_utc": "2025-12-14T04:31:04.072",
+        "mjd": 61023.18824157408,
+        "wavelength_um": 1.275328807398227,
+        "bandwidth_um": 0.030414312183827435,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 71,
+            "original_detector_pixel": [
+              976.6149739617135,
+              1254.0018100548618
+            ],
+            "rms_width_native_pixels": 0.5023075007971987,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 6.220639114928872e-09,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            1.275328807398227,
+            1.2753483845950853,
+            1.2753092302013684,
+            1.2779028944512052,
+            1.2727547203452487
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.9997100830078125,
+            "median": 0.0005250839167274535,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.40159937739372253,
+          "zodi_median": 0.34181469678878784,
+          "core_median": 0.6605612933635712,
+          "core_box_px": 20,
+          "valid_fraction": 1.0,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "6bb0e8b404d92b8e9ad11c65617615c7b77d359c53d347b29a5c0e4a872c3c5d",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "unconfirmed_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 0.5470593869686127,
+        "empirical_noise": 0.06734334602952004,
+        "peak_contrast": 128.85962027890628,
+        "units": "MJy / sr",
+        "candidate_ra": 167.27524860022382,
+        "candidate_dec": 5.122642888004552,
+        "offset_from_prediction_pixels": 0.32100966083609417,
+        "peak_surface_brightness_excess": 8.677837997674942,
+        "positional_uncertainty_arcsec": null
+      }
+    },
+    {
+      "prediction": {
+        "ra": 167.27579224044294,
+        "dec": 5.12272596967069,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0685_3",
+        "observed_at_utc": "2025-12-14T04:31:04.072Z",
+        "detector": 5
+      },
+      "fits_sha256": "75768b82419ddfacc257563b2e3cdbbea08a3925ae2247258267ce76499cb278",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0685_3D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0685_3",
+        "band": "SPHEREx-D5",
+        "detector": 5,
+        "observed_at_utc": "2025-12-14T04:31:04.072",
+        "mjd": 61023.18824157408,
+        "wavelength_um": 4.027233695779073,
+        "bandwidth_um": 0.036673968038204253,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 71,
+            "original_detector_pixel": [
+              979.9401989043015,
+              1243.8909915572513
+            ],
+            "rms_width_native_pixels": 0.5416877213590089,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 2.5160014696656852e-11,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            4.027233695779073,
+            4.027281077663328,
+            4.027186313894819,
+            4.030271678079289,
+            4.024195713478859
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.9969635009765625,
+            "median": 0.0012367317685857415,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.2405439794063568,
+          "zodi_median": 0.231924369931221,
+          "core_median": 0.33534902334213257,
+          "core_box_px": 20,
+          "valid_fraction": 0.9983673469387755,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "75768b82419ddfacc257563b2e3cdbbea08a3925ae2247258267ce76499cb278",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "unconfirmed_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 0.3171948194503784,
+        "empirical_noise": 0.03799770838022232,
+        "peak_contrast": 23.361858872030997,
+        "units": "MJy / sr",
+        "candidate_ra": 167.27551814559536,
+        "candidate_dec": 5.122568964654741,
+        "offset_from_prediction_pixels": 0.18421729252399868,
+        "peak_surface_brightness_excess": 0.8876971006393433,
+        "positional_uncertainty_arcsec": null
+      }
+    },
+    {
+      "prediction": {
+        "ra": 167.27414377886691,
+        "dec": 5.123300666018959,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0685_4",
+        "observed_at_utc": "2025-12-14T04:33:13.004Z",
+        "detector": 5
+      },
+      "fits_sha256": "2480eed5e7e38fd15ffbf74ea02e1807ec3308d95eeaad5447dd23bd35cc5c91",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0685_4D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0685_4",
+        "band": "SPHEREx-D5",
+        "detector": 5,
+        "observed_at_utc": "2025-12-14T04:33:13.004",
+        "mjd": 61023.18973384259,
+        "wavelength_um": 4.062525330314805,
+        "bandwidth_um": 0.036737310720414584,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 71,
+            "original_detector_pixel": [
+              978.8196695362541,
+              1128.693158588109
+            ],
+            "rms_width_native_pixels": 0.5416877213590089,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 2.5160014696656852e-11,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            4.062525330314805,
+            4.062573670902546,
+            4.062476989727064,
+            4.06559400539547,
+            4.059456655234141
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.9970361138132295,
+            "median": 0.0012964149937033653,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.25222627967596056,
+          "zodi_median": 0.24446024000644684,
+          "core_median": 0.3527637869119644,
+          "core_box_px": 20,
+          "valid_fraction": 0.9975510204081632,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "2480eed5e7e38fd15ffbf74ea02e1807ec3308d95eeaad5447dd23bd35cc5c91",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "unconfirmed_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 0.3273009955883026,
+        "empirical_noise": 0.04474854605197906,
+        "peak_contrast": 27.744404130539866,
+        "units": "MJy / sr",
+        "candidate_ra": 167.27361073580778,
+        "candidate_dec": 5.122596916896395,
+        "offset_from_prediction_pixels": 0.5155950660098724,
+        "peak_surface_brightness_excess": 1.2415217459201813,
+        "positional_uncertainty_arcsec": null
+      }
+    },
+    {
+      "prediction": {
+        "ra": 167.20665303736263,
+        "dec": 5.146825168641826,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0698_1",
+        "observed_at_utc": "2025-12-14T06:01:11.490Z",
+        "detector": 5
+      },
+      "fits_sha256": "fa8a8132a57c431739078af072c5b465c595692a1d41f513d3575ec12ebd6cfe",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0698_1D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0698_1",
+        "band": "SPHEREx-D5",
+        "detector": 5,
+        "observed_at_utc": "2025-12-14T06:01:11.490",
+        "mjd": 61023.25082743056,
+        "wavelength_um": 4.097283521742396,
+        "bandwidth_um": 0.03680761648355656,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 60,
+            "original_detector_pixel": [
+              977.2724913704075,
+              1015.5051309459254
+            ],
+            "rms_width_native_pixels": 0.5442754121752088,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 2.018045036633609e-10,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            4.097283521742396,
+            4.09733319731157,
+            4.097233846173222,
+            4.100389508904746,
+            4.094198064581511
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.9970703125,
+            "median": 0.0013557500205934048,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.26211912631988527,
+          "zodi_median": 0.25731202960014343,
+          "core_median": 0.3640393763780594,
+          "core_box_px": 20,
+          "valid_fraction": 1.0,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "fa8a8132a57c431739078af072c5b465c595692a1d41f513d3575ec12ebd6cfe",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "unconfirmed_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 0.3443994075059891,
+        "empirical_noise": 0.049811939415335654,
+        "peak_contrast": 18.937625261965444,
+        "units": "MJy / sr",
+        "candidate_ra": 167.20587610219002,
+        "candidate_dec": 5.147568829217564,
+        "offset_from_prediction_pixels": 0.6292834654684634,
+        "peak_surface_brightness_excess": 0.9433198422193527,
+        "positional_uncertainty_arcsec": null
+      }
+    },
+    {
+      "prediction": {
+        "ra": 167.20665302521547,
+        "dec": 5.146825172875038,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0698_1",
+        "observed_at_utc": "2025-12-14T06:01:11.491Z",
+        "detector": 2
+      },
+      "fits_sha256": "f83d50ab6a40e2fdf44e783ec7936b9dad5cf19fcaceec2df56da3e060293708",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/2/level2_2025W50_2A_0698_1D2_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0698_1",
+        "band": "SPHEREx-D2",
+        "detector": 2,
+        "observed_at_utc": "2025-12-14T06:01:11.491",
+        "mjd": 61023.25082744213,
+        "wavelength_um": 1.3360826172772124,
+        "bandwidth_um": 0.032239344337203865,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 60,
+            "original_detector_pixel": [
+              975.0904824675085,
+              1025.3777869504963
+            ],
+            "rms_width_native_pixels": 0.5018460449780298,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 5.177492212737889e-09,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            1.3360826172772124,
+            1.3361096043693343,
+            1.33605563018509,
+            1.3388041657388843,
+            1.3334123339165629
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.999542236328125,
+            "median": 0.0004971817834302783,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.3964578568935394,
+          "zodi_median": 0.33153796195983887,
+          "core_median": 0.6758306622505188,
+          "core_box_px": 20,
+          "valid_fraction": 1.0,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "f83d50ab6a40e2fdf44e783ec7936b9dad5cf19fcaceec2df56da3e060293708",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "unconfirmed_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 0.5428871810436249,
+        "empirical_noise": 0.07294075837433338,
+        "peak_contrast": 106.20357340807328,
+        "units": "MJy / sr",
+        "candidate_ra": 167.20559635843972,
+        "candidate_dec": 5.14703910987193,
+        "offset_from_prediction_pixels": 0.6302635114889932,
+        "peak_surface_brightness_excess": 7.746569186449051,
+        "positional_uncertainty_arcsec": null
+      }
+    },
+    {
+      "prediction": {
+        "ra": 167.20500444973925,
+        "dec": 5.14739968815294,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0698_2",
+        "observed_at_utc": "2025-12-14T06:03:20.422Z",
+        "detector": 5
+      },
+      "fits_sha256": "e39bdb010fed69ac9e8fd847862450a09e053599c323bfd0fc327292c4cad25c",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0698_2D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0698_2",
+        "band": "SPHEREx-D5",
+        "detector": 5,
+        "observed_at_utc": "2025-12-14T06:03:20.422",
+        "mjd": 61023.25231969907,
+        "wavelength_um": 4.13313499914493,
+        "bandwidth_um": 0.036796699662387716,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 49,
+            "original_detector_pixel": [
+              976.2741771965087,
+              900.093755176854
+            ],
+            "rms_width_native_pixels": 0.5422197643721132,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 2.8735399476564893e-11,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            4.13313499914493,
+            4.13318360358112,
+            4.133086394708741,
+            4.1362409770419255,
+            4.130029021247935
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.9972426470588235,
+            "median": 0.0014181060250848532,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.27973544746637347,
+          "zodi_median": 0.2712152302265167,
+          "core_median": 0.3808472156524658,
+          "core_box_px": 20,
+          "valid_fraction": 0.9942857142857143,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "e39bdb010fed69ac9e8fd847862450a09e053599c323bfd0fc327292c4cad25c",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "unconfirmed_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 0.3578518331050873,
+        "empirical_noise": 0.046839244061708446,
+        "peak_contrast": 26.889041691416374,
+        "units": "MJy / sr",
+        "candidate_ra": 167.2042140798084,
+        "candidate_dec": 5.147776443588119,
+        "offset_from_prediction_pixels": 0.5119818792300135,
+        "peak_surface_brightness_excess": 1.2594623863697052,
+        "positional_uncertainty_arcsec": null
+      }
+    },
+    {
+      "prediction": {
+        "ra": 167.20335587130242,
+        "dec": 5.147974199186135,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0698_3",
+        "observed_at_utc": "2025-12-14T06:05:29.353Z",
+        "detector": 5
+      },
+      "fits_sha256": "76ffb1c76462aa59eb9971100644902869836d720ec79f3f2f90d0622b8ebf7b",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0698_3D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0698_3",
+        "band": "SPHEREx-D5",
+        "detector": 5,
+        "observed_at_utc": "2025-12-14T06:05:29.353",
+        "mjd": 61023.25381195602,
+        "wavelength_um": 4.169011136195612,
+        "bandwidth_um": 0.036731182755823044,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 49,
+            "original_detector_pixel": [
+              975.2583281674716,
+              784.7831203828342
+            ],
+            "rms_width_native_pixels": 0.5422197643721132,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 2.8735399476564893e-11,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            4.169011136195612,
+            4.1690586632801185,
+            4.168963609111106,
+            4.172135069302403,
+            4.16588720308882
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.997283935546875,
+            "median": 0.001534740556962788,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.33607862889766693,
+          "zodi_median": 0.28555160760879517,
+          "core_median": 0.4682138115167618,
+          "core_box_px": 20,
+          "valid_fraction": 0.9983673469387755,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "76ffb1c76462aa59eb9971100644902869836d720ec79f3f2f90d0622b8ebf7b",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "unconfirmed_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 0.43439842760562897,
+        "empirical_noise": 0.05887709499299526,
+        "peak_contrast": 22.50535394830929,
+        "units": "MJy / sr",
+        "candidate_ra": 167.20256764886946,
+        "candidate_dec": 5.148379188200654,
+        "offset_from_prediction_pixels": 0.5184700408235267,
+        "peak_surface_brightness_excess": 1.3250498622655869,
+        "positional_uncertainty_arcsec": null
+      }
+    },
+    {
+      "prediction": {
+        "ra": 167.20170730314166,
+        "dec": 5.148548701361233,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0698_4",
+        "observed_at_utc": "2025-12-14T06:07:38.283Z",
+        "detector": 2
+      },
+      "fits_sha256": "a9ce8668589817936347f6acba6b9823b4400449e2c296e96fc41c79de099566",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/2/level2_2025W50_2A_0698_4D2_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0698_4",
+        "band": "SPHEREx-D2",
+        "detector": 2,
+        "observed_at_utc": "2025-12-14T06:07:38.283",
+        "mjd": 61023.25530420139,
+        "wavelength_um": 1.4344445051630605,
+        "bandwidth_um": 0.034816727597180165,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 38,
+            "original_detector_pixel": [
+              973.6933035908337,
+              678.9060081659869
+            ],
+            "rms_width_native_pixels": 0.5043014237231883,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 3.2855185239100138e-09,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            1.4344445051630605,
+            1.434463614647566,
+            1.4344253956785549,
+            1.437375764549285,
+            1.431513245776836
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.99969482421875,
+            "median": 0.0004936318146064878,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.41228493452072146,
+          "zodi_median": 0.3384326100349426,
+          "core_median": 0.7010697424411774,
+          "core_box_px": 20,
+          "valid_fraction": 1.0,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "a9ce8668589817936347f6acba6b9823b4400449e2c296e96fc41c79de099566",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "unconfirmed_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 0.5671083927154541,
+        "empirical_noise": 0.07568709436655044,
+        "peak_contrast": 106.00846306338144,
+        "units": "MJy / sr",
+        "candidate_ra": 167.20128156003196,
+        "candidate_dec": 5.148579723264198,
+        "offset_from_prediction_pixels": 0.24981267784230848,
+        "peak_surface_brightness_excess": 8.023472547531128,
+        "positional_uncertainty_arcsec": null
+      }
+    },
+    {
+      "prediction": {
+        "ra": 167.20170730314166,
+        "dec": 5.148548701361233,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0698_4",
+        "observed_at_utc": "2025-12-14T06:07:38.283Z",
+        "detector": 5
+      },
+      "fits_sha256": "c9de92a14c83a8d230325bf062291b18afb9d60f2b9c4e2495da675454f76e0e",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0698_4D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0698_4",
+        "band": "SPHEREx-D5",
+        "detector": 5,
+        "observed_at_utc": "2025-12-14T06:07:38.283",
+        "mjd": 61023.25530420139,
+        "wavelength_um": 4.205072571582743,
+        "bandwidth_um": 0.03651855901592067,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 38,
+            "original_detector_pixel": [
+              974.2197873004825,
+              669.3625519202341
+            ],
+            "rms_width_native_pixels": 0.5391759614705859,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 3.4417999561497936e-09,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            4.205072571582743,
+            4.2051190009991135,
+            4.205026142166373,
+            4.208196494812844,
+            4.2019486483526425
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.9973907470703125,
+            "median": 0.0016682628775015473,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.8914449423551559,
+          "zodi_median": 0.30093690752983093,
+          "core_median": 1.8957842588424683,
+          "core_box_px": 20,
+          "valid_fraction": 0.9959183673469387,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "c9de92a14c83a8d230325bf062291b18afb9d60f2b9c4e2495da675454f76e0e",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "unconfirmed_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 1.6066455245018005,
+        "empirical_noise": 0.23466400609016416,
+        "peak_contrast": 23.039872021237407,
+        "units": "MJy / sr",
+        "candidate_ra": 167.20045463720817,
+        "candidate_dec": 5.148330014366692,
+        "offset_from_prediction_pixels": 0.743115941189554,
+        "peak_surface_brightness_excess": 5.406628668308258,
+        "positional_uncertainty_arcsec": null
+      }
+    },
+    {
+      "prediction": {
+        "ra": 167.13087450913795,
+        "dec": 5.173227913957699,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0712_1",
+        "observed_at_utc": "2025-12-14T07:39:57.704Z",
+        "detector": 5
+      },
+      "fits_sha256": "65bdc700a3ae6e9f9316c7eae4c9187fbc0eee07f1f6a338177a8dc0a817e0c3",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0712_1D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0712_1",
+        "band": "SPHEREx-D5",
+        "detector": 5,
+        "observed_at_utc": "2025-12-14T07:39:57.704",
+        "mjd": 61023.31941787037,
+        "wavelength_um": 4.240891167155771,
+        "bandwidth_um": 0.03667536040843716,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 27,
+            "original_detector_pixel": [
+              970.3167247067964,
+              555.4689209868218
+            ],
+            "rms_width_native_pixels": 0.5574032990005853,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 1.7488804848753148e-10,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            4.240891167155771,
+            4.240937990260091,
+            4.24084434405145,
+            4.2440542176879426,
+            4.237728116623599
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.9977656857976653,
+            "median": 0.0016838018782436848,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.7199144244194031,
+          "zodi_median": 0.31599751114845276,
+          "core_median": 2.793676733970642,
+          "core_box_px": 20,
+          "valid_fraction": 0.9934693877551021,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "65bdc700a3ae6e9f9316c7eae4c9187fbc0eee07f1f6a338177a8dc0a817e0c3",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "ambiguous_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 1.9344626665115356,
+        "empirical_noise": 0.41496005487442017,
+        "peak_contrast": 414.5248676353899,
+        "units": "MJy / sr",
+        "candidate_ra": 167.13537609333002,
+        "candidate_dec": 5.1686368277698165,
+        "offset_from_prediction_pixels": 3.7689782807573122,
+        "peak_surface_brightness_excess": 172.01126182079315,
+        "positional_uncertainty_arcsec": null
+      }
+    },
+    {
+      "prediction": {
+        "ra": 167.12922579980165,
+        "dec": 5.173802232742921,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0712_2",
+        "observed_at_utc": "2025-12-14T07:42:06.635Z",
+        "detector": 2
+      },
+      "fits_sha256": "2a34d18b8f1d407c09a221a708be1999a199754bc1c954757bbbae24a91999ac",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/2/level2_2025W50_2A_0712_2D2_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0712_2",
+        "band": "SPHEREx-D2",
+        "detector": 2,
+        "observed_at_utc": "2025-12-14T07:42:06.635",
+        "mjd": 61023.32091012732,
+        "wavelength_um": 1.5042653851682746,
+        "bandwidth_um": 0.03675666420543093,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 27,
+            "original_detector_pixel": [
+              969.7634093158581,
+              449.1417463579712
+            ],
+            "rms_width_native_pixels": 0.5060088056152162,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 2.6405897468606554e-09,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            1.5042653851682746,
+            1.5042897879737658,
+            1.5042409823627836,
+            1.5073479991216052,
+            1.501182771214944
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.9994964599609375,
+            "median": 0.0004852465935982764,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.4012608230113983,
+          "zodi_median": 0.34707120060920715,
+          "core_median": 0.6493934690952301,
+          "core_box_px": 20,
+          "valid_fraction": 1.0,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "2a34d18b8f1d407c09a221a708be1999a199754bc1c954757bbbae24a91999ac",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "unconfirmed_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 0.5338395833969116,
+        "empirical_noise": 0.05746775059103965,
+        "peak_contrast": 146.3611597405224,
+        "units": "MJy / sr",
+        "candidate_ra": 167.12875541467548,
+        "candidate_dec": 5.173815737625411,
+        "offset_from_prediction_pixels": 0.27558860065943697,
+        "peak_surface_brightness_excess": 8.411046624183655,
+        "positional_uncertainty_arcsec": null
+      }
+    },
+    {
+      "prediction": {
+        "ra": 167.12922579980165,
+        "dec": 5.173802232742921,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0712_2",
+        "observed_at_utc": "2025-12-14T07:42:06.635Z",
+        "detector": 5
+      },
+      "fits_sha256": "3c0cf94a6870eb8ff3f9b5102db249efdbfd31bc60bfb1535425cf753bbaba6f",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0712_2D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0712_2",
+        "band": "SPHEREx-D5",
+        "detector": 5,
+        "observed_at_utc": "2025-12-14T07:42:06.635",
+        "mjd": 61023.32091012732,
+        "wavelength_um": 4.277465555235858,
+        "bandwidth_um": 0.0371995559698734,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 27,
+            "original_detector_pixel": [
+              969.1779557724699,
+              439.85635993719063
+            ],
+            "rms_width_native_pixels": 0.5574032990005853,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 1.7488804848753148e-10,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            4.277465555235858,
+            4.277514299142979,
+            4.277416811328736,
+            4.28062862468769,
+            4.274302485784025
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.9977569580078125,
+            "median": 0.0017573643708601594,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.8253149151802063,
+          "zodi_median": 0.33315563201904297,
+          "core_median": 2.9007277488708496,
+          "core_box_px": 20,
+          "valid_fraction": 0.9991836734693877,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "3c0cf94a6870eb8ff3f9b5102db249efdbfd31bc60bfb1535425cf753bbaba6f",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "unconfirmed_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 2.089114189147949,
+        "empirical_noise": 0.4141322061538696,
+        "peak_contrast": 107.03142927606564,
+        "units": "MJy / sr",
+        "candidate_ra": 167.12832097946747,
+        "candidate_dec": 5.174255635704149,
+        "offset_from_prediction_pixels": 0.5928323263114974,
+        "peak_surface_brightness_excess": 44.325161933898926,
+        "positional_uncertainty_arcsec": null
+      }
+    },
+    {
+      "prediction": {
+        "ra": 167.127577087617,
+        "dec": 5.174376547217039,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0712_3",
+        "observed_at_utc": "2025-12-14T07:44:15.566Z",
+        "detector": 5
+      },
+      "fits_sha256": "51fdafaa53f71bce38969b262432b9a89a759435dc9d7bf71f10de955ff65d21",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0712_3D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0712_3",
+        "band": "SPHEREx-D5",
+        "detector": 5,
+        "observed_at_utc": "2025-12-14T07:44:15.566",
+        "mjd": 61023.322402384256,
+        "wavelength_um": 4.3142522474891605,
+        "bandwidth_um": 0.03737482074612578,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 16,
+            "original_detector_pixel": [
+              968.0777397643844,
+              324.31044511410886
+            ],
+            "rms_width_native_pixels": 0.5694072356068115,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 1.4229302180979175e-09,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            4.3142522474891605,
+            4.31430200012067,
+            4.31420249485765,
+            4.317443193274444,
+            4.311061301703877
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.997589111328125,
+            "median": 0.0018491251394152641,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.7376970380544663,
+          "zodi_median": 0.3514977693557739,
+          "core_median": 1.3572227954864502,
+          "core_box_px": 20,
+          "valid_fraction": 0.9975510204081632,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "51fdafaa53f71bce38969b262432b9a89a759435dc9d7bf71f10de955ff65d21",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "unconfirmed_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 1.209136962890625,
+        "empirical_noise": 0.12712700518369674,
+        "peak_contrast": 36.49190246358498,
+        "units": "MJy / sr",
+        "candidate_ra": 167.12723619347622,
+        "candidate_dec": 5.17416225727769,
+        "offset_from_prediction_pixels": 0.2356073161048461,
+        "peak_surface_brightness_excess": 4.639106273651123,
+        "positional_uncertainty_arcsec": null
+      }
+    },
+    {
+      "prediction": {
+        "ra": 167.12592838474777,
+        "dec": 5.174950853142384,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0712_4",
+        "observed_at_utc": "2025-12-14T07:46:24.496Z",
+        "detector": 2
+      },
+      "fits_sha256": "34589a8ea80e2df38ce59330a65c9695039575737df3544f0f6353d885eb59fe",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/2/level2_2025W50_2A_0712_4D2_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0712_4",
+        "band": "SPHEREx-D2",
+        "detector": 2,
+        "observed_at_utc": "2025-12-14T07:46:24.496",
+        "mjd": 61023.323894629626,
+        "wavelength_um": 1.5783061719241263,
+        "bandwidth_um": 0.03824723901691133,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 16,
+            "original_detector_pixel": [
+              968.6778548346052,
+              217.7367547387883
+            ],
+            "rms_width_native_pixels": 0.5153554989195244,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 4.921651086675638e-09,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            1.5783061719241263,
+            1.5783459542403457,
+            1.578266389607906,
+            1.5815309398298119,
+            1.57508140401844
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.9998328064202334,
+            "median": 0.0004573703627102077,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.3833376497030258,
+          "zodi_median": 0.35344094038009644,
+          "core_median": 0.5997797846794128,
+          "core_box_px": 20,
+          "valid_fraction": 0.9975510204081632,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "34589a8ea80e2df38ce59330a65c9695039575737df3544f0f6353d885eb59fe",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "unconfirmed_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 0.5088131725788116,
+        "empirical_noise": 0.05853848383426666,
+        "peak_contrast": 125.13297154018241,
+        "units": "MJy / sr",
+        "candidate_ra": 167.1252439064616,
+        "candidate_dec": 5.174402044749195,
+        "offset_from_prediction_pixels": 0.5142043469753322,
+        "peak_surface_brightness_excess": 7.325094431638718,
+        "positional_uncertainty_arcsec": null
+      }
+    },
+    {
+      "prediction": {
+        "ra": 167.12592838474777,
+        "dec": 5.174950853142384,
+        "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+        "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+        "obs_id": "2025W50_2A_0712_4",
+        "observed_at_utc": "2025-12-14T07:46:24.496Z",
+        "detector": 5
+      },
+      "fits_sha256": "f9ab9188e1764fa8226a1b66e0359e9bb87ffc943a8f3493f07dccd2f632fa7f",
+      "fits_source": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0712_4D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+      "frame": {
+        "obs_id": "2025W50_2A_0712_4",
+        "band": "SPHEREx-D5",
+        "detector": 5,
+        "observed_at_utc": "2025-12-14T07:46:24.496",
+        "mjd": 61023.323894629626,
+        "wavelength_um": 4.351148788503947,
+        "bandwidth_um": 0.03741965477924935,
+        "diagnostics": {
+          "local_psf": {
+            "status": "measured",
+            "plane": 16,
+            "original_detector_pixel": [
+              966.9621570596506,
+              208.69921480708462
+            ],
+            "rms_width_native_pixels": 0.5694072356068115,
+            "oversampling": 10.0,
+            "negative_absolute_mass_fraction": 1.4229302180979175e-09,
+            "limitation": "Signed empirical model moments may depend on negative wings; not field-wide PSF matching or measured source sharpness"
+          },
+          "pipeline_version": "6.4+psffix1",
+          "calibrated_spectral_maps_available": false,
+          "approximate_wavelength_samples_um": [
+            4.351148788503947,
+            4.351199203473627,
+            4.351098373534268,
+            4.354360629839931,
+            4.347957836327477
+          ],
+          "variance": {
+            "positive_finite_fraction": 0.99774169921875,
+            "median": 0.0019156145863234997,
+            "units": "MJy2 / sr2"
+          },
+          "psf_shape": [
+            121,
+            101,
+            101
+          ],
+          "physical_unit": "MJy / sr",
+          "variance_available": true,
+          "psf_available": true,
+          "flags_available": true,
+          "sky_level": 0.49036042392253876,
+          "zodi_median": 0.37103256583213806,
+          "core_median": 0.6475667357444763,
+          "core_box_px": 20,
+          "valid_fraction": 0.9991836734693877,
+          "measured_on": "raw IMAGE cutout (no zodi subtraction)"
+        },
+        "provenance": {
+          "source": "verified_local_irsa_cutout",
+          "file_name": "original.fits",
+          "sha256": "f9ab9188e1764fa8226a1b66e0359e9bb87ffc943a8f3493f07dccd2f632fa7f",
+          "cutout_deg": 0.06,
+          "wavelength_source": "WCS-WAVE / alternate WCS W"
+        }
+      },
+      "measurement": {
+        "status": "unconfirmed_local_excess",
+        "source_identity_verified": false,
+        "measured_comet_position": null,
+        "limitations": [
+          "A local excess can be a background source, noise or coma structure. No comet identity is established.",
+          "Empirical image contrast is not calibrated detection significance. No aperture/PSF correction or physical variability is inferred."
+        ],
+        "background": 0.6190206408500671,
+        "empirical_noise": 0.05522700058221817,
+        "peak_contrast": 33.49502442411,
+        "units": "MJy / sr",
+        "candidate_ra": 167.12529305118173,
+        "candidate_dec": 5.174283272357742,
+        "offset_from_prediction_pixels": 0.5397938844763004,
+        "peak_surface_brightness_excess": 1.8498297333717346,
+        "positional_uncertainty_arcsec": null
+      }
+    }
+  ],
+  "predicted_first_to_last": {
+    "kind": "predicted_only",
+    "separation_arcsec": 581.7998028623441,
+    "elapsed_hours": 3.3273013888888885,
+    "rate_arcsec_per_hour": 174.8563580098853,
+    "measured_motion": null
+  },
+  "measured_comet_motion": null,
+  "calibrated_brightness_change": null,
+  "conclusion": "Predicted trajectory and real image playback; local excesses remain unconfirmed. No independently validated comet motion, physical brightening or coma activity change is established."
+}

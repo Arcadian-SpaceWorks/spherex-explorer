@@ -201,7 +201,7 @@ SPHEREx image conventions: [official product guide](https://github.com/Caltech-I
 
 ### Preloaded presentation mode
 
-Open `/?mode=demo` or choose **Demo Mode** in the Data mode selector. Three preserved real SPHEREx cutouts for the M101 region and six for the M31 core are included (M31: three survey passes, each in detectors D1 and D4; fetched with `scripts/acquire_m31_demo.py`). Demo playback uses local PNGs and manifests, with local FastAPI FITS pixel readouts. Live Mode retains the existing IRSA search/cutout pipeline.
+Open `/?mode=demo` or choose **Demo Mode** in the Data mode selector. Four targets are included: three preserved real SPHEREx cutouts for the M101 region, and larger sets of 0.437° cutouts for the M31 core (18 frames: three survey passes, one exposure per detector), Barnard’s Star (21 frames at three epochs over a year, with Gaia-predicted positions) and comet 3I/ATLAS (18 frames over 3.3 hours on a fixed sky centre, with IRSA’s predicted comet positions). The larger sets are chosen and fetched by `scripts/acquire_demo_targets.py`; see [the showcase notes](docs/demo-target-showcase.md#larger-sets-m31-barnards-star-and-3iatlas). Demo playback uses local PNGs and manifests, with local FastAPI FITS pixel readouts. Live Mode retains the existing IRSA search/cutout pipeline.
 
 Validate assets before presenting: `.venv/bin/python scripts/prepare_demo.py --validate frontend/public/demo`. For offline preparation, provenance, deployment and scaling instructions, see [the hybrid demo architecture](docs/demo-architecture.md). PNGs are independently stretched previews; the application makes no validated motion or variability claim.
 

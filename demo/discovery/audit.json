@@ -1,5 +1,5 @@
 {
-  "audited_at_utc": "2026-11-07T13:31:42.377637+00:00",
+  "audited_at_utc": "2026-11-08T07:19:26.068827+00:00",
   "epoch_definition": "Unique exposure start t_min; visits are separated by >1 day, not inferred variability epochs",
   "targets": {
     "3i-atlas": {
@@ -355,6 +355,99 @@
           },
           "releases": {
             "spherex_qr3": 119
+          },
+          "calib_levels": [
+            2
+          ],
+          "spectral_range_um": [
+            0.7455,
+            5.009600000000001
+          ]
+        }
+      }
+    },
+    "m31": {
+      "name": "M31 \u2014 Andromeda Galaxy core",
+      "ra": 10.684708333333333,
+      "dec": 41.26875,
+      "source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+      "position": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+      "query": "SELECT TOP 10000 obs_id,s_ra,s_dec,t_min,t_max,em_min,em_max,energy_bandpassname,obs_collection,access_url,s_region,calib_level,access_estsize FROM spherex.obscore WHERE 1=CONTAINS(POINT('ICRS',10.684708333333333,41.26875),s_region) ORDER BY t_min",
+      "table_url": "https://irsa.ipac.caltech.edu/TAP/sync",
+      "status": "metadata_verified",
+      "sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+      "records": 361,
+      "observation_ids": 182,
+      "exposure_epochs": 182,
+      "visits_gap_over_1_day": 20,
+      "earliest_utc": "2025-07-09T14:56:47.933Z",
+      "latest_utc": "2026-08-07T07:20:13.430Z",
+      "baseline_days": 393.682934000004,
+      "detectors": {
+        "SPHEREx-D4": 57,
+        "SPHEREx-D1": 57,
+        "SPHEREx-D2": 63,
+        "SPHEREx-D5": 60,
+        "SPHEREx-D3": 62,
+        "SPHEREx-D6": 62
+      },
+      "releases": {
+        "spherex_qr2": 305,
+        "spherex_qr3": 56
+      },
+      "calib_levels": [
+        2
+      ],
+      "spectral_range_um": [
+        0.7455,
+        5.009600000000001
+      ],
+      "by_release": {
+        "spherex_qr2": {
+          "records": 305,
+          "observation_ids": 154,
+          "exposure_epochs": 154,
+          "visits_gap_over_1_day": 17,
+          "earliest_utc": "2025-07-09T14:56:47.933Z",
+          "latest_utc": "2026-07-19T05:44:41.050Z",
+          "baseline_days": 374.6165870000041,
+          "detectors": {
+            "SPHEREx-D4": 56,
+            "SPHEREx-D1": 56,
+            "SPHEREx-D2": 57,
+            "SPHEREx-D5": 54,
+            "SPHEREx-D3": 41,
+            "SPHEREx-D6": 41
+          },
+          "releases": {
+            "spherex_qr2": 305
+          },
+          "calib_levels": [
+            2
+          ],
+          "spectral_range_um": [
+            0.7455,
+            5.009600000000001
+          ]
+        },
+        "spherex_qr3": {
+          "records": 56,
+          "observation_ids": 28,
+          "exposure_epochs": 28,
+          "visits_gap_over_1_day": 3,
+          "earliest_utc": "2026-07-20T06:03:58.896Z",
+          "latest_utc": "2026-08-07T07:20:13.430Z",
+          "baseline_days": 18.05294600000343,
+          "detectors": {
+            "SPHEREx-D6": 21,
+            "SPHEREx-D3": 21,
+            "SPHEREx-D1": 1,
+            "SPHEREx-D4": 1,
+            "SPHEREx-D2": 6,
+            "SPHEREx-D5": 6
+          },
+          "releases": {
+            "spherex_qr3": 56
           },
           "calib_levels": [
             2

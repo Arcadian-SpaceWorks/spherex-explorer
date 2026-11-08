@@ -19,9 +19,13 @@ function Slot({role, row, onRemove}) {
   </div>;
 }
 
-function Frame({frame, src, label}) {
+function Frame({frame, src, label, prediction, shape}) {
   return <figure className="compare-frame">
+    <div style={{position:'relative'}}>
     <img src={src} alt={`${label}: ${frame.obs_id}, ${frame.band}, ${formatUtcLabel(frame.observed_at_utc)}, north up`} data-testid={`compare-image-${frame.role}`}/>
+    {prediction && <svg viewBox={`0 0 ${shape[1]} ${shape[0]}`} style={{position:'absolute',inset:0,width:'100%',height:'100%'}} aria-label="Predicted comet position">
+      <circle cx={prediction.marker.x+.5} cy={shape[0]-.5-prediction.marker.y} r="4" fill="none" stroke="cyan" strokeDasharray="2 1"/><title>IRSA predicted comet position, not measured</title>
+    </svg>}</div>
     <figcaption><b>{label}</b> {formatUtcLabel(frame.observed_at_utc).replace(' UTC', '')} · {frame.band} · {number(frame.wavelength_um, 3)} µm</figcaption>
   </figure>;
 }
@@ -72,6 +76,10 @@ export function ComparisonResult({result}) {
     <div className={`compare-verdict verdict-${result.decision.toLowerCase()}`} data-testid="compare-verdict">
       <strong>{outcome}</strong>
     </div>
+    {result.moving_target && <div role="note"><strong>Predicted Motion</strong><p>{result.moving_target.conclusion}</p>
+      <p>Predicted separation {number(result.moving_target.trajectory.separation_arcsec,2)} arcseconds over {number(Math.abs(result.moving_target.trajectory.elapsed_hours),3)} hours. This is ephemeris information, not measured motion.</p>
+      <p>{result.moving_target.activity_conclusion} Dashed rings mark predicted positions. {result.moving_target.view==='comet_centered' ? 'Views follow the predicted comet; background stars move.' : 'Views share a fixed celestial grid.'}</p>
+    </div>}
     <p className="compare-explanation">{result.detection?.conclusion || 'These images can be viewed together, but their differences do not establish an astronomical change.'}</p>
     <p>{formatSeparation(result.validation.time_separation_hours)} between observations. {result.stretch.shared ? 'Before and After use the same display brightness scale.' : 'Each image uses its own display scale; brightness cannot be compared by eye.'}</p>
     <div className="compare-tabs" role="group" aria-label="Comparison view">
@@ -82,7 +90,7 @@ export function ComparisonResult({result}) {
     </div>
     {!result.previews.difference && <p className="result-note" data-testid="difference-unavailable">Differences are unavailable for this pair. You can still view the two original images.</p>}
     {view === 'side' && <div className="compare-side">
-      {chronological.map(frame => <Frame key={frame.role} frame={frame} src={result.previews[frame.role]} label={labelFor(frame)}/>)}
+      {chronological.map(frame => <Frame key={frame.role} frame={frame} src={result.previews[frame.role]} label={labelFor(frame)} prediction={result.moving_target?.frames[frame.role==='a'?0:1]} shape={result.grid.shape}/>)}
     </div>}
     {view === 'blink' && <Blink result={result}/>}
     {(view === 'difference' || view === 'side') && result.previews.difference && <figure className="compare-frame compare-difference">
@@ -116,6 +124,7 @@ export function ComparisonResult({result}) {
       </tbody></table></div>}
 
       <div>
+        {result.moving_target?.frames.map((f,i)=><p key={i}>View {i?'B':'A'} at predicted comet: wavelength {number(f.target_wavelength_um,4)} µm (approximate). Local image check: {f.image_measurement.status}. Peak contrast {number(f.image_measurement.peak_contrast,2)} times empirical background spread (not calibrated significance); excess {number(f.image_measurement.peak_surface_brightness_excess,4)} MJy/sr. Source identity and positional uncertainty are not established.</p>)}
         <p>{result.detection.follow_up}</p>
         <ul>{result.detection.reasons.map(reason => <li key={reason}>{reason}</li>)}</ul>
         <ul>{result.detection.limitations.map(reason => <li key={reason}>{reason}</li>)}</ul>
@@ -137,6 +146,8 @@ export function ComparisonResult({result}) {
 
 export default function ComparePanel({picks, target, onRemove, onSwap, initialResult = null, onResult}) {
   const {a, b} = picks;
+  const moving=a?.demo_target_id==='3i-atlas' && b?.demo_target_id==='3i-atlas';
+  const [trackingView,setTrackingView]=useState('fixed_sky');
   const [mode, setMode] = useState(() => suggestMode(a, b));
   const [result, setResult] = useState(initialResult), [error, setError] = useState('');
   const [loading, setLoading] = useState(false), [run, setRun] = useState(0);
@@ -152,7 +163,7 @@ export default function ComparePanel({picks, target, onRemove, onSwap, initialRe
     const controller = new AbortController(); request.current = controller;
     setRun(n => n + 1); setLoading(true); setResult(null); setError('');
     try {
-      const data = await requestComparison({a, b, target, mode, signal: controller.signal});
+      const data = await requestComparison({a, b, target, mode, signal: controller.signal, trackingView:moving?trackingView:undefined});
       if (request.current === controller) {setResult(data); onResult?.(data);}
     } catch (err) {
       if (request.current === controller && controller.signal.reason !== 'user') setError(err.message);
@@ -171,6 +182,7 @@ export default function ComparePanel({picks, target, onRemove, onSwap, initialRe
       <Slot role="b" row={b} onRemove={onRemove}/>
     </div>
     <p className="result-note">1. Choose A and B in the observations table. 2. Find Changes. 3. Read what the images can tell us.</p>
+    {moving && <label>Comet view <select aria-label="Comparison comet view" value={trackingView} disabled={loading} onChange={e=>{setTrackingView(e.target.value);setResult(null);}}><option value="fixed_sky">Fixed sky — see predicted motion</option><option value="comet_centered">Follow predicted comet — background stars move</option></select></label>}
     <div className="compare-mode" role="group" aria-label="Comparison mode">
       {Object.entries(MODES).map(([id, item]) => <button key={id} type="button" aria-pressed={mode === id} onClick={() => chooseMode(id)}>
         {item.label}{ready && id === suggested ? ' (suggested)' : ''}</button>)}

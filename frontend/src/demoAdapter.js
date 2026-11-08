@@ -33,7 +33,9 @@ export function validateDemoManifest(data) {
             !source.pathname.includes(`/spherex/${a.data_release.slice(8)}/`) || !a.calibration || !source.pathname.split('/').includes(a.calibration) ||
             !Number.isFinite(a.ra) || a.ra < 0 || a.ra >= 360 || !Number.isFinite(a.dec) || Math.abs(a.dec)>90 ||
             !['moving-target-centered','fixed-sky-region'].includes(a.position_mode) || !a.position_source?.startsWith('https://') ||
-            !hash.test(a.discovery_sha256) || !(a.archive_em_min_m>0) || !(a.archive_em_max_m>=a.archive_em_min_m)) {
+            !hash.test(a.discovery_sha256) || !(a.archive_em_min_m>0) || !(a.archive_em_max_m>=a.archive_em_min_m) ||
+            (a.predicted_ra == null) !== (a.predicted_dec == null) ||
+            (a.predicted_ra != null && !(Number.isFinite(a.predicted_ra) && a.predicted_ra >= 0 && a.predicted_ra < 360 && Number.isFinite(a.predicted_dec) && Math.abs(a.predicted_dec) <= 90))) {
           throw new Error('Invalid demo acquisition provenance.');
         }
         const center=source.searchParams.get('center')?.split(',').map(Number);
@@ -56,7 +58,7 @@ export function demoResult(target, scienceNote) {
     obs_id: row.obs_id, access_url: row.access_url, access_format: 'application/fits (preloaded cutout)',
     observed_at_utc: row.observed_at_utc, energy_bandpassname: `SPHEREx-D${row.detector}`,
     obs_collection: row.acquisition?.data_release || 'Preloaded IRSA SPHEREx', s_ra: null, s_dec: null, em_min: row.acquisition?.archive_em_min_m ?? null, em_max: row.acquisition?.archive_em_max_m ?? null, t_exptime: null,
-    demo: row,
+    demo: row, demo_target_id: target.id,
   }))).frames;
   return {mode: 'demo', status: target.status, ra: target.ra, dec: target.dec, count: observations.length, truncated: false, observations, science_note: scienceNote};
 }
@@ -76,6 +78,12 @@ export async function loadDemoImage(observation, {signal, fetchImpl = fetch} = {
   }
   if (row.acquisition && Object.entries(row.acquisition).some(([key,value])=>metadata.acquisition?.[key]!==value)) throw new Error('Preloaded acquisition provenance differs from manifest.');
   return metadata;
+}
+
+/** Data releases of a target's frames, in time order of first use (e.g. ['spherex_qr2', 'spherex_qr3']). */
+export function targetReleases(target) {
+  const rows = [...(target?.observations || [])].sort((a, b) => a.observed_at_utc.localeCompare(b.observed_at_utc));
+  return [...new Set(rows.map(row => row.acquisition?.data_release).filter(Boolean))];
 }
 
 export function targetCoverage(target) {

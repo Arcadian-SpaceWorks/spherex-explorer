@@ -39,6 +39,7 @@ class CompareRequest(BaseModel):
     size_deg: float = Field(default=0.3, ge=0.02, le=0.68, allow_inf_nan=False)
     mode: Literal['time', 'wavelength']
     match_scale: bool = False
+    tracking_view: Literal['fixed_sky','comet_centered'] = 'fixed_sky'
 
 
 @lru_cache(maxsize=1)
@@ -53,7 +54,7 @@ def get_compare_service(images=Depends(get_image_service)):
 @router.post('')
 def compare(request: CompareRequest, service=Depends(get_compare_service)):
     return service.compare(request.a.model_dump(), request.b.model_dump(), request.ra, request.dec,
-                           request.size_deg, request.mode, request.match_scale)
+                           request.size_deg, request.mode, request.match_scale, request.tracking_view)
 
 
 @router.get('/{compare_id}/{role}.png')

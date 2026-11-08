@@ -15,10 +15,12 @@ test('validates real bundle and orders observations by UTC, then detector', () =
   assert.equal(result.observations.length, 3);
   assert.deepEqual(result.observations.map(row => row.energy_bandpassname), ['SPHEREx-D5', 'SPHEREx-D2', 'SPHEREx-D5']);
   assert.deepEqual(result.observations.map(o => o.observed_at_utc), [...result.observations.map(o => o.observed_at_utc)].sort());
+  assert.deepEqual(manifest.targets.map(t => t.id), ['m101', 'm31', 'barnard', '3i-atlas']);
   const m31 = demoResult(manifest.targets[1], manifest.science_note);
-  assert.equal(m31.count, 6);
-  assert.deepEqual(m31.observations.map(row => row.energy_bandpassname),
-    ['SPHEREx-D1', 'SPHEREx-D4', 'SPHEREx-D1', 'SPHEREx-D4', 'SPHEREx-D1', 'SPHEREx-D4']);
+  assert.equal(m31.count, 18);
+  // One exposure per detector in each of three passes; same-moment frames ordered by detector.
+  for (const detector of [1, 2, 3, 4, 5, 6]) assert.equal(m31.observations.filter(row => row.energy_bandpassname === `SPHEREx-D${detector}`).length, 3);
+  assert.deepEqual(m31.observations.slice(0, 2).map(row => row.energy_bandpassname), ['SPHEREx-D1', 'SPHEREx-D4']);
 });
 
 test('rejects malformed versions, times, targets, sources and external asset URLs', () => {

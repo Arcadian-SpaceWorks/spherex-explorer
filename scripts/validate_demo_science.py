@@ -1,5 +1,6 @@
 """Offline integrity audit of every published FITS, PNG and provenance reference."""
 import argparse
+from functools import lru_cache
 import json
 from pathlib import Path
 import sys
@@ -8,6 +9,15 @@ from astropy.io import fits
 from PIL import Image
 from backend.app.demo import validate_bundle,asset_path,digest
 from backend.app.fits_worker import process_fits
+
+
+@lru_cache(maxsize=None)
+def discovery_table(sha):
+    """The saved discovery response with this SHA-256 (current tables first, then snapshots)."""
+    directory=Path(__file__).resolve().parents[1]/'demo/discovery'
+    for candidate in [*sorted(directory.glob('*.vot')),*sorted((directory/'snapshots').glob('*.vot'))]:
+        if digest(candidate)==sha: return candidate
+    raise ValueError('Missing discovery snapshot or digest mismatch')
 
 
 def validate(root):
@@ -34,18 +44,20 @@ def validate(root):
             if row.acquisition:
                 from scripts.discover_demo import read_table
                 from astropy.time import Time
-                directory=Path(__file__).resolve().parents[1]/'demo/discovery'
-                snapshot=directory/f'{target.id}.vot'
-                if not snapshot.exists() or digest(snapshot)!=row.acquisition.discovery_sha256:
-                    snapshot=directory/'snapshots'/f'{row.acquisition.discovery_sha256}.vot'
-                if not snapshot.exists() or digest(snapshot)!=row.acquisition.discovery_sha256: raise ValueError('Missing discovery snapshot or digest mismatch')
-                table=read_table(snapshot)
+                a=row.acquisition
+                table=read_table(discovery_table(a.discovery_sha256))
                 matches=[r for r in table if str(r['access_url'])==row.access_url and str(r['obs_id'])==row.obs_id]
                 if len(matches)!=1: raise ValueError('Observation not uniquely present in original discovery response')
                 record=matches[0]
-                if str(record['obs_collection'])!=row.acquisition.data_release: raise ValueError('Release differs from discovery')
+                if str(record['obs_collection'])!=a.data_release: raise ValueError('Release differs from discovery')
                 if abs(Time(row.observed_at_utc.removesuffix('Z'),format='isot',scale='utc').mjd-float(record['t_min']))*86400>0.1: raise ValueError('Discovery/FITS time mismatch')
-                if target.id=='3i-atlas' and (abs(float(record['comet_ra'])-row.acquisition.ra)>1e-8 or abs(float(record['comet_dec'])-row.acquisition.dec)>1e-8): raise ValueError('Comet position differs from official ephemeris table')
+                if 'comet_ra' in table.colnames:
+                    # A tracking cutout is centred on the official prediction; a fixed-sky cutout records it.
+                    expected=(a.ra,a.dec) if a.position_mode=='moving-target-centered' else (a.predicted_ra,a.predicted_dec)
+                    if expected[0] is None or abs(float(record['comet_ra'])-expected[0])>1e-8 or abs(float(record['comet_dec'])-expected[1])>1e-8: raise ValueError('Comet position differs from official ephemeris table')
+                if a.predicted_ra is not None:
+                    predicted=process_fits('target',path=str(path),ra=a.predicted_ra,dec=a.predicted_dec,max_pixels=8_000_000)
+                    if predicted['status']!='inside': raise ValueError('Predicted source position outside WCS')
             position=row.acquisition or target
             placed=process_fits('target',path=str(path),ra=position.ra,dec=position.dec,max_pixels=8_000_000)
             if placed['status']!='inside': raise ValueError('Frame reference outside WCS')

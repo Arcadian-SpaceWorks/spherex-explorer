@@ -1,0 +1,679 @@
+{
+  "target": {
+    "id": "m31",
+    "name": "M31 — Andromeda Galaxy core",
+    "ra": 10.684708333333333,
+    "dec": 41.26875,
+    "coordinate_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+    "science_context": "Three SPHEREx survey passes (July 2025, December 2025, July 2026). Each pass has one exposure in every detector pair: D1/D4 (about 0.75–0.9 and 2.4–3.0 µm at the core), D2/D5 and D3/D6. The two detectors of a pair see the same moment through a dichroic. Within a detector, exposures were chosen so the wavelength at the core matches another pass where the archive allows it. Brightness differences between passes follow the wavelength at the target, not time; no variability is claimed."
+  },
+  "cutout_deg": 0.437,
+  "grid_deg": 0.3,
+  "min_grid_coverage": 0.95,
+  "wavelength_match_um": 0.02,
+  "discovery_table": "demo/discovery/m31.vot",
+  "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+  "rules": {
+    "epochs": [
+      [
+        "July 2025",
+        "2025-07-01",
+        "2025-09-01"
+      ],
+      [
+        "December 2025",
+        "2025-12-01",
+        "2026-03-01"
+      ],
+      [
+        "July 2026",
+        "2026-07-01",
+        "2026-09-01"
+      ]
+    ],
+    "releases": [
+      "spherex_qr2"
+    ],
+    "groups": [
+      {
+        "detector": 1,
+        "partner": 4,
+        "keep": [
+          "2025W28_1B_0480_4",
+          "2026W01_1A_0471_1",
+          "2026W28_2A_0117_1"
+        ]
+      },
+      {
+        "detector": 2,
+        "partner": 5,
+        "candidates": 4,
+        "quota": 1
+      },
+      {
+        "detector": 3,
+        "partner": 6,
+        "candidates": 4,
+        "quota": 1
+      }
+    ],
+    "seed_pairs": 1
+  },
+  "frames": [
+    {
+      "obs_id": "2025W28_1B_0480_4",
+      "detector": 1,
+      "epoch": "July 2025",
+      "observed_at_utc": "2025-07-09T14:56:47.965",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-260",
+      "sha256": "77c0421b6d3748deb3cb5cfc75db9c126a7b4e48c5fa9fe49fac46824f85c0e7",
+      "wavelength_um_at_centre": 0.7502265325938458,
+      "wavelength_um_at_marker": 0.7502265325938458,
+      "grid_coverage": 0.9731,
+      "predicted": null,
+      "selected": true,
+      "reason": "curated exposure (validated by scripts/smoke_compare.py)"
+    },
+    {
+      "obs_id": "2025W28_1B_0480_4",
+      "detector": 4,
+      "epoch": "July 2025",
+      "observed_at_utc": "2025-07-09T14:56:47.965",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-260",
+      "sha256": "fc8d60ffb462e67fd8e38bff2d87b1ee49e3ed7479513d00fc4517b99ac99b88",
+      "wavelength_um_at_centre": 2.44189982205359,
+      "wavelength_um_at_marker": 2.44189982205359,
+      "grid_coverage": 0.7227,
+      "predicted": null,
+      "selected": true,
+      "reason": "simultaneous D4 exposure of 2025W28_1B_0480_4 D1 (same moment through the dichroic)"
+    },
+    {
+      "obs_id": "2025W28_2A_0555_3",
+      "detector": 2,
+      "epoch": "July 2025",
+      "observed_at_utc": "2025-07-13T13:28:30.140",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-260",
+      "sha256": "3c85cc03b285ed60f9e51bffe712f79894fc309213b2d8f2a81a3e12c851fd10",
+      "wavelength_um_at_centre": 1.1003623680035577,
+      "wavelength_um_at_marker": 1.1003623680035577,
+      "grid_coverage": 0.6695,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2025W29_1A_0054_2",
+      "detector": 2,
+      "epoch": "July 2025",
+      "observed_at_utc": "2025-07-14T05:45:56.780",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-260",
+      "sha256": "9d811996eb23c1c447e3ae841baed451a308ca3a8bef703f02024e2bf9b9ca0f",
+      "wavelength_um_at_centre": 1.610893102108628,
+      "wavelength_um_at_marker": 1.610893102108628,
+      "grid_coverage": 0.9991,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2025W29_1A_0186_2",
+      "detector": 2,
+      "epoch": "July 2025",
+      "observed_at_utc": "2025-07-14T23:39:37.682",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-260",
+      "sha256": "1e6305ad36ed3f39ac301786b6bd49f1f84c0d7d34b4513cd904f803a1b7d1bc",
+      "wavelength_um_at_centre": 1.2669072477105254,
+      "wavelength_um_at_marker": 1.2669072477105254,
+      "grid_coverage": 0.9986,
+      "predicted": null,
+      "selected": true,
+      "reason": "wavelength at the target matches 2026W01_1A_0392_2 D2 (December 2025) within 0.0195 µm"
+    },
+    {
+      "obs_id": "2025W29_1A_0186_2",
+      "detector": 5,
+      "epoch": "July 2025",
+      "observed_at_utc": "2025-07-14T23:39:37.682",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-260",
+      "sha256": "38206c74f02810f73f645062733ce20c930ef10d1ca527e0c32bea8060132512",
+      "wavelength_um_at_centre": 4.017291775393509,
+      "wavelength_um_at_marker": 4.017291775393509,
+      "grid_coverage": 0.9914,
+      "predicted": null,
+      "selected": true,
+      "reason": "simultaneous D5 exposure of 2025W29_1A_0186_2 D2 (same moment through the dichroic)"
+    },
+    {
+      "obs_id": "2025W29_2A_0202_1",
+      "detector": 3,
+      "epoch": "July 2025",
+      "observed_at_utc": "2025-07-18T07:29:50.571",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-262",
+      "sha256": "f42964802a7d4ac76ee6c09d62ffde8a642c194756c9f264f33778b164fc3804",
+      "wavelength_um_at_centre": 2.2345447412995876,
+      "wavelength_um_at_marker": 2.2345447412995876,
+      "grid_coverage": 0.9991,
+      "predicted": null,
+      "selected": true,
+      "reason": "closest wavelength at the target to another epoch (0.0222 µm away)"
+    },
+    {
+      "obs_id": "2025W29_2A_0202_1",
+      "detector": 6,
+      "epoch": "July 2025",
+      "observed_at_utc": "2025-07-18T07:29:50.571",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-261",
+      "sha256": "7f543283a5fe13d2e8348c70a506010e43c32ac8a49898248e43de6c9317504a",
+      "wavelength_um_at_centre": 4.8722108218768545,
+      "wavelength_um_at_marker": 4.8722108218768545,
+      "grid_coverage": 0.9945,
+      "predicted": null,
+      "selected": true,
+      "reason": "simultaneous D6 exposure of 2025W29_2A_0202_1 D3 (same moment through the dichroic)"
+    },
+    {
+      "obs_id": "2025W29_2A_0215_3",
+      "detector": 3,
+      "epoch": "July 2025",
+      "observed_at_utc": "2025-07-18T09:09:16.691",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-262",
+      "sha256": "24556a8a349094c3b5d46048a0f3ceab2e0df479a9e16c10259e5a95afb3fff2",
+      "wavelength_um_at_centre": 2.1839022723501524,
+      "wavelength_um_at_marker": 2.1839022723501524,
+      "grid_coverage": 0.9987,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2025W30_1B_0007_1",
+      "detector": 2,
+      "epoch": "July 2025",
+      "observed_at_utc": "2025-07-21T00:42:47.448",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-262",
+      "sha256": "77addc16da91749738ada3547e973098dfc9b12f74486bdd9d44344b3e35a742",
+      "wavelength_um_at_centre": 1.3910802802795454,
+      "wavelength_um_at_marker": 1.3910802802795454,
+      "grid_coverage": 0.9984,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2025W30_1B_0160_4",
+      "detector": 3,
+      "epoch": "July 2025",
+      "observed_at_utc": "2025-07-21T22:03:21.006",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-262",
+      "sha256": "5fc01e47f02f42f3636efbb6ac9511de20485bee56a3e7e287159e7a9e558447",
+      "wavelength_um_at_centre": 1.8435869313276763,
+      "wavelength_um_at_marker": 1.8435869313276763,
+      "grid_coverage": 0.9978,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2025W33_2C_0177_1",
+      "detector": 3,
+      "epoch": "July 2025",
+      "observed_at_utc": "2025-08-15T05:34:35.371",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-267",
+      "sha256": "efcbd287ea0661c499448ea8dc391eb1108db68afc45c8f1021138cedd8ef08b",
+      "wavelength_um_at_centre": 2.085657292510409,
+      "wavelength_um_at_marker": 2.085657292510409,
+      "grid_coverage": 0.9988,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2025W51_1A_0684_1",
+      "detector": 3,
+      "epoch": "December 2025",
+      "observed_at_utc": "2025-12-18T05:07:25.719",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v21-2025-354",
+      "sha256": "b2fd598996eda4474473373db6de693d3fd40fb0d382572fd0edb811c163b1b9",
+      "wavelength_um_at_centre": 1.9788548786671243,
+      "wavelength_um_at_marker": 1.9788548786671243,
+      "grid_coverage": 0.9864,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2025W51_2A_0258_3",
+      "detector": 3,
+      "epoch": "December 2025",
+      "observed_at_utc": "2025-12-19T18:40:46.552",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v21-2025-357",
+      "sha256": "1ce8c812cb342ce65a309ca62079b36c186f8c72f9f766929840bba0b92e886b",
+      "wavelength_um_at_centre": 2.2701703300703464,
+      "wavelength_um_at_marker": 2.2701703300703464,
+      "grid_coverage": 0.9901,
+      "predicted": null,
+      "selected": true,
+      "reason": "wavelength at the target matches 2026W29_2A_0552_3 D3 (July 2026) within 0.0134 µm"
+    },
+    {
+      "obs_id": "2025W51_2A_0258_3",
+      "detector": 6,
+      "epoch": "December 2025",
+      "observed_at_utc": "2025-12-19T18:40:46.552",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v21-2025-357",
+      "sha256": "4a5c182f2bbb8a7eceac919b8c37f04397b8b3c1f415effffd8d6eb154f8bf3e",
+      "wavelength_um_at_centre": 4.897084489140297,
+      "wavelength_um_at_marker": 4.897084489140297,
+      "grid_coverage": 0.9811,
+      "predicted": null,
+      "selected": true,
+      "reason": "simultaneous D6 exposure of 2025W51_2A_0258_3 D3 (same moment through the dichroic)"
+    },
+    {
+      "obs_id": "2025W51_2A_0653_1",
+      "detector": 2,
+      "epoch": "December 2025",
+      "observed_at_utc": "2025-12-21T14:36:00.237",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v21-2025-357",
+      "sha256": "ba4a3063e768394344216fe1a8bf6139b3a72c4a9461fd0fd5ceac60f5f6423c",
+      "wavelength_um_at_centre": 1.3071492383505956,
+      "wavelength_um_at_marker": 1.3071492383505956,
+      "grid_coverage": 0.9924,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2025W52_1A_0344_3",
+      "detector": 3,
+      "epoch": "December 2025",
+      "observed_at_utc": "2025-12-23T17:11:42.632",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v21-2025-363",
+      "sha256": "c065154dfe8fb5f661f30c419b10a2f13a9b96c81e5272fea83d2028d9f2a350",
+      "wavelength_um_at_centre": 1.6974983883127712,
+      "wavelength_um_at_marker": 1.6974983883127712,
+      "grid_coverage": 0.9863,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2025W52_1A_0539_3",
+      "detector": 2,
+      "epoch": "December 2025",
+      "observed_at_utc": "2025-12-24T16:00:54.581",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v21-2025-363",
+      "sha256": "80b483fd562fac7e18355db922318e681309ad3d91b8d3eb880210a3a7010c48",
+      "wavelength_um_at_centre": 1.505506638762868,
+      "wavelength_um_at_marker": 1.505506638762868,
+      "grid_coverage": 0.9928,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2025W52_2A_0366_1",
+      "detector": 3,
+      "epoch": "December 2025",
+      "observed_at_utc": "2025-12-27T07:32:22.538",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v22-2026-006",
+      "sha256": "3e49fdc92535bdfaa28e515b10c9b1e5e5ed0fb9023907ee214d6678ea2b0c8b",
+      "wavelength_um_at_centre": 1.948700113092006,
+      "wavelength_um_at_marker": 1.948700113092006,
+      "grid_coverage": 0.9892,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2025W52_2A_0379_3",
+      "detector": 2,
+      "epoch": "December 2025",
+      "observed_at_utc": "2025-12-27T09:11:37.913",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v22-2026-006",
+      "sha256": "350493980ed73fd9bca0d65ac24635505d819ccbd68222d4bd8d2fd045d6eb84",
+      "wavelength_um_at_centre": 1.1172367099971858,
+      "wavelength_um_at_marker": 1.1172367099971858,
+      "grid_coverage": 0.9919,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2026W01_1A_0392_2",
+      "detector": 2,
+      "epoch": "December 2025",
+      "observed_at_utc": "2025-12-30T20:16:17.501",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v22-2026-007",
+      "sha256": "bd45220e8653fbf1d589c8da6987baa34a57128f2be17608c7eb6e341a552570",
+      "wavelength_um_at_centre": 1.2864443537603432,
+      "wavelength_um_at_marker": 1.2864443537603432,
+      "grid_coverage": 0.9916,
+      "predicted": null,
+      "selected": true,
+      "reason": "wavelength at the target matches 2025W29_1A_0186_2 D2 (July 2025) within 0.0195 µm"
+    },
+    {
+      "obs_id": "2026W01_1A_0392_2",
+      "detector": 5,
+      "epoch": "December 2025",
+      "observed_at_utc": "2025-12-30T20:16:17.501",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v22-2026-007",
+      "sha256": "32a1a2443a58155e232ad6ebbcf24a140e5a9db8b4cba41811fd7885f6925933",
+      "wavelength_um_at_centre": 4.040311823210924,
+      "wavelength_um_at_marker": 4.040311823210924,
+      "grid_coverage": 0.9826,
+      "predicted": null,
+      "selected": true,
+      "reason": "simultaneous D5 exposure of 2026W01_1A_0392_2 D2 (same moment through the dichroic)"
+    },
+    {
+      "obs_id": "2026W01_1A_0471_1",
+      "detector": 1,
+      "epoch": "December 2025",
+      "observed_at_utc": "2025-12-31T06:00:22.121",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v22-2026-007",
+      "sha256": "6591bbba39f7e919e90c65a2c5a075f8271b290083506d6ce3f864f47b04a42b",
+      "wavelength_um_at_centre": 0.8945705926062897,
+      "wavelength_um_at_marker": 0.8945705926062897,
+      "grid_coverage": 0.9906,
+      "predicted": null,
+      "selected": true,
+      "reason": "curated exposure (validated by scripts/smoke_compare.py)"
+    },
+    {
+      "obs_id": "2026W01_1A_0471_1",
+      "detector": 4,
+      "epoch": "December 2025",
+      "observed_at_utc": "2025-12-31T06:00:22.121",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v22-2026-007",
+      "sha256": "39a73c7e45b3d663c136dd1176f27972eb4345c629bbdf98e2968b84e86f0b0e",
+      "wavelength_um_at_centre": 2.979926302579743,
+      "wavelength_um_at_marker": 2.979926302579743,
+      "grid_coverage": 0.9687,
+      "predicted": null,
+      "selected": true,
+      "reason": "simultaneous D4 exposure of 2026W01_1A_0471_1 D1 (same moment through the dichroic)"
+    },
+    {
+      "obs_id": "2026W28_2A_0117_1",
+      "detector": 1,
+      "epoch": "July 2026",
+      "observed_at_utc": "2026-07-10T00:02:31.613",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v25-2026-195",
+      "sha256": "88d42086353e66209bcb114504871b0ad979e60273a56511740b77b94eb94e90",
+      "wavelength_um_at_centre": 0.8934645045347931,
+      "wavelength_um_at_marker": 0.8934645045347931,
+      "grid_coverage": 0.9905,
+      "predicted": null,
+      "selected": true,
+      "reason": "curated exposure (validated by scripts/smoke_compare.py)"
+    },
+    {
+      "obs_id": "2026W28_2A_0117_1",
+      "detector": 4,
+      "epoch": "July 2026",
+      "observed_at_utc": "2026-07-10T00:02:31.613",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v25-2026-195",
+      "sha256": "5af39570aacfbbfd9036c520b71d3bbcfb93faf91da92a205107da2de4a65c1a",
+      "wavelength_um_at_centre": 2.97512416499149,
+      "wavelength_um_at_marker": 2.97512416499149,
+      "grid_coverage": 0.9736,
+      "predicted": null,
+      "selected": true,
+      "reason": "simultaneous D4 exposure of 2026W28_2A_0117_1 D1 (same moment through the dichroic)"
+    },
+    {
+      "obs_id": "2026W29_1A_0252_1",
+      "detector": 2,
+      "epoch": "July 2026",
+      "observed_at_utc": "2026-07-14T06:42:17.995",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v25-2026-203",
+      "sha256": "8616ae2600306e8e55c073dc4843ef61b79bdd605eb500cd3da45be28c04c5dd",
+      "wavelength_um_at_centre": 1.341059609419298,
+      "wavelength_um_at_marker": 1.341059609419298,
+      "grid_coverage": 0.9932,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2026W29_1A_0312_4",
+      "detector": 2,
+      "epoch": "July 2026",
+      "observed_at_utc": "2026-07-14T14:56:45.900",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v25-2026-203",
+      "sha256": "35c618d76e1d8f9c0e5a55fd070b214f472dfb3b13e2d7a8497cb4f53b86d35a",
+      "wavelength_um_at_centre": 1.1925416581805974,
+      "wavelength_um_at_marker": 1.1925416581805974,
+      "grid_coverage": 0.9924,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2026W29_1A_0443_1",
+      "detector": 2,
+      "epoch": "July 2026",
+      "observed_at_utc": "2026-07-15T07:07:45.754",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v25-2026-203",
+      "sha256": "2241ac023386063231a278a1992a8b75c9a5f7c490ca857d09f2df59dde8fe95",
+      "wavelength_um_at_centre": 1.2209713335500756,
+      "wavelength_um_at_marker": 1.2209713335500756,
+      "grid_coverage": 0.9934,
+      "predicted": null,
+      "selected": true,
+      "reason": "closest wavelength at the target to another epoch (0.0459 µm away)"
+    },
+    {
+      "obs_id": "2026W29_1A_0443_1",
+      "detector": 5,
+      "epoch": "July 2026",
+      "observed_at_utc": "2026-07-15T07:07:45.754",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v25-2026-203",
+      "sha256": "b312c9de7bdb20a539b178d0c86fd60912e6ca72dc4dd52f5516cb1dedcec114",
+      "wavelength_um_at_centre": 3.9630217545354096,
+      "wavelength_um_at_marker": 3.9630217545354096,
+      "grid_coverage": 0.9817,
+      "predicted": null,
+      "selected": true,
+      "reason": "simultaneous D5 exposure of 2026W29_1A_0443_1 D2 (same moment through the dichroic)"
+    },
+    {
+      "obs_id": "2026W29_1A_0457_3",
+      "detector": 2,
+      "epoch": "July 2026",
+      "observed_at_utc": "2026-07-15T08:50:29.874",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v25-2026-203",
+      "sha256": "bbf342d2207a8141e959767df1d613885ec45f3086cf9e727a5b8aaa3809ff36",
+      "wavelength_um_at_centre": 1.6294783786682208,
+      "wavelength_um_at_marker": 1.6294783786682208,
+      "grid_coverage": 0.8861,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2026W29_2A_0552_1",
+      "detector": 3,
+      "epoch": "July 2026",
+      "observed_at_utc": "2026-07-19T05:38:14.270",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v25-2026-206",
+      "sha256": "b3639f564746625531010e09d2be2745ec3587240fd25ab6eec31001855cf7dd",
+      "wavelength_um_at_centre": 2.1553308681349095,
+      "wavelength_um_at_marker": 2.1553308681349095,
+      "grid_coverage": 0.9884,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2026W29_2A_0552_2",
+      "detector": 3,
+      "epoch": "July 2026",
+      "observed_at_utc": "2026-07-19T05:40:23.200",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v25-2026-206",
+      "sha256": "0b9f5a082fc436ef163b8e0cbd9b2866ed2c869bfba1f3d1f6cfaaff9dad2a26",
+      "wavelength_um_at_centre": 2.205980127429826,
+      "wavelength_um_at_marker": 2.205980127429826,
+      "grid_coverage": 0.9884,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2026W29_2A_0552_3",
+      "detector": 3,
+      "epoch": "July 2026",
+      "observed_at_utc": "2026-07-19T05:42:32.131",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v25-2026-206",
+      "sha256": "447f7c8ec542554c8549bce7e0322c0c2cfd8d217a622ade9815694bdbbe6131",
+      "wavelength_um_at_centre": 2.2567921351496922,
+      "wavelength_um_at_marker": 2.2567921351496922,
+      "grid_coverage": 0.9875,
+      "predicted": null,
+      "selected": true,
+      "reason": "wavelength at the target matches 2025W51_2A_0258_3 D3 (December 2025) within 0.0134 µm"
+    },
+    {
+      "obs_id": "2026W29_2A_0552_3",
+      "detector": 6,
+      "epoch": "July 2026",
+      "observed_at_utc": "2026-07-19T05:42:32.131",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v25-2026-206",
+      "sha256": "96ef901c8cb8e24b6fb235fcf555da5c10ec7b59f859d9d113ed3aebd65324f4",
+      "wavelength_um_at_centre": 4.887948946683921,
+      "wavelength_um_at_marker": 4.887948946683921,
+      "grid_coverage": 0.983,
+      "predicted": null,
+      "selected": true,
+      "reason": "simultaneous D6 exposure of 2026W29_2A_0552_3 D3 (same moment through the dichroic)"
+    },
+    {
+      "obs_id": "2026W29_2A_0552_4",
+      "detector": 3,
+      "epoch": "July 2026",
+      "observed_at_utc": "2026-07-19T05:44:41.062",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v25-2026-206",
+      "sha256": "74aeb9a5aefb180fd4c8bb3864c65c3571a43a8b860b87d7b3874960272b3769",
+      "wavelength_um_at_centre": 2.309123505707269,
+      "wavelength_um_at_marker": 2.309123505707269,
+      "grid_coverage": 0.9872,
+      "predicted": null,
+      "selected": false,
+      "reason": "not selected"
+    }
+  ],
+  "failures": [],
+  "inputs": [
+    {
+      "fits": "acquired/m31/56406638a68deca1a46d221ddc19b2e62fb4701e24e956cbf4d482d1da65416f/original.fits",
+      "metadata": "source-records/77c0421b6d3748deb3cb5cfc75db9c126a7b4e48c5fa9fe49fac46824f85c0e7.json"
+    },
+    {
+      "fits": "acquired/m31/01b3cd517c73feafb767ae791da03bd579eebb05839aafc5ff396f4ff9dabac3/original.fits",
+      "metadata": "source-records/fc8d60ffb462e67fd8e38bff2d87b1ee49e3ed7479513d00fc4517b99ac99b88.json"
+    },
+    {
+      "fits": "acquired/m31/47c7765a147bb127b3534b76cfbb694b81811da3e1e3eca5ad1261662a17b71c/original.fits",
+      "metadata": "source-records/1e6305ad36ed3f39ac301786b6bd49f1f84c0d7d34b4513cd904f803a1b7d1bc.json"
+    },
+    {
+      "fits": "acquired/m31/ed4508253cab0138a2100022a0fe427ae1ced4f03c910fa1a3a0db55274fcc82/original.fits",
+      "metadata": "source-records/38206c74f02810f73f645062733ce20c930ef10d1ca527e0c32bea8060132512.json"
+    },
+    {
+      "fits": "acquired/m31/387774b0c459c0ad0f7f7a8b0ee339d70bd45becc14b823648698bf53de7aa32/original.fits",
+      "metadata": "source-records/f42964802a7d4ac76ee6c09d62ffde8a642c194756c9f264f33778b164fc3804.json"
+    },
+    {
+      "fits": "acquired/m31/334789ff1838649a103b6b071e40d8af74d77722205d1d5d99320f6e1baf3b5e/original.fits",
+      "metadata": "source-records/7f543283a5fe13d2e8348c70a506010e43c32ac8a49898248e43de6c9317504a.json"
+    },
+    {
+      "fits": "acquired/m31/536a548a4888b51a1c9f42463fe4a2d04d3d8867f42a344b247b740dc4758da0/original.fits",
+      "metadata": "source-records/1ce8c812cb342ce65a309ca62079b36c186f8c72f9f766929840bba0b92e886b.json"
+    },
+    {
+      "fits": "acquired/m31/f0e62d0622b3b05e9385650df5a704e678eb2e1d7020f1991b8daef81a5ba1f5/original.fits",
+      "metadata": "source-records/4a5c182f2bbb8a7eceac919b8c37f04397b8b3c1f415effffd8d6eb154f8bf3e.json"
+    },
+    {
+      "fits": "acquired/m31/cf16484898083f8524011c3ed57e4ac7a87a5fbd7a49649cec6922f29f2b896a/original.fits",
+      "metadata": "source-records/bd45220e8653fbf1d589c8da6987baa34a57128f2be17608c7eb6e341a552570.json"
+    },
+    {
+      "fits": "acquired/m31/f1307689a24d0285dcdd7d733a3d35763d7f021f13c488674336a5151979c6e6/original.fits",
+      "metadata": "source-records/32a1a2443a58155e232ad6ebbcf24a140e5a9db8b4cba41811fd7885f6925933.json"
+    },
+    {
+      "fits": "acquired/m31/05e95e4bd205bba38cb5418cad60d754ad9599cbc149b140bc3f5d9ed7836416/original.fits",
+      "metadata": "source-records/6591bbba39f7e919e90c65a2c5a075f8271b290083506d6ce3f864f47b04a42b.json"
+    },
+    {
+      "fits": "acquired/m31/42af2d0833fa237a45187df543c67b5d0c93b33dd9dca44d40f021b999f3bd24/original.fits",
+      "metadata": "source-records/39a73c7e45b3d663c136dd1176f27972eb4345c629bbdf98e2968b84e86f0b0e.json"
+    },
+    {
+      "fits": "acquired/m31/daed8f1689a20bf9d540c9de85322271f515b795761f99e1816e6b71cbaeff0b/original.fits",
+      "metadata": "source-records/88d42086353e66209bcb114504871b0ad979e60273a56511740b77b94eb94e90.json"
+    },
+    {
+      "fits": "acquired/m31/4f3c3ba025a8c8889beeef1ed63ea5448d19ff11d1351ec904dce824a9465a7b/original.fits",
+      "metadata": "source-records/5af39570aacfbbfd9036c520b71d3bbcfb93faf91da92a205107da2de4a65c1a.json"
+    },
+    {
+      "fits": "acquired/m31/d07bb1c4088b725a583362407b328c9c0413ee9494bc86e66586176b6d5c5e53/original.fits",
+      "metadata": "source-records/2241ac023386063231a278a1992a8b75c9a5f7c490ca857d09f2df59dde8fe95.json"
+    },
+    {
+      "fits": "acquired/m31/8dcc501b177c5f6dcc9ef7a385e9009b2717491b71624e3ff14454f5ea04c82d/original.fits",
+      "metadata": "source-records/b312c9de7bdb20a539b178d0c86fd60912e6ca72dc4dd52f5516cb1dedcec114.json"
+    },
+    {
+      "fits": "acquired/m31/a93893d61c3349a678292a2bdd5a604209dad31896250dd12ebc75fe58458a78/original.fits",
+      "metadata": "source-records/447f7c8ec542554c8549bce7e0322c0c2cfd8d217a622ade9815694bdbbe6131.json"
+    },
+    {
+      "fits": "acquired/m31/9f1fc2e3ae7fe5802f7560ef3018fb8d9736dffcbbc35063eb300c4aa218a421/original.fits",
+      "metadata": "source-records/96ef901c8cb8e24b6fb235fcf555da5c10ec7b59f859d9d113ed3aebd65324f4.json"
+    }
+  ]
+}

@@ -69,16 +69,19 @@ class CompareService:
             try:
                 manifest = validate_bundle(DEFAULT_ROOT, check_files=False)
                 observation = next((o for t in manifest.targets for o in t.observations if o.image_id == ref['demo_image_id']), None)
+                target_id = next((t.id for t in manifest.targets if any(o.image_id == ref['demo_image_id'] for o in t.observations)),None)
                 if observation is None:
                     raise ValueError('Unknown preloaded observation')
                 path = asset_path(DEFAULT_ROOT, observation.fits_path)
                 if digest(path) != observation.fits_sha256:
                     raise ValueError('Preloaded FITS checksum mismatch')
                 from urllib.parse import parse_qs, urlsplit
+                from .analysis.moving_target import verified_prediction
+                moving = verified_prediction(observation) if target_id == '3i-atlas' else None
                 size = float(parse_qs(urlsplit(observation.source_url).query)['size'][0].removesuffix('deg'))
                 return {'image_id': observation.image_id, 'sha256': observation.fits_sha256,
                         'access_url': observation.access_url, 'fits_url': observation.source_url,
-                        'cutout': {'size_deg': size}, '_demo_path': path}
+                        'cutout': {'size_deg': size}, '_demo_path': path, '_moving': moving}
             except (ValueError, OSError, KeyError) as exc:
                 raise ImageError('Preloaded observation unavailable or failed verification.', 422, 'demo_invalid') from exc
         if ref.get('image_id'):
@@ -108,14 +111,19 @@ class CompareService:
         path.touch()
         return json.loads((path / 'metadata.json').read_text())
 
-    def compare(self, a, b, ra, dec, size_deg, mode, match_scale=False):
+    def compare(self, a, b, ra, dec, size_deg, mode, match_scale=False, tracking_view='fixed_sky'):
         if not self.slots.acquire(blocking=False):
             raise ImageError('The comparison service is busy. Please retry shortly.', 503, 'compare_busy')
         try:
             inputs = [self._resolve(ref, ra, dec, size_deg) for ref in (a, b)]
-            key = json.dumps({'v': 'compare-v5-final-real-analysis', 'a': inputs[0]['sha256'], 'b': inputs[1]['sha256'],
+            moving=[meta.get('_moving') for meta in inputs]
+            if any(moving) and not all(moving):
+                raise ImageError('Choose two observations of the same moving target.',422,'moving_pair_required')
+            if tracking_view=='comet_centered' and not all(moving):
+                raise ImageError('Comet centering needs verified per-exposure predictions.',422,'prediction_required')
+            key = json.dumps({'v': 'compare-v7-comet-final', 'a': inputs[0]['sha256'], 'b': inputs[1]['sha256'],
                               'ra': round(ra, 6), 'dec': round(dec, 6), 'size': round(size_deg, 4),
-                              'mode': mode, 'match_scale': bool(match_scale)}, sort_keys=True)
+                              'mode': mode, 'tracking_view': tracking_view, 'predictions':moving, 'match_scale': bool(match_scale)}, sort_keys=True)
             compare_id = hashlib.sha256(key.encode()).hexdigest()
             self.settings.cache_dir.mkdir(parents=True, exist_ok=True)
             with self.lock:
@@ -134,7 +142,7 @@ class CompareService:
                                       size_deg=size_deg, mode=mode, out_dir=str(working.resolve()),
                                       source_a='verified_local_irsa_cutout' if inputs[0].get('_demo_path') else ('irsa_cutout' if inputs[0].get('cutout') else 'irsa_full_file'),
                                       source_b='verified_local_irsa_cutout' if inputs[1].get('_demo_path') else ('irsa_cutout' if inputs[1].get('cutout') else 'irsa_full_file'),
-                                      match_scale=bool(match_scale))
+                                      match_scale=bool(match_scale), tracking_view=tracking_view, moving_a=moving[0], moving_b=moving[1])
                 for role in 'ab':
                     (working / f'{role}.fits').unlink()  # Keep only small derived products.
                 frames = []

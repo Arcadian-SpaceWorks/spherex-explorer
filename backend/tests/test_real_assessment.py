@@ -13,7 +13,8 @@ from backend.app.image_download import ImageSettings
 def test_independent_real_pair_gate_and_cache(tmp_path):
     manifest=json.loads(Path('frontend/public/demo/manifest.json').read_text())
     rows=next(t for t in manifest['targets'] if t['id']=='m31')['observations']
-    a,b=rows[2],rows[4] # D1, separate real dates
+    a=next(o for o in rows if o['obs_id']=='2026W01_1A_0471_1' and o['detector']==1)
+    b=next(o for o in rows if o['obs_id']=='2026W28_2A_0117_1' and o['detector']==1)
     service=CompareService(ImageService(ImageSettings(cache_dir=tmp_path/'images')),
                            CompareCacheSettings(cache_dir=tmp_path/'comparison'))
     app.dependency_overrides[get_compare_service]=lambda:service

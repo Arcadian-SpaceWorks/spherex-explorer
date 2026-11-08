@@ -95,8 +95,10 @@ def prepare(config_path, output):
                 acquisition = None
                 if 'mission' in record:
                     from backend.app.demo import Acquisition
+                    # ra/dec is the cutout centre; a moving source's own position is predicted_ra/dec.
                     acquisition = Acquisition(**{key: record[key] for key in ('mission', 'data_release', 'calibration', 'position_source', 'position_mode', 'position_note', 'discovery_sha256', 'archive_em_min_m', 'archive_em_max_m')},
-                                              ra=frame_position['ra'], dec=frame_position['dec']).model_dump()
+                                              ra=cutout['ra'], dec=cutout['dec'],
+                                              predicted_ra=record.get('predicted_ra'), predicted_dec=record.get('predicted_dec')).model_dump()
                     meta['acquisition'] = acquisition
                 (directory / 'metadata.json').write_text(json.dumps(meta, indent=2, sort_keys=True, allow_nan=False)+'\n')
                 observation = dict(image_id=image_id, obs_id=meta['observation_id'], access_url=record['access_url'], source_url=source_url,

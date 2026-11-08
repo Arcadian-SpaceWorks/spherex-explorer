@@ -1,5 +1,20 @@
 {
   "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W01_1A_0471_1/D4",
+  "acquisition": {
+    "archive_em_max_m": 3.8473e-06,
+    "archive_em_min_m": 2.4027e-06,
+    "calibration": "l2b-v22-2026-007",
+    "data_release": "spherex_qr2",
+    "dec": 41.26875,
+    "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+    "mission": "SPHEREx",
+    "position_mode": "fixed-sky-region",
+    "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+    "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+    "predicted_dec": null,
+    "predicted_ra": null,
+    "ra": 10.684708
+  },
   "bytes": 6099840,
   "cache_hit": true,
   "center": {

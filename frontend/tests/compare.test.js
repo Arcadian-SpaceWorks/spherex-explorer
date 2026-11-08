@@ -20,7 +20,7 @@ test('detector, separation and identity helpers', () => {
   assert.ok(sameObservation(jan, {...jan}));
   assert.ok(!sameObservation(jan, janD4));
   assert.ok(canPick(jan));
-  assert.ok(!canPick({...jan, demo: {}}));
+  assert.ok(canPick({...jan, demo: {}}));
   assert.ok(!canPick({...jan, access_url: 'not a url'}));
 });
 

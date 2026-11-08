@@ -31,7 +31,7 @@ export function sameObservation(a, b) {
 }
 
 export function canPick(row) {
-  return Boolean(row && !row.demo && usableAccessUrl(row.access_url));
+  return Boolean(row && usableAccessUrl(row.access_url));
 }
 
 /** Wavelength mode for two detectors of one exposure (or within an hour); time mode otherwise. */
@@ -73,14 +73,14 @@ function errorMessage(data, status) {
   return status === 503 ? 'The comparison service is busy. Please retry shortly.' : 'The comparison could not be completed.';
 }
 
-export async function requestComparison({a, b, target, mode, signal, fetchImpl = fetch}) {
+export async function requestComparison({a, b, target, mode, signal, trackingView, fetchImpl = fetch}) {
   if (mode === 'time' && parseUtc(a.observed_at_utc) != null && parseUtc(b.observed_at_utc) != null && parseUtc(a.observed_at_utc) > parseUtc(b.observed_at_utc)) [a,b]=[b,a];
   let response;
   try {
     response = await fetchImpl('/api/compare', {
       method: 'POST', signal, headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({a: a.demo ? {demo_image_id: a.demo.image_id} : {access_url: a.access_url}, b: b.demo ? {demo_image_id: b.demo.image_id} : {access_url: b.access_url},
-        ra: target.ra, dec: target.dec, size_deg: COMPARE_SIZE_DEG, mode}),
+        ra: target.ra, dec: target.dec, size_deg: COMPARE_SIZE_DEG, mode, ...(trackingView ? {tracking_view:trackingView} : {})}),
     });
   } catch (err) {
     if (err?.name === 'AbortError') throw err;
@@ -92,7 +92,7 @@ export async function requestComparison({a, b, target, mode, signal, fetchImpl =
   if (!['ACCEPT', 'WARN', 'REJECT'].includes(data.decision) || !data.previews?.a || !data.previews?.b || data.frames?.length !== 2) {
     throw new Error('The comparison service returned an incomplete result.');
   }
-  for (const [row, frame] of [[a, data.frames[0]], [b, data.frames[1]]]) {
+  for (const [row, frame] of data.moving_target ? [] : [[a, data.frames[0]], [b, data.frames[1]]]) {
     recordTargetWavelength(row, target, Number.isFinite(frame?.wavelength_um)
       ? {status: 'measured', wavelength_um: frame.wavelength_um, bandwidth_um: frame.bandwidth_um ?? null}
       : {status: 'unavailable'});
@@ -108,9 +108,9 @@ export function previousEpoch(frames, index) {
   const wavelength=row=>row.demo?.spectral?.wavelength_um;
   const candidates=frames.slice(0,index).filter(row=>{
     const hours=hoursApart(row,current);
-    if (hours==null || hours<1 || detectorOf(row)!==detectorOf(current) || release(row)!==release(current) || row.obs_collection!==current.obs_collection || sameObservation(row,current)) return false;
+    if (hours==null || hours<(current.demo_target_id==='3i-atlas' ? .01 : 1) || detectorOf(row)!==detectorOf(current) || release(row)!==release(current) || row.obs_collection!==current.obs_collection || sameObservation(row,current)) return false;
     const wa=wavelength(row),wb=wavelength(current);
-    return wa==null || wb==null || Math.abs(wa-wb)<=.02;
+    return current.demo_target_id==='3i-atlas' || wa==null || wb==null || Math.abs(wa-wb)<=.02;
   });
   // Prefer known close target wavelengths; unknown response is never certified by this ranking.
   const delta=row=>wavelength(row)!=null && wavelength(current)!=null ? Math.abs(wavelength(row)-wavelength(current)) : Infinity;

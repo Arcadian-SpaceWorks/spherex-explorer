@@ -36,12 +36,16 @@ def _difference_pixels(data, valid, noise):
 
 
 def compare_files(path_a, path_b, ra, dec, size_deg, mode, out_dir, source_a='file', source_b='file',
-                  match_scale=False):
+                  match_scale=False, tracking_view='fixed_sky', moving_a=None, moving_b=None):
     try:
         grid = common_grid(ra, dec, size_deg)
         cutout_deg = cutout_size_for_grid(size_deg)
-        frames = [load_frame(path_a, ra, dec, cutout_deg, source=source_a),
-                  load_frame(path_b, ra, dec, cutout_deg, source=source_b)]
+        predictions=[moving_a,moving_b]
+        centered=tracking_view=='comet_centered'
+        if centered and not all(predictions):raise ValueError('Verified predictions are required')
+        centers=[(p['ra'],p['dec']) for p in predictions] if centered else [(ra,dec),(ra,dec)]
+        frames = [load_frame(path_a, *centers[0], cutout_deg, source=source_a),
+                  load_frame(path_b, *centers[1], cutout_deg, source=source_b)]
     except FrameError as exc:
         raise ImageError(str(exc), 422, exc.code) from exc
     except ValueError as exc:
@@ -57,6 +61,20 @@ def compare_files(path_a, path_b, ra, dec, size_deg, mode, out_dir, source_a='fi
         if not units_ok:
             check=replace(check, decision='REJECT', difference_allowed=False,
                           reasons=check.reasons+(Reason('incompatible_units','reject','A meaningful subtraction requires both images in MJy/sr.'),))
+    grids=[grid,grid]
+    if centered:
+        grids=[common_grid(*center,size_deg) for center in centers]
+        a,b=[align([f],g)[0] for f,g in zip(frames,grids)]
+        check=replace(check,decision='REJECT' if check.decision=='REJECT' else 'WARN',difference_allowed=False,reasons=check.reasons+(Reason(
+            'comet_centered_no_subtraction','warn','These images follow predicted comet positions; the star background moves. No same-sky subtraction or activity measurement is allowed.'),))
+    moving_report=None
+    if all(predictions):
+        from .moving_target import frame_report,predicted_motion
+        moving_report={'view':tracking_view,'common_sky_grid':not centered,
+                       'frames':[frame_report(path_a,moving_a,grids[0]),frame_report(path_b,moving_b,grids[1])],
+                       'trajectory':predicted_motion(moving_a,moving_b),
+                       'conclusion':'The observation metadata predict that the comet moved between these positions. Its movement has not been independently measured from these images.',
+                       'activity_conclusion':'No calibrated brightness or coma change has been established. Different infrared wavelengths and moving background sources can change appearance.'}
     out = Path(out_dir)
 
     # One shared scale only when the pair may be compared directly; otherwise each frame gets
@@ -80,12 +98,20 @@ def compare_files(path_a, path_b, ra, dec, size_deg, mode, out_dir, source_a='fi
         _save(rgba, out / PREVIEWS['difference'])
         diff_summary = {**result.diagnostics(), 'display': display}
 
-    return {'context': 'real_observation_comparison', 'decision': check.decision, 'validation': check.to_dict(),
+    detection=assess_real_pair(a,b,grid,check)
+    if centered:
+        for item in detection.get('checks',[]):
+            if item['code']=='registration':item['explanation']='These views use separate prediction-centered celestial grids. No stellar registration or subtraction is performed.'
+        detection['registration_diagnostics']={'status':'not_applicable','matches':0,'limitation':'Different celestial grids centered on predictions.'}
+        detection['outcome']='PREDICTION-CENTERED VIEWS ONLY'
+        detection['conclusion']='These views follow the predicted comet position. Moving background stars are not changes in the comet. No astronomical activity change is established.'
+        detection['variance_propagation']={'method':'not_used','limitation':'No same-sky subtraction is performed.'}
+    return {'moving_target':moving_report, 'context': 'real_observation_comparison', 'decision': check.decision, 'validation': check.to_dict(),
             'frames': [dict(frame.summary(), role=role) for role, frame in (('a', a.frame), ('b', b.frame))],
             'grid': grid.summary(), 'cutout_deg_used': cutout_deg, 'overlap_fraction': overlap,
             'stretch': {'method': 'asinh', 'percentiles': [1, 99], 'shared': shared,
                         'a': scalings['a'], 'b': scalings['b']},
             'difference': diff_summary,
-            'detection': assess_real_pair(a, b, grid, check),
+            'detection': detection,
             'previews': {role: name for role, name in PREVIEWS.items()
                          if role != 'difference' or diff_summary is not None}}
