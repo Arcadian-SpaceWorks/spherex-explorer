@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { canPick, detectorOf, formatSeparation, hoursApart, pairHints, requestComparison, sameObservation, suggestMode } from '../src/compareAdapter.js';
+import { canPick, imageRef, detectorOf, formatSeparation, hoursApart, pairHints, requestComparison, sameObservation, suggestMode } from '../src/compareAdapter.js';
 
 // TEST DATA: synthetic archive rows shaped like GET /api/observations results.
 const row = (obs_id, band, observed_at_utc, n = obs_id) => ({obs_id, energy_bandpassname: band, observed_at_utc,
@@ -20,7 +20,8 @@ test('detector, separation and identity helpers', () => {
   assert.ok(sameObservation(jan, {...jan}));
   assert.ok(!sameObservation(jan, janD4));
   assert.ok(canPick(jan));
-  assert.ok(!canPick({...jan, demo: {}}));
+  assert.ok(!canPick({...jan, demo: {}}));  // A demo row needs its preloaded image ID.
+  assert.ok(canPick({...jan, demo: {image_id: 'a'.repeat(64)}}));
   assert.ok(!canPick({...jan, access_url: 'not a url'}));
 });
 
@@ -58,4 +59,15 @@ test('requestComparison reports server messages, validation errors and broken re
   await assert.rejects(call(reply(503, {})), /busy/);
   await assert.rejects(call(reply(200, {decision: 'MAYBE'})), /incomplete/);
   await assert.rejects(call(async () => {throw new TypeError('offline');}), /could not be reached/);
+});
+
+test('demo rows are sent as preloaded image IDs and leave the wavelength store alone', async () => {
+  const demoA = {...jan, demo: {image_id: 'a'.repeat(64)}}, demoB = {...jul, demo: {image_id: 'b'.repeat(64)}};
+  assert.deepEqual(imageRef(demoA), {demo_image_id: 'a'.repeat(64)});
+  assert.deepEqual(imageRef(jan), {access_url: jan.access_url});
+  let sent;
+  const ok = {decision: 'ACCEPT', previews: {a: '/a.png', b: '/b.png', difference: '/d.png'}, frames: [{wavelength_um: 9}, {wavelength_um: 9}]};
+  const fetchImpl = async (url, options) => {sent = JSON.parse(options.body); return {ok: true, json: async () => ok};};
+  await requestComparison({a: demoA, b: demoB, target: {ra: 269.44623, dec: 4.76867}, mode: 'time', fetchImpl});
+  assert.deepEqual([sent.a, sent.b], [{demo_image_id: 'a'.repeat(64)}, {demo_image_id: 'b'.repeat(64)}]);
 });

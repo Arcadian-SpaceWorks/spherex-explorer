@@ -1,7 +1,8 @@
-"""Compare two SPHEREx images held in (or fetched into) the existing image cache.
+"""Compare two SPHEREx images held in (or fetched into) the existing image cache, or preloaded
+in the local demo bundle.
 
-Inputs are resolved through ImageService, so downloads keep its URL allowlist, size limits and
-locks. The comparison itself runs in the isolated FITS worker. Results (metadata and PNGs, no
+Live inputs are resolved through ImageService, so downloads keep its URL allowlist, size limits and
+locks. Demo inputs are read from the validated demo bundle (checksum verified) with no network. The comparison itself runs in the isolated FITS worker. Results (metadata and PNGs, no
 FITS copies) live in a small separate cache keyed by the input checksums and parameters.
 """
 from dataclasses import dataclass
@@ -39,9 +40,10 @@ class CompareCacheSettings:
         return settings
 
 
-def _notes(result, frames):
-    notes = ['Real NASA/IPAC IRSA SPHEREx data, downloaded through this server\'s image cache. '
-             'No motion, variability or discovery is claimed.']
+def _notes(result, frames, demo=False):
+    notes = [('Real NASA/IPAC IRSA SPHEREx cutouts preloaded in the local demo bundle; no network was used. '
+              if demo else 'Real NASA/IPAC IRSA SPHEREx data, downloaded through this server\'s image cache. ')
+             + 'No motion, variability or discovery is claimed.']
     if result['stretch']['shared']:
         notes.append('A and B share one brightness scale, so their brightness can be compared.')
     else:
@@ -57,13 +59,33 @@ def _notes(result, frames):
 
 
 class CompareService:
-    def __init__(self, images, settings=None, *, max_active=2):
+    def __init__(self, images, settings=None, *, max_active=2, demo_root=None):
         self.images = images
         self.settings = settings or CompareCacheSettings.from_env()
+        self.demo_root = demo_root  # None: the app's demo bundle (backend.app.demo.DEFAULT_ROOT).
         self.lock = threading.Lock()
         self.slots = threading.BoundedSemaphore(max_active)
 
+    def _resolve_demo(self, image_id):
+        from . import demo
+        root = Path(self.demo_root or demo.DEFAULT_ROOT)
+        try:
+            manifest = demo.validate_bundle(root, check_files=False)
+            observation = next((o for t in manifest.targets for o in t.observations if o.image_id == image_id), None)
+            if observation is None:
+                raise ImageError('Unknown preloaded image. Reload Demo Mode.', 404, 'demo_missing')
+            path = demo.asset_path(root, observation.fits_path)
+            if not path.is_file() or demo.digest(path) != observation.fits_sha256:
+                raise ValueError('Preloaded FITS missing or checksum mismatch')
+            metadata = json.loads(demo.asset_path(root, observation.metadata_path).read_text())
+        except (OSError, ValueError) as exc:
+            raise ImageError('Preloaded science data unavailable. Validate or prepare the demo bundle.', 503, 'demo_missing') from exc
+        return {'image_id': image_id, 'sha256': observation.fits_sha256, 'cutout': metadata.get('cutout'),
+                'access_url': observation.access_url, 'fits_url': observation.source_url, 'demo': True, 'path': path}
+
     def _resolve(self, ref, ra, dec, size_deg):
+        if ref.get('demo_image_id'):
+            return self._resolve_demo(ref['demo_image_id'])
         if ref.get('image_id'):
             return self.images.metadata(ref['image_id'])
         return self.images.prepare(ref['access_url'], ra, dec, round(cutout_size_for_grid(size_deg), 4))
@@ -96,7 +118,8 @@ class CompareService:
             raise ImageError('The comparison service is busy. Please retry shortly.', 503, 'compare_busy')
         try:
             inputs = [self._resolve(ref, ra, dec, size_deg) for ref in (a, b)]
-            key = json.dumps({'v': 'compare-v1', 'a': inputs[0]['sha256'], 'b': inputs[1]['sha256'],
+            demo = all(meta.get('demo') for meta in inputs)
+            key = json.dumps({'v': 'compare-v1', 'a': inputs[0]['sha256'], 'b': inputs[1]['sha256'], 'demo': demo,
                               'ra': round(ra, 6), 'dec': round(dec, 6), 'size': round(size_deg, 4),
                               'mode': mode, 'match_scale': bool(match_scale)}, sort_keys=True)
             compare_id = hashlib.sha256(key.encode()).hexdigest()
@@ -108,7 +131,10 @@ class CompareService:
             with tempfile.TemporaryDirectory(prefix='.part-', dir=self.settings.cache_dir) as temporary:
                 working = Path(temporary)
                 for role, meta in zip('ab', inputs):
-                    self.images.copy_original(meta['image_id'], working / f'{role}.fits')
+                    if meta.get('demo'):
+                        shutil.copyfile(meta['path'], working / f'{role}.fits')
+                    else:
+                        self.images.copy_original(meta['image_id'], working / f'{role}.fits')
                 result = process_fits('compare', path_a=str((working / 'a.fits').resolve()),
                                       path_b=str((working / 'b.fits').resolve()), ra=ra, dec=dec,
                                       size_deg=size_deg, mode=mode, out_dir=str(working.resolve()),
@@ -121,11 +147,11 @@ class CompareService:
                 for frame, meta in zip(result['frames'], inputs):
                     frames.append({**frame, 'image_id': meta['image_id'], 'access_url': meta.get('access_url'),
                                    'fits_url': meta.get('fits_url'), 'cutout': meta.get('cutout'),
-                                   'sha256': meta['sha256']})
+                                   'sha256': meta['sha256'], 'demo': bool(meta.get('demo'))})
                 previews = {role: (f'/api/compare/{compare_id}/{role}.png' if role in result['previews'] else None)
                             for role in PREVIEW_ROLES}
                 metadata = {**result, 'compare_id': compare_id, 'frames': frames, 'previews': previews,
-                            'notes': _notes(result, frames)}
+                            'notes': _notes(result, frames, demo)}
                 (working / 'metadata.json').write_text(json.dumps(metadata, allow_nan=False))
                 with self.lock:
                     if not (self.settings.cache_dir / compare_id).exists():

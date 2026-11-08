@@ -30,7 +30,7 @@ export default function App() {
     const next = filterDemoResult(demoResult(target, scienceNote), params);
     setFilter(activeFilter); setFilterError('');
     setDemoTargetId(target.id); setSelected({ra:target.ra, dec:target.dec}); setNavigation({ra:target.ra, dec:target.dec});
-    setResult(next); setError(''); setImageObservation(next.observations[0] || null);
+    setResult(next); setError(''); setImageObservation(next.observations[0] || null); setPicks({a: null, b: null});
   }
   function changeMode(next) {
     request.current?.abort(); request.current = null;
@@ -122,9 +122,9 @@ export default function App() {
       {manifest && <p>Reference ICRS RA {selected.ra.toFixed(6)}°, Dec {selected.dec.toFixed(6)}°. For tracking targets this reference is the first prepared frame; each image records its own center. The cutouts below retain native detector orientation and may have different coverage. Live Mode provides the interactive Aladin sky atlas.</p>}
     </section>}
     <ObservationsTable mode={mode} result={result} loading={loading} error={error} selectedObservation={imageObservation} onViewImage={setImageObservation}
-      compare={mode === 'live' ? {...picks, onPick: pick} : null} target={selected}/>
-    {mode === 'live' && result?.count > 0 && <ComparePanel key={`${picks.a?.access_url}|${picks.b?.access_url}|${selected.ra}|${selected.dec}`}
-      picks={picks} target={selected} onRemove={role => setPicks(current => ({...current, [role]: null}))}
+      compare={{...picks, onPick: pick}} target={selected}/>
+    {result?.count > 0 && <ComparePanel key={`${mode}|${picks.a?.access_url}|${picks.b?.access_url}|${selected.ra}|${selected.dec}`}
+      picks={picks} target={selected} demo={mode === 'demo'} onRemove={role => setPicks(current => ({...current, [role]: null}))}
       onSwap={() => setPicks(current => ({a: current.b, b: current.a}))}/>}
     <TemporalImageExplorer result={result} loading={loading} error={error} target={selected}/>
     <ImageInspector observation={imageObservation} target={selected}/></main><footer><span>Arcadian SkyTracker · Milestone 02</span><span>Sky atlas by <a href="https://aladin.cds.unistra.fr/AladinLite/">Aladin Lite / CDS</a> · DSS2 imagery · Observations from <a href="https://irsa.ipac.caltech.edu/Missions/spherex.html">NASA/IPAC IRSA</a></span></footer></div>;

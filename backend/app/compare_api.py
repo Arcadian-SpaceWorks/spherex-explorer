@@ -16,15 +16,17 @@ CompareId = Annotated[str, Path(pattern=r'^[a-f0-9]{64}$')]
 
 
 class ImageRef(BaseModel):
-    """Exactly one of: an image already in the image cache, or an IRSA SPHEREx product URL."""
+    """Exactly one of: an image already in the image cache, an IRSA SPHEREx product URL, or an
+    image preloaded in the local demo bundle."""
     model_config = ConfigDict(extra='forbid')
     image_id: str | None = Field(default=None, pattern=r'^[a-f0-9]{64}$')
     access_url: str | None = Field(default=None, min_length=1, max_length=4096)
+    demo_image_id: str | None = Field(default=None, pattern=r'^[a-f0-9]{64}$')
 
     @model_validator(mode='after')
     def exactly_one(self):
-        if (self.image_id is None) == (self.access_url is None):
-            raise ValueError('Give exactly one of image_id or access_url.')
+        if sum(value is not None for value in (self.image_id, self.access_url, self.demo_image_id)) != 1:
+            raise ValueError('Give exactly one of image_id, access_url or demo_image_id.')
         return self
 
 
@@ -38,6 +40,12 @@ class CompareRequest(BaseModel):
     size_deg: float = Field(default=0.3, ge=0.02, le=0.68, allow_inf_nan=False)
     mode: Literal['time', 'wavelength']
     match_scale: bool = False
+
+    @model_validator(mode='after')
+    def same_origin(self):
+        if (self.a.demo_image_id is None) != (self.b.demo_image_id is None):
+            raise ValueError('Compare two preloaded demo images or two live images, not one of each.')
+        return self
 
 
 @lru_cache(maxsize=1)

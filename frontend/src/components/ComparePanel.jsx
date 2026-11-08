@@ -101,7 +101,7 @@ function Result({result}) {
   </div>;
 }
 
-export default function ComparePanel({picks, target, onRemove, onSwap}) {
+export default function ComparePanel({picks, target, onRemove, onSwap, demo = false}) {
   const {a, b} = picks;
   const [mode, setMode] = useState(() => suggestMode(a, b));
   const [result, setResult] = useState(null), [error, setError] = useState('');
@@ -130,13 +130,15 @@ export default function ComparePanel({picks, target, onRemove, onSwap}) {
 
   return <section className="panel compare-panel" aria-label="Image comparison" aria-busy={loading}>
     <div className="section-heading"><div><div className="eyebrow">COMPARE</div><h2>Compare two observations</h2></div>
-      <span className={`tag ${result ? 'live' : ''}`}>{loading ? 'Comparing' : result ? 'Live IRSA data' : ready ? 'Ready to compare' : 'Choose A and B'}</span></div>
+      <span className={`tag ${result ? 'live' : ''}`}>{loading ? 'Comparing' : result ? demo ? 'Preloaded data' : 'Live IRSA data' : ready ? 'Ready to compare' : 'Choose A and B'}</span></div>
     <div className="compare-tray">
       <Slot role="a" row={a} onRemove={onRemove}/>
       <button type="button" className="secondary compare-swap" onClick={onSwap} disabled={!a && !b} aria-label="Swap A and B">⇄</button>
       <Slot role="b" row={b} onRemove={onRemove}/>
     </div>
-    <p className="result-note">The table shows at most 100 observations. Filter by detector to see every observation of one band.</p>
+    <p className="result-note">{demo
+      ? 'Preloaded frames are compared locally from their original FITS; no network is used. After choosing A, the ≈ A badge in the table marks frames with the same detector and wavelength at the target: those pairs can make a difference image.'
+      : 'The table shows at most 100 observations. Filter by detector to see every observation of one band.'}</p>
     <div className="compare-mode" role="group" aria-label="Comparison mode">
       {Object.entries(MODES).map(([id, item]) => <button key={id} type="button" aria-pressed={mode === id} onClick={() => chooseMode(id)}>
         {item.label}{ready && id === suggested ? ' (suggested)' : ''}</button>)}
@@ -146,7 +148,9 @@ export default function ComparePanel({picks, target, onRemove, onSwap}) {
     {ready && a && b && <p className="result-note">{detectorOf(a) === detectorOf(b) ? 'Same detector' : 'Different detectors'} · {formatSeparation(hoursApart(a, b))} apart (archive times).</p>}
     <button type="button" className="compare-run" disabled={!ready || loading || hints.some(hint => hint.startsWith('A and B are the same'))} onClick={compare}>
       {result || error ? 'Compare again' : 'Compare A and B'}</button>
-    {loading && <DownloadProgress title="Downloading both cutouts from IRSA and aligning them" elapsed={elapsed}
+    {loading && <DownloadProgress title={demo ? 'Aligning both preloaded images' : 'Downloading both cutouts from IRSA and aligning them'} elapsed={elapsed}
+      local={demo} note={demo ? 'Reading both preserved FITS files and resampling them onto one north-up grid. No IRSA request is made.' : null}
+      cancelNote={demo ? 'You can run this comparison again.' : null}
       onCancel={() => {request.current?.abort('user'); setLoading(false);}}/>}
     {error && <p className="error" role="alert">{error}</p>}
     {result && <Result key={result.compare_id} result={result}/>}

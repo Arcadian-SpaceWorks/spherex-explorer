@@ -1,5 +1,6 @@
 /**
- * Client for POST /api/compare plus small pure helpers. Live Mode only.
+ * Client for POST /api/compare plus small pure helpers. Live rows are sent as IRSA access URLs;
+ * Demo Mode rows as the preloaded image ID, which the server reads from the local bundle.
  *
  * The server's decision (ACCEPT / WARN / REJECT and its reasons) is authoritative. The helpers
  * here only pre-select a mode and give early hints; they never decide comparability.
@@ -31,7 +32,13 @@ export function sameObservation(a, b) {
 }
 
 export function canPick(row) {
-  return Boolean(row && !row.demo && usableAccessUrl(row.access_url));
+  if (row?.demo) return /^[a-f0-9]{64}$/.test(row.demo.image_id || '');
+  return Boolean(row && usableAccessUrl(row.access_url));
+}
+
+/** The image reference /api/compare expects for this row. */
+export function imageRef(row) {
+  return row.demo ? {demo_image_id: row.demo.image_id} : {access_url: row.access_url};
 }
 
 /** Wavelength mode for two detectors of one exposure (or within an hour); time mode otherwise. */
@@ -78,7 +85,7 @@ export async function requestComparison({a, b, target, mode, signal, fetchImpl =
   try {
     response = await fetchImpl('/api/compare', {
       method: 'POST', signal, headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({a: {access_url: a.access_url}, b: {access_url: b.access_url},
+      body: JSON.stringify({a: imageRef(a), b: imageRef(b),
         ra: target.ra, dec: target.dec, size_deg: COMPARE_SIZE_DEG, mode}),
     });
   } catch (err) {
@@ -92,6 +99,7 @@ export async function requestComparison({a, b, target, mode, signal, fetchImpl =
     throw new Error('The comparison service returned an incomplete result.');
   }
   for (const [row, frame] of [[a, data.frames[0]], [b, data.frames[1]]]) {
+    if (row.demo) continue;  // Demo wavelengths come from each preloaded image's own metadata.
     recordTargetWavelength(row, target, Number.isFinite(frame?.wavelength_um)
       ? {status: 'measured', wavelength_um: frame.wavelength_um, bandwidth_um: frame.bandwidth_um ?? null}
       : {status: 'unavailable'});

@@ -2,7 +2,10 @@
 
 No network. The real ImageService (cache, locks, FITS worker) and the real comparison worker run.
 """
+import json
+from pathlib import Path
 import shutil
+from unittest.mock import patch
 
 import numpy as np
 import pytest
@@ -16,7 +19,7 @@ from PIL import Image
 
 from backend.app.compare_api import get_compare_service
 from backend.app.compare_service import CompareCacheSettings, CompareService
-from backend.app.image_download import ImageSettings, add_cutout_query
+from backend.app.image_download import ImageError, ImageSettings, add_cutout_query
 from backend.app.image_service import ImageService
 from backend.app.main import app
 from test_compare import DEC, RA, detector_wcs, render, write_frame
@@ -189,3 +192,71 @@ def test_unknown_comparison_preview_is_404(setup):
     client, _, _, _ = setup
     assert client.get('/api/compare/' + 'c' * 64 + '/a.png').status_code == 404
     assert client.get('/api/compare/' + 'c' * 64 + '/x.png').status_code == 422
+
+
+# Real preloaded demo frames (frontend/public/demo); no network is allowed.
+DEMO_ROOT = Path(__file__).resolve().parents[2] / 'frontend' / 'public' / 'demo'
+
+
+def demo_image(target_id, obs_id, detector):
+    manifest = json.loads((DEMO_ROOT / 'manifest.json').read_text())
+    target = next(t for t in manifest['targets'] if t['id'] == target_id)
+    row = next(o for o in target['observations'] if o['obs_id'] == obs_id and o['detector'] == detector)
+    return target, row['image_id']
+
+
+@pytest.fixture
+def demo_client(tmp_path):
+    service = CompareService(images=None, settings=CompareCacheSettings(cache_dir=tmp_path / 'compare', entries=3, ttl=600))
+    app.dependency_overrides[get_compare_service] = lambda: service
+    try:
+        with patch('requests.sessions.Session.request', side_effect=AssertionError('network forbidden')):
+            yield TestClient(app)
+    finally:
+        app.dependency_overrides.pop(get_compare_service, None)
+
+
+def demo_body(target_id, a, b, mode='time'):
+    target, image_a = demo_image(target_id, *a)
+    _, image_b = demo_image(target_id, *b)
+    return {'a': {'demo_image_id': image_a}, 'b': {'demo_image_id': image_b}, 'ra': target['ra'], 'dec': target['dec'],
+            'size_deg': 0.3, 'mode': mode}
+
+
+def test_a_matched_demo_pair_is_differenced_offline(demo_client):
+    # Barnard's Star, D3, August 2025 vs March 2026: wavelength at the target within 0.006 um.
+    response = demo_client.post('/api/compare', json=demo_body('barnard', ('2025W34_2B_0030_2', 3), ('2026W12_1A_0598_3', 3)))
+    assert response.status_code == 200, response.text
+    result = response.json()
+    assert result['decision'] == 'ACCEPT' and result['previews']['difference']
+    assert result['overlap_fraction'] > 0.95
+    assert all(frame['demo'] and frame['provenance']['source'] == 'irsa_cutout' for frame in result['frames'])
+    assert 'preloaded in the local demo bundle; no network was used' in result['notes'][0]
+    assert png(demo_client, result['previews']['difference']).shape[:2] == (176, 176)
+
+
+def test_demo_comet_frames_hours_apart_stay_side_by_side(demo_client):
+    result = demo_client.post('/api/compare', json=demo_body('3i-atlas', ('2025W50_2A_0685_1', 5), ('2025W50_2A_0712_4', 5))).json()
+    assert result['decision'] == 'WARN' and result['previews']['difference'] is None
+    assert [r['code'] for r in result['validation']['reasons'] if r['severity'] != 'info'] == ['wavelength_mismatch']
+
+
+@pytest.mark.parametrize('refs, status', [
+    ({'a': {'demo_image_id': 'f' * 64}, 'b': {'demo_image_id': 'e' * 64}}, 404),           # Not in the bundle.
+    ({'a': {'demo_image_id': 'f' * 64}, 'b': {'access_url': BASE.format('D1-JAN')}}, 422),  # Mixed origins.
+    ({'a': {'demo_image_id': 'f' * 64, 'image_id': 'e' * 64}, 'b': {'demo_image_id': 'e' * 64}}, 422),
+    ({'a': {'demo_image_id': '../manifest'}, 'b': {'demo_image_id': 'e' * 64}}, 422),
+])
+def test_demo_references_are_checked(demo_client, refs, status):
+    response = demo_client.post('/api/compare', json={**refs, 'ra': 10.0, 'dec': 41.0, 'size_deg': 0.3, 'mode': 'time'})
+    assert response.status_code == status
+
+
+def test_a_corrupted_demo_fits_is_refused(tmp_path):
+    root = tmp_path / 'demo'
+    shutil.copytree(DEMO_ROOT, root, ignore=shutil.ignore_patterns('*.fits'))
+    target, image_id = demo_image('m31', '2026W01_1A_0471_1', 1)
+    (root / 'assets' / image_id / 'original.fits').write_bytes(b'not the original')
+    service = CompareService(images=None, settings=CompareCacheSettings(cache_dir=tmp_path / 'compare', entries=3, ttl=600), demo_root=root)
+    with pytest.raises(ImageError, match='Preloaded science data unavailable'):
+        service.compare({'demo_image_id': image_id}, {'demo_image_id': image_id}, target['ra'], target['dec'], 0.3, 'time')

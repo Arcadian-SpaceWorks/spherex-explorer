@@ -16,12 +16,12 @@ export function useElapsed(runKey) {
   return elapsed;
 }
 
-export default function DownloadProgress({title, elapsed, local = false, onCancel}) {
+export default function DownloadProgress({title, elapsed, local = false, onCancel, note = null, cancelNote = null}) {
   return <div className="download-progress" role="status" aria-live="polite" data-testid="download-progress">
     <strong>{title}</strong>
     <span data-testid="download-elapsed">{formatElapsed(elapsed)} elapsed</span>
     <div className="download-progress-bar" role="progressbar" aria-label="Image preparation in progress"><span/></div>
-    <p>{local ? 'Loading a preserved local preview. No IRSA request is made.' : 'Waiting for IRSA or the local image service. Byte progress and completion time are unavailable.'}</p>
-    {onCancel && <><button type="button" className="secondary" onClick={onCancel}>Stop waiting</button><small>{local ? 'You can load this preloaded preview again.' : 'Stops this browser request. Work already started on the server may finish and be cached.'}</small></>}
+    <p>{note || (local ? 'Loading a preserved local preview. No IRSA request is made.' : 'Waiting for IRSA or the local image service. Byte progress and completion time are unavailable.')}</p>
+    {onCancel && <><button type="button" className="secondary" onClick={onCancel}>Stop waiting</button><small>{cancelNote || (local ? 'You can load this preloaded preview again.' : 'Stops this browser request. Work already started on the server may finish and be cached.')}</small></>}
   </div>;
 }
