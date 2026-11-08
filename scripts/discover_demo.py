@@ -25,6 +25,7 @@ CANDIDATES = {
  'rw-aur': dict(name='RW Aurigae', ra=76.956067, dec=30.401327, source='https://archive.stsci.edu/prepds/starcat/StarCAT-summary/Table_1.pdf', position='Fixed ICRS region around RW Aur; components unresolved; no astrometric detection claim'),
  'r-dra': dict(name='R Draconis', ra=248.1676075, dec=66.75498417, source='https://aladin.cds.unistra.fr/simbad-thumbnails/thumbnails42.html', position='Fixed catalog ICRS region; source detection and variability unvalidated'),
  'barnard': dict(name="Barnard’s Star", ra=269.446, dec=4.766, source="https://simbad.cds.unistra.fr/simbad/sim-basic?Ident=Barnard%27s+star", position='Mission-era reference position footprint query; near expected proper-motion position; exposure-specific astrometry/detection NOT VERIFIED'),
+ 'm31': dict(name='M31 — Andromeda Galaxy core', ra=10.684708333333333, dec=41.26875, source='https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31', position='Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry'),
  'wise0855': dict(name='WISE 0855-0714', ra=133.795125, dec=-7.24513889, source='https://doi.org/10.1088/2041-8205/786/2/L18', position='Catalog-designation position footprint query only; current astrometry and source detectability NOT VERIFIED; not selected'),
 }
 

@@ -10,8 +10,9 @@ Use localhost or HTTPS (metadata SHA-256 verification uses Web Crypto).
 
 ## Prepared inventory and scientific limits
 
-`frontend/public/demo/manifest.json` lists two astronomical targets with coordinate
-references: M101 (ready), M31 (ready). M101's selected point is the existing
+`frontend/public/demo/manifest.json` lists four astronomical targets with coordinate
+references: M101, M31, Barnard’s Star and 3I/ATLAS (all ready). The last three are
+described in [the showcase notes](demo-target-showcase.md#larger-sets-m31-barnards-star-and-3iatlas). M101's selected point is the existing
 application region at ICRS 210.802270°, +54.348950°. The coordinate reference identifies
 the named galaxy; the selected region is not asserted to be an exact catalog centroid.
 References: [M101](https://simbad.cds.unistra.fr/simbad/sim-basic?Ident=M101),
@@ -27,10 +28,10 @@ three distinct observing times:
 | 2026W21_2A_0213_3 | 2026-05-22T19:42:28.021Z | 2 | 1.6305 |
 | 2026W21_2A_0213_3 | 2026-05-22T19:42:28.021Z | 5 | 4.4002 |
 
-M31 (ICRS 10.684708°, +41.268750°) has six real IRSA cutouts of **0.437°**, the size
-`/api/compare` needs to fill its north-up 0.3° grid, about 36 MiB of FITS. They are the
-three survey passes validated by `scripts/smoke_compare.py`, each in D1 and in D4 of the
-**same exposure** (imaged at the same moment through a dichroic):
+M31 (ICRS 10.684708°, +41.268750°) has eighteen real IRSA cutouts of **0.437°**, the size
+`/api/compare` needs to fill its north-up 0.3° grid: one exposure per detector in each of three
+survey passes. Its D1/D4 frames are the passes validated by `scripts/smoke_compare.py`, each in
+D1 and in D4 of the **same exposure** (imaged at the same moment through a dichroic):
 
 | FITS observation ID | FITS UTC | D1 wavelength at M31 (approx. µm) | D4 wavelength at M31 (approx. µm) |
 | --- | --- | --- | --- |
@@ -39,10 +40,11 @@ three survey passes validated by `scripts/smoke_compare.py`, each in D1 and in D
 | 2026W28_2A_0117_1 | 2026-07-10T00:02:31.613Z | 0.8935 | 2.9751 |
 
 Brightness differences between passes follow the wavelength at the target (linear variable
-filters), not time; no variability is claimed. `scripts/acquire_m31_demo.py` re-downloads the
-set through the app's `ImageService` (sequential, checksummed, resumable) into the ignored
-`demo/acquired/m31/` staging folder and writes the source records; `demo/targets.json` then
-points at the published originals so the bundle rebuilds offline byte-for-byte.
+filters), not time; no variability is claimed. `scripts/acquire_demo_targets.py` selects and
+downloads the M31, Barnard’s Star and 3I/ATLAS sets through the app's `ImageService`
+(sequential, checksummed, resumable) into the ignored `demo/acquired/` staging folder, writes
+the source records and `demo/plans/<target>.json`; `demo/targets.json` then points at the
+published originals so the bundle rebuilds offline byte-for-byte.
 
 The original DataLink and IBE cutout URLs are retained per frame. Preparation
 verified FITS header IDs, times (explicit TIMESYS=UTC), detectors, source-record SHA-256, URL identity,
@@ -84,7 +86,7 @@ checksum mismatches, mismatched source identities, missing UTC/detector metadata
 unsupported cutouts and targets outside their supplied WCS footprint.
 
 `demo/manifest.schema.json` is generated from the Pydantic `Manifest` model in
-`backend/app/demo.py`. Schema version 1 permits 2–3 targets, explicit ready/missing
+`backend/app/demo.py`. Schema version 1 permits 2–8 targets, explicit ready/missing
 states, validated source URLs, UTC timestamps, detector/spectral fields, local
 asset paths, checksums and processing provenance. `--validate` checks file
 existence, checksums and metadata/manifest consistency. The frontend independently

@@ -63,6 +63,34 @@
           "exclusiveMinimum": 0,
           "title": "Archive Em Max M",
           "type": "number"
+        },
+        "predicted_ra": {
+          "anyOf": [
+            {
+              "exclusiveMaximum": 360,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Predicted Ra"
+        },
+        "predicted_dec": {
+          "anyOf": [
+            {
+              "maximum": 90,
+              "minimum": -90,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Predicted Dec"
         }
       },
       "required": [

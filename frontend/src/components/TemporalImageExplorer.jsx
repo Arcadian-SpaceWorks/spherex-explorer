@@ -115,7 +115,9 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
           <div><span>Center wavelength</span><strong>{metadata?.center?.spectral ? `${Number(metadata.center.spectral.wavelength_um).toFixed(3)} µm` : imageLoading ? 'Loading…' : '—'}</strong></div>
         </div>
         {metadata?.observed_at_utc && parseUtc(metadata.observed_at_utc) !== parseUtc(frame.observed_at_utc) && <p className="result-note">FITS header time differs from the archive timestamp: {formatUtcLabel(metadata.observed_at_utc)}.</p>}
-        {metadata?.acquisition && <p className="result-note">{metadata.acquisition.data_release} · calibration {metadata.acquisition.calibration} · {metadata.acquisition.position_mode}. Predicted/reference ICRS {metadata.acquisition.ra.toFixed(6)}°, {metadata.acquisition.dec.toFixed(6)}°. No measured source position is inferred from the marker.</p>}
+        {metadata?.acquisition && <p className="result-note">{metadata.acquisition.data_release} · calibration {metadata.acquisition.calibration} · {metadata.acquisition.position_mode}. {metadata.acquisition.predicted_ra != null
+          ? `Frame centre ICRS ${metadata.acquisition.ra.toFixed(6)}°, ${metadata.acquisition.dec.toFixed(6)}°; marker at the predicted position for this exposure, ICRS ${metadata.acquisition.predicted_ra.toFixed(6)}°, ${metadata.acquisition.predicted_dec.toFixed(6)}°.`
+          : `Predicted/reference ICRS ${metadata.acquisition.ra.toFixed(6)}°, ${metadata.acquisition.dec.toFixed(6)}°.`} No measured source position is inferred from the marker.</p>}
         <div className="time-stage">
           {imageLoading && <DownloadProgress title={`Loading the observation preview for ${frame.obs_id || 'this step'}`} local={Boolean(frame.demo)} elapsed={elapsed}/>}
           {imageError && <p className="image-loading error" role="alert">{imageError}</p>}

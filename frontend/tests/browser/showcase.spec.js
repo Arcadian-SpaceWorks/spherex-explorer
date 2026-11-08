@@ -27,7 +27,9 @@ for (const target of manifest.targets.filter(t=>t.status==='ready')) {
    if(row.acquisition) await expect(explorer).toContainText(row.acquisition.calibration);
   }
   await expect(page.locator('.image-inspector')).toContainText(target.observations[0].obs_id);
-  if(target.id==='3i-atlas') await expect(page.getByTestId('demo-coverage')).toContainText('Moving-target-centered tracking');
+  if(target.observations.some(row=>row.acquisition?.predicted_ra!=null)) await expect(page.getByTestId('demo-coverage')).toContainText('Fixed sky: every cutout has the same centre');
+  if(target.id==='barnard') await expect(page.getByTestId('mixed-releases')).toContainText('2 data releases (QR2, QR3)');
+  if(target.id==='m31') await expect(page.getByTestId('mixed-releases')).toHaveCount(0);
   expect(forbidden).toEqual([]);
  });
 }
@@ -35,7 +37,7 @@ test('unprepared science candidates are clearly unavailable offline',async({page
  await page.goto('/?mode=demo');
  for(const id of ['barnard','wise0855']){
   const target=manifest.targets.find(t=>t.id===id);
-  if(!target) continue;
+  if(!target || target.status!=='missing') continue;
   await page.getByLabel('Preloaded target').selectOption(id);
   await expect(page.getByText(target.missing_reason,{exact:true})).toBeVisible();
   await expect(page.getByTestId('time-slider')).toHaveCount(0);

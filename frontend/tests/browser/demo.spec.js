@@ -40,7 +40,7 @@ test('real preloaded playback, local science pixel readout and target changes wo
   await page.getByLabel('Preloaded target').selectOption('m31');
   const m31 = manifest.targets.find(item => item.id === 'm31');
   await expect(explorer.getByTestId('time-slider-id')).toHaveText(`Observation ${m31.observations[0].obs_id}`);
-  await expect(explorer).toContainText('Step 1 of 6');
+  await expect(explorer).toContainText(`Step 1 of ${m31.observations.length}`);
   await expect.poll(() => explorer.getByTestId('time-slider-image').evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
   await expect(page.getByTestId('fits-target')).toBeVisible();
   await page.getByLabel('Preloaded target').selectOption('m101');

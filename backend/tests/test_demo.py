@@ -117,13 +117,43 @@ def test_pixel_readout_uses_local_science_fits_without_live_cache(inventory, tmp
 
 
 def test_shipped_real_bundle_validates():
+    from collections import Counter
+    from scripts.acquire_demo_targets import gaia_astrometry, propagate, separation_deg
+    from astropy.time import Time
     root = Path(__file__).resolve().parents[2] / 'frontend/public/demo'
     manifest = validate_bundle(root)
-    assert len(manifest.targets[0].observations) == 3
-    m31 = manifest.targets[1]
-    assert m31.id == 'm31' and m31.status == 'ready' and len(m31.observations) == 6
-    # Three survey passes, each in D1 and D4 of the same exposure (curated M31 set).
-    assert sorted((o.obs_id, o.detector) for o in m31.observations) == [
-        (obs_id, detector) for obs_id in ('2025W28_1B_0480_4', '2026W01_1A_0471_1', '2026W28_2A_0117_1')
-        for detector in (1, 4)]
-    assert all('size=0.4370deg' in o.source_url for o in m31.observations)
+    targets = {t.id: t for t in manifest.targets}
+    assert list(targets) == ['m101', 'm31', 'barnard', '3i-atlas']
+    assert len(targets['m101'].observations) == 3
+    larger = [o for key in ('m31', 'barnard', '3i-atlas') for o in targets[key].observations]
+    assert all('size=0.4370deg' in o.source_url and o.acquisition for o in larger)
+
+    m31 = targets['m31']
+    # Three survey passes, one exposure per detector each; the curated D1/D4 exposures are kept.
+    assert len(m31.observations) == 18 and set(Counter(o.detector for o in m31.observations).values()) == {3}
+    curated = {(obs_id, d) for obs_id in ('2025W28_1B_0480_4', '2026W01_1A_0471_1', '2026W28_2A_0117_1') for d in (1, 4)}
+    assert curated <= {(o.obs_id, o.detector) for o in m31.observations}
+    # Dichroic partners (D1/D4, D2/D5, D3/D6) share one exposure (headers can differ by a millisecond).
+    def mjd(o):
+        return Time(o.observed_at_utc[:-1], scale='utc').mjd
+    for o in m31.observations:
+        partner = [p for p in m31.observations if p.obs_id == o.obs_id and p.detector == (o.detector + 2) % 6 + 1]
+        assert len(partner) == 1 and abs(mjd(partner[0]) - mjd(o)) * 86400 < 0.01
+    assert {o.acquisition.data_release for o in m31.observations} == {'spherex_qr2'}
+
+    barnard = targets['barnard']
+    assert len(barnard.observations) == 21 and {o.detector for o in barnard.observations} == {3}
+    releases = [o.acquisition.data_release for o in barnard.observations]  # Time order.
+    assert releases == ['spherex_qr2'] * 14 + ['spherex_qr3'] * 7
+    gaia = gaia_astrometry()
+    for o in barnard.observations:
+        a = o.acquisition
+        assert (a.ra, a.dec) == (barnard.ra, barnard.dec)  # Fixed sky centre.
+        expected = propagate(gaia, Time(o.observed_at_utc[:-1], scale='utc').mjd)
+        assert separation_deg(a.predicted_ra, a.predicted_dec, *expected) * 3600 < 0.05
+
+    comet = targets['3i-atlas']
+    assert Counter(o.detector for o in comet.observations) == {5: 12, 2: 6}
+    assert all((o.acquisition.ra, o.acquisition.dec) == (comet.ra, comet.dec) == (167.2031, 5.1481) for o in comet.observations)
+    path = [(o.acquisition.predicted_ra, o.acquisition.predicted_dec) for o in comet.observations if o.detector == 5]
+    assert separation_deg(*path[0], *path[-1]) > 0.15  # The comet crosses the fixed field.

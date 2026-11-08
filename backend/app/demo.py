@@ -52,11 +52,17 @@ class Acquisition(Model):
     discovery_sha256: str = Field(pattern=SHA)
     archive_em_min_m: float = Field(gt=0)
     archive_em_max_m: float = Field(gt=0)
+    # Predicted position of a moving source at this exposure (from position_source), when the
+    # frame centre (ra, dec) is a fixed sky position rather than the source itself.
+    predicted_ra: float | None = Field(default=None, ge=0, lt=360)
+    predicted_dec: float | None = Field(default=None, ge=-90, le=90)
 
     @model_validator(mode='after')
     def coverage(self):
         if self.archive_em_max_m < self.archive_em_min_m or not self.position_source.startswith('https://'):
             raise ValueError('Invalid acquisition coverage or position provenance')
+        if (self.predicted_ra is None) != (self.predicted_dec is None):
+            raise ValueError('A predicted position needs both RA and Dec')
         return self
 
 

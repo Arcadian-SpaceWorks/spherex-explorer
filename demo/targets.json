@@ -28,6 +28,7 @@
       "ra": 10.684708333333333,
       "dec": 41.26875,
       "coordinate_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+      "science_context": "Three SPHEREx survey passes (July 2025, December 2025, July 2026). Each pass has one exposure in every detector pair: D1/D4 (about 0.75\u20130.9 and 2.4\u20133.0 \u00b5m at the core), D2/D5 and D3/D6. The two detectors of a pair see the same moment through a dichroic. Within a detector, exposures were chosen so the wavelength at the core matches another pass where the archive allows it. Brightness differences between passes follow the wavelength at the target, not time; no variability is claimed.",
       "inputs": [
         {
           "fits": "../frontend/public/demo/assets/33a87ebe34221120948ec7e74b3462c052e57c5e079b851a1b327491c994b1f3/original.fits",
@@ -36,6 +37,38 @@
         {
           "fits": "../frontend/public/demo/assets/feef6ed477f8cb54def8628018092a314f506fda7945bce93932a534db995df0/original.fits",
           "metadata": "source-records/fc8d60ffb462e67fd8e38bff2d87b1ee49e3ed7479513d00fc4517b99ac99b88.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/cc178e402ac0ec949cb34de563e075c22a45ec1c9a243f2866d36774d0cce821/original.fits",
+          "metadata": "source-records/9d811996eb23c1c447e3ae841baed451a308ca3a8bef703f02024e2bf9b9ca0f.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/57673c513b6d796abeb253c2b63651f9e8f8ca29d4cc50883c3c70a961b89dea/original.fits",
+          "metadata": "source-records/da87c46bb36c13fe180c619293993efaa4b3999ba9d591b2c64e12e5489c989f.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/8e683f34cab8e7f3cb9a6dbdcf4d745be3d747a146aa5a5751cace623b6d800e/original.fits",
+          "metadata": "source-records/f42964802a7d4ac76ee6c09d62ffde8a642c194756c9f264f33778b164fc3804.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/da5207c0f23595f82f45ce8f93927583cc1591ee71e286551ce02b0e8f444eb0/original.fits",
+          "metadata": "source-records/7f543283a5fe13d2e8348c70a506010e43c32ac8a49898248e43de6c9317504a.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/da819b18d47bc2fbbfc2918c2ae86038f0b5c8cb8dbc64668910a09cb148258d/original.fits",
+          "metadata": "source-records/1ce8c812cb342ce65a309ca62079b36c186f8c72f9f766929840bba0b92e886b.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/1d7ce1deecfd6cd3eff998e497231a7f56854ec8fd405945cd56c8747f37970b/original.fits",
+          "metadata": "source-records/4a5c182f2bbb8a7eceac919b8c37f04397b8b3c1f415effffd8d6eb154f8bf3e.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/d7aac0467d14eb93820108c152873e45c3d86aba1cc51914ea5d16495e34aaf9/original.fits",
+          "metadata": "source-records/80b483fd562fac7e18355db922318e681309ad3d91b8d3eb880210a3a7010c48.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/36b2d4854354926a835c4b6253eac0e2aa78c315eb70a3d963b1c37a4df30540/original.fits",
+          "metadata": "source-records/bb8a177d26ed549615fa2004d30f7c5db7b0323b9732795ef66373548d0677b0.json"
         },
         {
           "fits": "../frontend/public/demo/assets/c56c4179485e93d706a423b806f524aa02ede154fb7673e4b8ce92fdbec8445b/original.fits",
@@ -52,9 +85,200 @@
         {
           "fits": "../frontend/public/demo/assets/490d400b938e53170c8d1b5e2bde6cc7044fd38f309b9b4516f4573c2e900f21/original.fits",
           "metadata": "source-records/5af39570aacfbbfd9036c520b71d3bbcfb93faf91da92a205107da2de4a65c1a.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/da232c05965f5996c63800a841f96ea670487475ee01d7a51c748f787a68e02b/original.fits",
+          "metadata": "source-records/bbf342d2207a8141e959767df1d613885ec45f3086cf9e727a5b8aaa3809ff36.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/1768fa3106a37ecac95f7e38637cd8239aeb5d5e9c70c383611c061843d32c8e/original.fits",
+          "metadata": "source-records/016421ea76a74209f1a728147eb83687defa90fcc244afff3dfe44d525962680.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/c070ae74062c593d3220ee829387cc675d45e787a68936d215fff1c471124a06/original.fits",
+          "metadata": "source-records/447f7c8ec542554c8549bce7e0322c0c2cfd8d217a622ade9815694bdbbe6131.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/56186e04dbc0b8f65560ca4b07631a6519e5eb963f27af90995ba5e26a2db824/original.fits",
+          "metadata": "source-records/96ef901c8cb8e24b6fb235fcf555da5c10ec7b59f859d9d113ed3aebd65324f4.json"
         }
-      ],
-      "science_context": "Three SPHEREx survey passes (July 2025, December 2025, July 2026), each in detector D1 (about 0.75\u20130.89 \u00b5m at the core) and D4 (about 2.4\u20133.0 \u00b5m). D1 and D4 of one exposure are taken at the same moment through a dichroic. Brightness differences between passes follow the wavelength at the target, not time; no variability is claimed."
+      ]
+    },
+    {
+      "id": "barnard",
+      "name": "Barnard\u2019s Star \u2014 fast-moving nearby red dwarf",
+      "ra": 269.44623,
+      "dec": 4.76867,
+      "coordinate_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+      "science_context": "The nearest single star to the Sun (about 6 light-years) and the star with the fastest known motion across the sky: about 10.4\u2033 per year, mostly northward (Gaia DR3), which is 1.7 SPHEREx pixels. Detector D3 (about 1.6\u20132.4 \u00b5m) at three epochs: August 2025 and March 2026 (data release QR2) and August 2026 (QR3). The marker shows the Gaia position propagated to each exposure, not a measured position. The star is bright enough to saturate its core (OVERFLOW flags), so a position needs a centroid and is best averaged over several frames: a one-year test averaging three and four frames measured 9.2\u2033 per year against 10.39\u2033 from Gaia. The epochs mix two data releases, so positions can be compared but brightness should not be.",
+      "inputs": [
+        {
+          "fits": "../frontend/public/demo/assets/7a840fdf0ec17469679a2c7c797f95eed9786b2a11a8d2a9a1b474658b9821d0/original.fits",
+          "metadata": "source-records/23cd818f76d1666f8039be78ac0560263d675b2191059db8abfada6181434388.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/0f6fed956ecc6968fbc8f3612413c353550568ca92d8a66274fc667eb7942af3/original.fits",
+          "metadata": "source-records/5fc258a31ee4388cbacf2205b7f07a4f4f4fad5693f231845e2129f3b96fbc99.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/749c10f87e3b531fa424666bdb17c4a4de0612d646a7846a3b1ac155a4da813a/original.fits",
+          "metadata": "source-records/d1bd0bfde3ddebb81f65c15d600abd1d87a0ae6c5f11e3e555f2204c1312455b.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/99b61ce8046ef937e6fddff4f32d8716af34e211ce053dd6690a7115c02b0942/original.fits",
+          "metadata": "source-records/a23a665bbcdc170eb63362775a2edbaa6ba7eb9cc82fb18a5fa328d55d31071c.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/a381c8fcfae0d1a1a8af0f729a9345c59f12a8a148dad37add80a9d687cdf12d/original.fits",
+          "metadata": "source-records/29393fca70c780a5b8bf14bd36cd993a6c2c1273a2aa968f82a0b9659e25fa16.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/8dd2744163f3bd7fe909a00e8a7094b6701ecfe2932182f5944c692478cd66a5/original.fits",
+          "metadata": "source-records/77c7f77bbdedaf3c1c4996bbb94b01255c9014669cf385c21b15fa172c18b87d.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/df7511e9d7a90add343d73cf9cde0aa674b244d988a0c6d768557366bfbeaad8/original.fits",
+          "metadata": "source-records/c422b955480597ac9d10791a6975a3df0d741c2f4802d2ab2c42543e59962a56.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/ddf77357de8aa6c15cb0ce2414d23974b1c527950f920033339a2a90845d8775/original.fits",
+          "metadata": "source-records/e3425f19cf5307cc8c78df4263ecf56342bd074607090c7f0ceb40b4e6481ebb.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/1d44e5c993c1146abed3f0dab6b62a8f407183612b37f3c4f993a59d85236e13/original.fits",
+          "metadata": "source-records/4c2d5086f7ad858c6182b330f295b388393c27c7617f1f68124fcdd51aa10654.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/9a4a6ab016dcbedf03535f09b2bf2d71ece5fb4e1c95ae9e10a7e43e8d571bb9/original.fits",
+          "metadata": "source-records/c8be056167063a89ffc3fcbccccea4f8192e40b1514725841bf79f338ae04843.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/b4a5eddd7a911b01027c2a65e9de8a5eadd491ae34c41e11b295997677dea263/original.fits",
+          "metadata": "source-records/49b6ef4663cc2b2ed6f6a3329eb6c2db5f4cf6654200f75547fca0d9c1724980.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/f5c4c6d3756de9abbaf415462f2620d8d242a1fe804c47cb5f198e3d1e63eee7/original.fits",
+          "metadata": "source-records/eb1ee7dcd94b40ec01eed256a175eb14778ba34b299a7e6d62fd49b262d550f0.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/b856d9e220882909fe997926f4b0b829fa4dc77082eea1a396e64632b866dae4/original.fits",
+          "metadata": "source-records/24f9928d9996dc8779b187bd1ecbb0aa8d8d6100b860d12e01a05c08bcd7de68.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/b559f3026790e327ae5477f35330a6b549e921c3bc6fd7a2762fd393fd6c0d9f/original.fits",
+          "metadata": "source-records/13d71e12fb95b40f777bfa04ff87c4cc2a88baf54d582bcd0a71e7fbbf50d5d5.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/1d84a65ab87e4fa5a263cd63aecfd3540b9a33c4118cf78b3b089e8b35bdadd5/original.fits",
+          "metadata": "source-records/c2d92d4f0c68f3f71eefd5a6e81fbe7ef17a1c17f503f31e90d5abec84b9ec94.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/40af20efb4bdd8eafea020f126bc300ba428dd4799eba732d78cdbeeb92de024/original.fits",
+          "metadata": "source-records/32588f0c0b4ba7a6cb69834fc4093438a1b31d851601f0ac27d29c905e0d46ba.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/a13c450ab3bfdb247ce014edf3a01220c974d7ecf3a10439ad102adcaef4713f/original.fits",
+          "metadata": "source-records/288e8b09dfd004a7d7c715ddd76ce1e21b561e2f9f7944914a08045c6524739c.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/863d3c8b567d21fb985276e8d3b19684cfa367a543405caeaa35067931283254/original.fits",
+          "metadata": "source-records/2376deb025db41ae6ea0096e7b11d567acfed47b01411e049df941002c2484d8.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/3affb52e42c4b5061dd3f38312e56edad51c1b852d2bc3831dd3861fab20b1b3/original.fits",
+          "metadata": "source-records/59185daeb9f87def8bcb72b73bb08ee35ce0d4a0cefd1abb4794c0a113808ae8.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/417d3ed0a3ca4c0ca1832905ad7787a2e59436da12ee168103b947ac6c9c7a51/original.fits",
+          "metadata": "source-records/60deea7fb2836d85d119e5855c76448dd6f85e2bba8cfc5ae907284a962d0643.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/34d38788092bd48e47c65b4950e70e1d14fac1bec664f6a61ab52424587a66e1/original.fits",
+          "metadata": "source-records/100f584f790cae4eeaf5ac29f602d50dd45114433d88f7c0e8e2e0f660a7c362.json"
+        }
+      ]
+    },
+    {
+      "id": "3i-atlas",
+      "name": "3I/ATLAS \u2014 interstellar comet, 14 Dec 2025",
+      "ra": 167.2031,
+      "dec": 5.1481,
+      "coordinate_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+      "science_context": "The third known interstellar object. Twelve exposures over 3.3 hours on 14 December 2025 in detector D5 (about 3.8\u20134.4 \u00b5m, a range that includes the 4.26 \u00b5m CO\u2082 band) and six simultaneous D2 frames (about 1.1\u20131.65 \u00b5m). Every cutout has the same sky centre, so the stars stay fixed while the comet crosses about 0.16\u00b0 (roughly 95 pixels) of the field. The marker shows IRSA\u2019s predicted comet position for each exposure, not a measured position. IRSA warns of low signal-to-noise at many wavelengths, and the comet\u2019s brightness changes with the wavelength at its position.",
+      "inputs": [
+        {
+          "fits": "../frontend/public/demo/assets/db2cb7a2964892e80fd4acae5b4c78f361d98b5d96bb89dff4185f3ec86981b5/original.fits",
+          "metadata": "source-records/a6090ba87b16f9b4afe2fb5327f9af2b16d295802f6b2750885a14e65ef8db2e.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/f1658e2a46825cb972bd9c4f7b08304c737ab2c61dd2a9428d7f7bc00d6ac9a5/original.fits",
+          "metadata": "source-records/76bfebf0b3b18487aa342c9288f70383ed0ca61880e63d063d913a31ca76ae84.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/21511e4b902af37187d807a053734c233b0c011c12fd25f59b55088c045fb42a/original.fits",
+          "metadata": "source-records/fef7fffb5e2cb8c06642dd9837de29146368585e69afed07e0ce00dee595b2c5.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/1b7164044ce2a16b74355737bdb86d31baba6af7b9fabdf327d5ea1f258ff4e4/original.fits",
+          "metadata": "source-records/6bb0e8b404d92b8e9ad11c65617615c7b77d359c53d347b29a5c0e4a872c3c5d.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/fa8e7aeb539d3fb5c4c233c26ad50ec63d17683e3a9ea46f4b5f8d6b6fa8f0a1/original.fits",
+          "metadata": "source-records/75768b82419ddfacc257563b2e3cdbbea08a3925ae2247258267ce76499cb278.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/365d37aae3571c7a8e18b953abcb5e21e7f976df82270c4007cfd5db209b28a3/original.fits",
+          "metadata": "source-records/2480eed5e7e38fd15ffbf74ea02e1807ec3308d95eeaad5447dd23bd35cc5c91.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/7fd4c506b8d6d20101eb1eba1a2f16bb6c5c8cb91e57de373b44cbb759a94735/original.fits",
+          "metadata": "source-records/fa8a8132a57c431739078af072c5b465c595692a1d41f513d3575ec12ebd6cfe.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/bc3b9d28fb10f7b1302923cce2907b7512b5e219ad1c2602d9aa938ec4e30d49/original.fits",
+          "metadata": "source-records/f83d50ab6a40e2fdf44e783ec7936b9dad5cf19fcaceec2df56da3e060293708.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/c59e18a4b5bee7fc31fd7774ffa9225d11a3b6254bb0387accec01d9ec9adae5/original.fits",
+          "metadata": "source-records/e39bdb010fed69ac9e8fd847862450a09e053599c323bfd0fc327292c4cad25c.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/8ea3299c01418141a8296b6553bf03c4ff3e83646cfae5d836056947d9e82b8d/original.fits",
+          "metadata": "source-records/76ffb1c76462aa59eb9971100644902869836d720ec79f3f2f90d0622b8ebf7b.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/ad91a28acac6e015a1e428bbd5dad2710b0d6e73461a9ffca7210a0846381417/original.fits",
+          "metadata": "source-records/a9ce8668589817936347f6acba6b9823b4400449e2c296e96fc41c79de099566.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/906ecec49ed3310c467093c2384ff0c5a2e25cee7d5e58982bb861160c13d29b/original.fits",
+          "metadata": "source-records/c9de92a14c83a8d230325bf062291b18afb9d60f2b9c4e2495da675454f76e0e.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/cb06a4ac46748c46cc92fd748060a6e068d290ccf4aaf0a29f1debbd16bf57b6/original.fits",
+          "metadata": "source-records/65bdc700a3ae6e9f9316c7eae4c9187fbc0eee07f1f6a338177a8dc0a817e0c3.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/e9e0ac6aec47bdb0a0cdfaeeeb67314db61f534d25f4a04b6850746f822fd524/original.fits",
+          "metadata": "source-records/2a34d18b8f1d407c09a221a708be1999a199754bc1c954757bbbae24a91999ac.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/0a9ae4e1fe9af1393adb21edd38e9fa5e43c2a3a6b08b08fa18377fc8151c9ad/original.fits",
+          "metadata": "source-records/3c0cf94a6870eb8ff3f9b5102db249efdbfd31bc60bfb1535425cf753bbaba6f.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/9943894e717488f1268495e06965462796ca3052739865f7dd9638409f171301/original.fits",
+          "metadata": "source-records/51fdafaa53f71bce38969b262432b9a89a759435dc9d7bf71f10de955ff65d21.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/8e3835a3209a6802e08de45ebd8c136fac348361d6afc5151656254108b6641b/original.fits",
+          "metadata": "source-records/34589a8ea80e2df38ce59330a65c9695039575737df3544f0f6353d885eb59fe.json"
+        },
+        {
+          "fits": "../frontend/public/demo/assets/69eefb4c20801ca31cfefd39366c95027ce458fc1dd749655c54b92482b5ffd7/original.fits",
+          "metadata": "source-records/f9ab9188e1764fa8226a1b66e0359e9bb87ffc943a8f3493f07dccd2f632fa7f.json"
+        }
+      ]
     }
   ]
 }

@@ -125,7 +125,7 @@
       "ra": 10.684708333333333,
       "dec": 41.26875,
       "coordinate_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
-      "science_context": "Three SPHEREx survey passes (July 2025, December 2025, July 2026), each in detector D1 (about 0.75–0.89 µm at the core) and D4 (about 2.4–3.0 µm). D1 and D4 of one exposure are taken at the same moment through a dichroic. Brightness differences between passes follow the wavelength at the target, not time; no variability is claimed.",
+      "science_context": "Three SPHEREx survey passes (July 2025, December 2025, July 2026). Each pass has one exposure in every detector pair: D1/D4 (about 0.75–0.9 and 2.4–3.0 µm at the core), D2/D5 and D3/D6. The two detectors of a pair see the same moment through a dichroic. Within a detector, exposures were chosen so the wavelength at the core matches another pass where the archive allows it. Brightness differences between passes follow the wavelength at the target, not time; no variability is claimed.",
       "status": "ready",
       "missing_reason": null,
       "observations": [
@@ -147,7 +147,7 @@
           "fits_path": "/demo/assets/33a87ebe34221120948ec7e74b3462c052e57c5e079b851a1b327491c994b1f3/original.fits",
           "fits_sha256": "77c0421b6d3748deb3cb5cfc75db9c126a7b4e48c5fa9fe49fac46824f85c0e7",
           "preview_sha256": "76960e9e136d1d2438660d92794d381bae34d90bdb69efc5922be0aa6e3ed936",
-          "metadata_sha256": "3dbb9a44f44eddedf1e403c00b4227dfa1a72b82c85405172b5bac613d89fc25",
+          "metadata_sha256": "bfb3e2051cc7080727e256a9028ba6692e37f2c6192c4d5c57fa7ef738372b50",
           "provenance": {
             "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
             "renderer": "backend.app.fits_image.render_fits",
@@ -162,7 +162,21 @@
             "science_values": "original FITS copied byte-for-byte",
             "source_sha256": "77c0421b6d3748deb3cb5cfc75db9c126a7b4e48c5fa9fe49fac46824f85c0e7"
           },
-          "acquisition": null
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-260",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 7.455e-7,
+            "archive_em_max_m": 1.1167e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
         },
         {
           "image_id": "feef6ed477f8cb54def8628018092a314f506fda7945bce93932a534db995df0",
@@ -182,7 +196,7 @@
           "fits_path": "/demo/assets/feef6ed477f8cb54def8628018092a314f506fda7945bce93932a534db995df0/original.fits",
           "fits_sha256": "fc8d60ffb462e67fd8e38bff2d87b1ee49e3ed7479513d00fc4517b99ac99b88",
           "preview_sha256": "806ec0f74d6016145ce66e2ab7afd80650fdacc936c6eca4e5b437226f06cb83",
-          "metadata_sha256": "9f4b8a0e2c46ad7ef20e46a1444fd28645e8e824daa833de737ecebc3887961c",
+          "metadata_sha256": "532d673df4b5d9392732a6a4e9431bc1123f52d692c5a6ec750f325413b86afa",
           "provenance": {
             "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
             "renderer": "backend.app.fits_image.render_fits",
@@ -197,7 +211,413 @@
             "science_values": "original FITS copied byte-for-byte",
             "source_sha256": "fc8d60ffb462e67fd8e38bff2d87b1ee49e3ed7479513d00fc4517b99ac99b88"
           },
-          "acquisition": null
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-260",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 2.4027e-6,
+            "archive_em_max_m": 3.8473e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
+        },
+        {
+          "image_id": "cc178e402ac0ec949cb34de563e075c22a45ec1c9a243f2866d36774d0cce821",
+          "obs_id": "2025W29_1A_0054_2",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W29_1A_0054_2/D2",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W29_1A/l2b-v20-2025-260/2/level2_2025W29_1A_0054_2D2_spx_l2b-v20-2025-260.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2025-07-14T05:45:56.780Z",
+          "detector": 2,
+          "spectral": {
+            "wavelength_um": 1.6106727902864502,
+            "bandwidth_um": 0.03869393098847321,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/cc178e402ac0ec949cb34de563e075c22a45ec1c9a243f2866d36774d0cce821/preview.png",
+          "metadata_path": "/demo/assets/cc178e402ac0ec949cb34de563e075c22a45ec1c9a243f2866d36774d0cce821/metadata.json",
+          "fits_path": "/demo/assets/cc178e402ac0ec949cb34de563e075c22a45ec1c9a243f2866d36774d0cce821/original.fits",
+          "fits_sha256": "9d811996eb23c1c447e3ae841baed451a308ca3a8bef703f02024e2bf9b9ca0f",
+          "preview_sha256": "e048841ade680afe04e66efbabbf1e03a843c898f00ae8b95cceb0edabcad0b1",
+          "metadata_sha256": "e308a2f24221345ae1282cb594f9c91abaf8d14762b6da5317f125a6e6f27b5b",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "9d811996eb23c1c447e3ae841baed451a308ca3a8bef703f02024e2bf9b9ca0f"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-260",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 1.1033e-6,
+            "archive_em_max_m": 1.6499e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
+        },
+        {
+          "image_id": "57673c513b6d796abeb253c2b63651f9e8f8ca29d4cc50883c3c70a961b89dea",
+          "obs_id": "2025W29_1A_0054_2",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W29_1A_0054_2/D5",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W29_1A/l2b-v20-2025-260/5/level2_2025W29_1A_0054_2D5_spx_l2b-v20-2025-260.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2025-07-14T05:45:56.781Z",
+          "detector": 5,
+          "spectral": {
+            "wavelength_um": 4.38163440186718,
+            "bandwidth_um": 0.038157737320187866,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/57673c513b6d796abeb253c2b63651f9e8f8ca29d4cc50883c3c70a961b89dea/preview.png",
+          "metadata_path": "/demo/assets/57673c513b6d796abeb253c2b63651f9e8f8ca29d4cc50883c3c70a961b89dea/metadata.json",
+          "fits_path": "/demo/assets/57673c513b6d796abeb253c2b63651f9e8f8ca29d4cc50883c3c70a961b89dea/original.fits",
+          "fits_sha256": "da87c46bb36c13fe180c619293993efaa4b3999ba9d591b2c64e12e5489c989f",
+          "preview_sha256": "ae5906a5d1d76d550318aab98fdebbe19fa13c9caf7e90668a02445440566003",
+          "metadata_sha256": "b4a02dcc23e9d05cff1049e86ed7e812cda6667339e785a62a75ede94a2997b0",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "da87c46bb36c13fe180c619293993efaa4b3999ba9d591b2c64e12e5489c989f"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-260",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 3.8113e-6,
+            "archive_em_max_m": 4.43e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
+        },
+        {
+          "image_id": "8e683f34cab8e7f3cb9a6dbdcf4d745be3d747a146aa5a5751cace623b6d800e",
+          "obs_id": "2025W29_2A_0202_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W29_2A_0202_1/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W29_2A/l2b-v20-2025-262/3/level2_2025W29_2A_0202_1D3_spx_l2b-v20-2025-262.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2025-07-18T07:29:50.571Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 2.2347156225132343,
+            "bandwidth_um": 0.05572270182501368,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/8e683f34cab8e7f3cb9a6dbdcf4d745be3d747a146aa5a5751cace623b6d800e/preview.png",
+          "metadata_path": "/demo/assets/8e683f34cab8e7f3cb9a6dbdcf4d745be3d747a146aa5a5751cace623b6d800e/metadata.json",
+          "fits_path": "/demo/assets/8e683f34cab8e7f3cb9a6dbdcf4d745be3d747a146aa5a5751cace623b6d800e/original.fits",
+          "fits_sha256": "f42964802a7d4ac76ee6c09d62ffde8a642c194756c9f264f33778b164fc3804",
+          "preview_sha256": "b60bb98e002f0ba091aa84c2bda31ca0a64c7534b9ea355fc6c5f0640ed1c912",
+          "metadata_sha256": "e0616937493ce4a70e479fb42d09a156fdb28dda92e0e6ecfd166567196ee973",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "f42964802a7d4ac76ee6c09d62ffde8a642c194756c9f264f33778b164fc3804"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-262",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
+        },
+        {
+          "image_id": "da5207c0f23595f82f45ce8f93927583cc1591ee71e286551ce02b0e8f444eb0",
+          "obs_id": "2025W29_2A_0202_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W29_2A_0202_1/D6",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W29_2A/l2b-v20-2025-261/6/level2_2025W29_2A_0202_1D6_spx_l2b-v20-2025-261.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2025-07-18T07:29:50.571Z",
+          "detector": 6,
+          "spectral": {
+            "wavelength_um": 4.872298308705789,
+            "bandwidth_um": 0.03752688190378807,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/da5207c0f23595f82f45ce8f93927583cc1591ee71e286551ce02b0e8f444eb0/preview.png",
+          "metadata_path": "/demo/assets/da5207c0f23595f82f45ce8f93927583cc1591ee71e286551ce02b0e8f444eb0/metadata.json",
+          "fits_path": "/demo/assets/da5207c0f23595f82f45ce8f93927583cc1591ee71e286551ce02b0e8f444eb0/original.fits",
+          "fits_sha256": "7f543283a5fe13d2e8348c70a506010e43c32ac8a49898248e43de6c9317504a",
+          "preview_sha256": "4f88c8962f02f1d9755196407870249332933e2953321787c999850e7c76d32d",
+          "metadata_sha256": "a6f9b4a178aa9093a2b329d7dad424d622aa00016bc6d47925e83976e9e42a45",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "7f543283a5fe13d2e8348c70a506010e43c32ac8a49898248e43de6c9317504a"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-261",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 4.4115e-6,
+            "archive_em_max_m": 5.0096e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
+        },
+        {
+          "image_id": "da819b18d47bc2fbbfc2918c2ae86038f0b5c8cb8dbc64668910a09cb148258d",
+          "obs_id": "2025W51_2A_0258_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W51_2A_0258_3/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W51_2A/l2b-v21-2025-357/3/level2_2025W51_2A_0258_3D3_spx_l2b-v21-2025-357.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2025-12-19T18:40:46.552Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 2.270294506904576,
+            "bandwidth_um": 0.05643454356744215,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/da819b18d47bc2fbbfc2918c2ae86038f0b5c8cb8dbc64668910a09cb148258d/preview.png",
+          "metadata_path": "/demo/assets/da819b18d47bc2fbbfc2918c2ae86038f0b5c8cb8dbc64668910a09cb148258d/metadata.json",
+          "fits_path": "/demo/assets/da819b18d47bc2fbbfc2918c2ae86038f0b5c8cb8dbc64668910a09cb148258d/original.fits",
+          "fits_sha256": "1ce8c812cb342ce65a309ca62079b36c186f8c72f9f766929840bba0b92e886b",
+          "preview_sha256": "04f72dfe7f40d719b7bf71c31ff5148a6b4f06b8a30fa0c29ddae12d684be80e",
+          "metadata_sha256": "0f7f35817553fa6cfaf832ffa9da4bd23b370cd6e01f153ba32902049fc4f622",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "1ce8c812cb342ce65a309ca62079b36c186f8c72f9f766929840bba0b92e886b"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v21-2025-357",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
+        },
+        {
+          "image_id": "1d7ce1deecfd6cd3eff998e497231a7f56854ec8fd405945cd56c8747f37970b",
+          "obs_id": "2025W51_2A_0258_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W51_2A_0258_3/D6",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W51_2A/l2b-v21-2025-357/6/level2_2025W51_2A_0258_3D6_spx_l2b-v21-2025-357.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2025-12-19T18:40:46.552Z",
+          "detector": 6,
+          "spectral": {
+            "wavelength_um": 4.897192172754823,
+            "bandwidth_um": 0.0373403511500299,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/1d7ce1deecfd6cd3eff998e497231a7f56854ec8fd405945cd56c8747f37970b/preview.png",
+          "metadata_path": "/demo/assets/1d7ce1deecfd6cd3eff998e497231a7f56854ec8fd405945cd56c8747f37970b/metadata.json",
+          "fits_path": "/demo/assets/1d7ce1deecfd6cd3eff998e497231a7f56854ec8fd405945cd56c8747f37970b/original.fits",
+          "fits_sha256": "4a5c182f2bbb8a7eceac919b8c37f04397b8b3c1f415effffd8d6eb154f8bf3e",
+          "preview_sha256": "286a1b6618141481773e2533fcaa680ed83caa30524eaedddbf64d243bf7ecd9",
+          "metadata_sha256": "85655527215d7c1d10873b9671dbe1bc410c60f220d5389ca7f8b6d3ace226ac",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "4a5c182f2bbb8a7eceac919b8c37f04397b8b3c1f415effffd8d6eb154f8bf3e"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v21-2025-357",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 4.4115e-6,
+            "archive_em_max_m": 5.0096e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
+        },
+        {
+          "image_id": "d7aac0467d14eb93820108c152873e45c3d86aba1cc51914ea5d16495e34aaf9",
+          "obs_id": "2025W52_1A_0539_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W52_1A_0539_3/D2",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W52_1A/l2b-v21-2025-363/2/level2_2025W52_1A_0539_3D2_spx_l2b-v21-2025-363.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2025-12-24T16:00:54.581Z",
+          "detector": 2,
+          "spectral": {
+            "wavelength_um": 1.5056299338319907,
+            "bandwidth_um": 0.036922511595517245,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/d7aac0467d14eb93820108c152873e45c3d86aba1cc51914ea5d16495e34aaf9/preview.png",
+          "metadata_path": "/demo/assets/d7aac0467d14eb93820108c152873e45c3d86aba1cc51914ea5d16495e34aaf9/metadata.json",
+          "fits_path": "/demo/assets/d7aac0467d14eb93820108c152873e45c3d86aba1cc51914ea5d16495e34aaf9/original.fits",
+          "fits_sha256": "80b483fd562fac7e18355db922318e681309ad3d91b8d3eb880210a3a7010c48",
+          "preview_sha256": "b0c730e2f4c307e9f8cb01471688f16ce2f9f4a7a1e9ff27bd2bda90938c2c4f",
+          "metadata_sha256": "df617641f40107dc0fda0c5cf733b71c36bcdc783f41805cd91c56b1e2393f88",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "80b483fd562fac7e18355db922318e681309ad3d91b8d3eb880210a3a7010c48"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v21-2025-363",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 1.1033e-6,
+            "archive_em_max_m": 1.6499e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
+        },
+        {
+          "image_id": "36b2d4854354926a835c4b6253eac0e2aa78c315eb70a3d963b1c37a4df30540",
+          "obs_id": "2025W52_1A_0539_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W52_1A_0539_3/D5",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W52_1A/l2b-v21-2025-363/5/level2_2025W52_1A_0539_3D5_spx_l2b-v21-2025-363.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2025-12-24T16:00:54.581Z",
+          "detector": 5,
+          "spectral": {
+            "wavelength_um": 4.2785091627445055,
+            "bandwidth_um": 0.0370890864323757,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/36b2d4854354926a835c4b6253eac0e2aa78c315eb70a3d963b1c37a4df30540/preview.png",
+          "metadata_path": "/demo/assets/36b2d4854354926a835c4b6253eac0e2aa78c315eb70a3d963b1c37a4df30540/metadata.json",
+          "fits_path": "/demo/assets/36b2d4854354926a835c4b6253eac0e2aa78c315eb70a3d963b1c37a4df30540/original.fits",
+          "fits_sha256": "bb8a177d26ed549615fa2004d30f7c5db7b0323b9732795ef66373548d0677b0",
+          "preview_sha256": "73d06bc575b4e1806015e0b66fc7dfb541dcef912e6cc5fcbaf5d2c6d36a6e7e",
+          "metadata_sha256": "e897c2926f7a1ad184f5c3ea64c2a7f7fa936b91f914fc14d3605dec838c74a6",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "bb8a177d26ed549615fa2004d30f7c5db7b0323b9732795ef66373548d0677b0"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v21-2025-363",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 3.8113e-6,
+            "archive_em_max_m": 4.43e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
         },
         {
           "image_id": "c56c4179485e93d706a423b806f524aa02ede154fb7673e4b8ce92fdbec8445b",
@@ -217,7 +637,7 @@
           "fits_path": "/demo/assets/c56c4179485e93d706a423b806f524aa02ede154fb7673e4b8ce92fdbec8445b/original.fits",
           "fits_sha256": "6591bbba39f7e919e90c65a2c5a075f8271b290083506d6ce3f864f47b04a42b",
           "preview_sha256": "8e95a533ceb5c796dadf6cdb232d1c68af1b50a051ed13eee0cc6f4fc2c32a09",
-          "metadata_sha256": "f0249ce2b562da145b9597ba5892802f38aa7bc3092aefb336590b8c69a579ef",
+          "metadata_sha256": "0c3035c5c52236b11d07b7e19cb567e059d786374eba65d29cadc27b17bbe7c9",
           "provenance": {
             "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
             "renderer": "backend.app.fits_image.render_fits",
@@ -232,7 +652,21 @@
             "science_values": "original FITS copied byte-for-byte",
             "source_sha256": "6591bbba39f7e919e90c65a2c5a075f8271b290083506d6ce3f864f47b04a42b"
           },
-          "acquisition": null
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v22-2026-007",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 7.455e-7,
+            "archive_em_max_m": 1.1167e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
         },
         {
           "image_id": "02638fe5db8ab1fb76c7fad7783b1dbeb8df8fe7c445b2892fbe5299791f9519",
@@ -252,7 +686,7 @@
           "fits_path": "/demo/assets/02638fe5db8ab1fb76c7fad7783b1dbeb8df8fe7c445b2892fbe5299791f9519/original.fits",
           "fits_sha256": "39a73c7e45b3d663c136dd1176f27972eb4345c629bbdf98e2968b84e86f0b0e",
           "preview_sha256": "e8384044c0baba3ccc90a3ae8340e9c60136c8265482798b22e393107268eb1b",
-          "metadata_sha256": "2f64449440b44d5e758364898810882a3ae23ec89cd510813eb3a7f1bd0543e1",
+          "metadata_sha256": "a7e9b621241a5cdc028d34a7781f2d39eb835059b7fedb8bdad504c007f10737",
           "provenance": {
             "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
             "renderer": "backend.app.fits_image.render_fits",
@@ -267,7 +701,21 @@
             "science_values": "original FITS copied byte-for-byte",
             "source_sha256": "39a73c7e45b3d663c136dd1176f27972eb4345c629bbdf98e2968b84e86f0b0e"
           },
-          "acquisition": null
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v22-2026-007",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 2.4027e-6,
+            "archive_em_max_m": 3.8473e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
         },
         {
           "image_id": "f6fbe6d097f0ded0dd92a23c65dd92aac5d6d8efe976d4a15721157dd4fc94aa",
@@ -287,7 +735,7 @@
           "fits_path": "/demo/assets/f6fbe6d097f0ded0dd92a23c65dd92aac5d6d8efe976d4a15721157dd4fc94aa/original.fits",
           "fits_sha256": "88d42086353e66209bcb114504871b0ad979e60273a56511740b77b94eb94e90",
           "preview_sha256": "a2cdc2175ef98bd2e0f508974bcfb22eae165b9c49b7e3473fae5596cd8a66e9",
-          "metadata_sha256": "cbf156f2f08597aa37045403d0d62f9c11d97020d32b6772df75bce045ff309d",
+          "metadata_sha256": "a137f664adc4c97d04668f77ea0ec2251b7a8203e38e99a3f558172f77f1ce31",
           "provenance": {
             "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
             "renderer": "backend.app.fits_image.render_fits",
@@ -302,7 +750,21 @@
             "science_values": "original FITS copied byte-for-byte",
             "source_sha256": "88d42086353e66209bcb114504871b0ad979e60273a56511740b77b94eb94e90"
           },
-          "acquisition": null
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v25-2026-195",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 7.455e-7,
+            "archive_em_max_m": 1.1167e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
         },
         {
           "image_id": "490d400b938e53170c8d1b5e2bde6cc7044fd38f309b9b4516f4573c2e900f21",
@@ -322,7 +784,7 @@
           "fits_path": "/demo/assets/490d400b938e53170c8d1b5e2bde6cc7044fd38f309b9b4516f4573c2e900f21/original.fits",
           "fits_sha256": "5af39570aacfbbfd9036c520b71d3bbcfb93faf91da92a205107da2de4a65c1a",
           "preview_sha256": "f0d7d4bf48de414866446aa56a108fb69c57923045a132bea77f73458ff4f526",
-          "metadata_sha256": "02e5db1395a640c077a65da2cd7f9a2bf360a736588b276f0339991486bb8ae1",
+          "metadata_sha256": "8f1aabdef9a46b1fd07c782ffd6fe01d36cd88186b468e87eff27d184a950551",
           "provenance": {
             "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
             "renderer": "backend.app.fits_image.render_fits",
@@ -337,7 +799,2152 @@
             "science_values": "original FITS copied byte-for-byte",
             "source_sha256": "5af39570aacfbbfd9036c520b71d3bbcfb93faf91da92a205107da2de4a65c1a"
           },
-          "acquisition": null
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v25-2026-195",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 2.4027e-6,
+            "archive_em_max_m": 3.8473e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
+        },
+        {
+          "image_id": "da232c05965f5996c63800a841f96ea670487475ee01d7a51c748f787a68e02b",
+          "obs_id": "2026W29_1A_0457_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W29_1A_0457_3/D2",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W29_1A/l2b-v25-2026-203/2/level2_2026W29_1A_0457_3D2_spx_l2b-v25-2026-203.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2026-07-15T08:50:29.874Z",
+          "detector": 2,
+          "spectral": {
+            "wavelength_um": 1.6194941304074095,
+            "bandwidth_um": 0.03915325055886754,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/da232c05965f5996c63800a841f96ea670487475ee01d7a51c748f787a68e02b/preview.png",
+          "metadata_path": "/demo/assets/da232c05965f5996c63800a841f96ea670487475ee01d7a51c748f787a68e02b/metadata.json",
+          "fits_path": "/demo/assets/da232c05965f5996c63800a841f96ea670487475ee01d7a51c748f787a68e02b/original.fits",
+          "fits_sha256": "bbf342d2207a8141e959767df1d613885ec45f3086cf9e727a5b8aaa3809ff36",
+          "preview_sha256": "3a9ada9da2ce1893424e47a6324d4d563cca8b2f51afc2ac4ebfbd2990885da1",
+          "metadata_sha256": "a1f1cbc67d9111c56d6420d44044a128bfd5fa90599a8a0eaff98515f9143104",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "bbf342d2207a8141e959767df1d613885ec45f3086cf9e727a5b8aaa3809ff36"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v25-2026-203",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 1.1033e-6,
+            "archive_em_max_m": 1.6499e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
+        },
+        {
+          "image_id": "1768fa3106a37ecac95f7e38637cd8239aeb5d5e9c70c383611c061843d32c8e",
+          "obs_id": "2026W29_1A_0457_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W29_1A_0457_3/D5",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W29_1A/l2b-v25-2026-203/5/level2_2026W29_1A_0457_3D5_spx_l2b-v25-2026-203.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2026-07-15T08:50:29.874Z",
+          "detector": 5,
+          "spectral": {
+            "wavelength_um": 4.390126914370294,
+            "bandwidth_um": 0.038049871794760735,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/1768fa3106a37ecac95f7e38637cd8239aeb5d5e9c70c383611c061843d32c8e/preview.png",
+          "metadata_path": "/demo/assets/1768fa3106a37ecac95f7e38637cd8239aeb5d5e9c70c383611c061843d32c8e/metadata.json",
+          "fits_path": "/demo/assets/1768fa3106a37ecac95f7e38637cd8239aeb5d5e9c70c383611c061843d32c8e/original.fits",
+          "fits_sha256": "016421ea76a74209f1a728147eb83687defa90fcc244afff3dfe44d525962680",
+          "preview_sha256": "8d7d2bd4a84f2671e2be9d29a37d768a8b56471aca857c9a0a59d7bdb38adc68",
+          "metadata_sha256": "0ea92447c79ae51ee8ee92ee148ef0843418ea791be23855cfb1ffffc739b237",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "016421ea76a74209f1a728147eb83687defa90fcc244afff3dfe44d525962680"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v25-2026-203",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 3.8113e-6,
+            "archive_em_max_m": 4.43e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
+        },
+        {
+          "image_id": "c070ae74062c593d3220ee829387cc675d45e787a68936d215fff1c471124a06",
+          "obs_id": "2026W29_2A_0552_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W29_2A_0552_3/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W29_2A/l2b-v25-2026-206/3/level2_2026W29_2A_0552_3D3_spx_l2b-v25-2026-206.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2026-07-19T05:42:32.131Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 2.2568637526492976,
+            "bandwidth_um": 0.05622285307728922,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/c070ae74062c593d3220ee829387cc675d45e787a68936d215fff1c471124a06/preview.png",
+          "metadata_path": "/demo/assets/c070ae74062c593d3220ee829387cc675d45e787a68936d215fff1c471124a06/metadata.json",
+          "fits_path": "/demo/assets/c070ae74062c593d3220ee829387cc675d45e787a68936d215fff1c471124a06/original.fits",
+          "fits_sha256": "447f7c8ec542554c8549bce7e0322c0c2cfd8d217a622ade9815694bdbbe6131",
+          "preview_sha256": "379da0ab747eb0ecb5117a93129744c6f463c060e1d6f289f73b877eb7de2a09",
+          "metadata_sha256": "e7437c15512f1bfd8e24219f76afd359ead07692b4112e2adefedefded68145e",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "447f7c8ec542554c8549bce7e0322c0c2cfd8d217a622ade9815694bdbbe6131"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v25-2026-206",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
+        },
+        {
+          "image_id": "56186e04dbc0b8f65560ca4b07631a6519e5eb963f27af90995ba5e26a2db824",
+          "obs_id": "2026W29_2A_0552_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W29_2A_0552_3/D6",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W29_2A/l2b-v25-2026-206/6/level2_2026W29_2A_0552_3D6_spx_l2b-v25-2026-206.fits?center=10.684708,41.268750&size=0.4370deg",
+          "observed_at_utc": "2026-07-19T05:42:32.131Z",
+          "detector": 6,
+          "spectral": {
+            "wavelength_um": 4.888098225874059,
+            "bandwidth_um": 0.037406912584807356,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/56186e04dbc0b8f65560ca4b07631a6519e5eb963f27af90995ba5e26a2db824/preview.png",
+          "metadata_path": "/demo/assets/56186e04dbc0b8f65560ca4b07631a6519e5eb963f27af90995ba5e26a2db824/metadata.json",
+          "fits_path": "/demo/assets/56186e04dbc0b8f65560ca4b07631a6519e5eb963f27af90995ba5e26a2db824/original.fits",
+          "fits_sha256": "96ef901c8cb8e24b6fb235fcf555da5c10ec7b59f859d9d113ed3aebd65324f4",
+          "preview_sha256": "096f7b3a1d7181b44028c1daf3b8699c425a80a1f5112a3781bd4115de51a842",
+          "metadata_sha256": "85a33000b74588ddf34f82e85708901f99bfbf23c53cba73f9527c6eb881f077",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "96ef901c8cb8e24b6fb235fcf555da5c10ec7b59f859d9d113ed3aebd65324f4"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v25-2026-206",
+            "ra": 10.684708,
+            "dec": 41.26875,
+            "position_source": "https://simbad.u-strasbg.fr/simbad/sim-basic?Ident=m31",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed ICRS position of the galaxy nucleus; extended source, no point-source astrometry",
+            "discovery_sha256": "e90fc1d112ec35b80b2bfd5698cc4870b785451b3d668260c9c95b48a0183032",
+            "archive_em_min_m": 4.4115e-6,
+            "archive_em_max_m": 5.0096e-6,
+            "predicted_ra": null,
+            "predicted_dec": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "barnard",
+      "name": "Barnard’s Star — fast-moving nearby red dwarf",
+      "ra": 269.44623,
+      "dec": 4.76867,
+      "coordinate_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+      "science_context": "The nearest single star to the Sun (about 6 light-years) and the star with the fastest known motion across the sky: about 10.4″ per year, mostly northward (Gaia DR3), which is 1.7 SPHEREx pixels. Detector D3 (about 1.6–2.4 µm) at three epochs: August 2025 and March 2026 (data release QR2) and August 2026 (QR3). The marker shows the Gaia position propagated to each exposure, not a measured position. The star is bright enough to saturate its core (OVERFLOW flags), so a position needs a centroid and is best averaged over several frames: a one-year test averaging three and four frames measured 9.2″ per year against 10.39″ from Gaia. The epochs mix two data releases, so positions can be compared but brightness should not be.",
+      "status": "ready",
+      "missing_reason": null,
+      "observations": [
+        {
+          "image_id": "7a840fdf0ec17469679a2c7c797f95eed9786b2a11a8d2a9a1b474658b9821d0",
+          "obs_id": "2025W33_2C_0321_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W33_2C_0321_1/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W33_2C/l2b-v20-2025-267/3/level2_2025W33_2C_0321_1D3_spx_l2b-v20-2025-267.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2025-08-15T20:45:11.338Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 2.3078077038914864,
+            "bandwidth_um": 0.05733943688269648,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/7a840fdf0ec17469679a2c7c797f95eed9786b2a11a8d2a9a1b474658b9821d0/preview.png",
+          "metadata_path": "/demo/assets/7a840fdf0ec17469679a2c7c797f95eed9786b2a11a8d2a9a1b474658b9821d0/metadata.json",
+          "fits_path": "/demo/assets/7a840fdf0ec17469679a2c7c797f95eed9786b2a11a8d2a9a1b474658b9821d0/original.fits",
+          "fits_sha256": "23cd818f76d1666f8039be78ac0560263d675b2191059db8abfada6181434388",
+          "preview_sha256": "fbcc2e226f09e2283c67106e5b20c995eb850a54195cc1fc93f784d65e51627b",
+          "metadata_sha256": "66ed461342d71c10aee7b62d2c7701f150a05647660d2d97c8b4a2c17db840f5",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "23cd818f76d1666f8039be78ac0560263d675b2191059db8abfada6181434388"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-267",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.44635280753175,
+            "predicted_dec": 4.767115869679113
+          }
+        },
+        {
+          "image_id": "0f6fed956ecc6968fbc8f3612413c353550568ca92d8a66274fc667eb7942af3",
+          "obs_id": "2025W33_2C_0321_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W33_2C_0321_3/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W33_2C/l2b-v20-2025-267/3/level2_2025W33_2C_0321_3D3_spx_l2b-v20-2025-267.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2025-08-15T20:49:29.198Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 2.395098533514874,
+            "bandwidth_um": 0.05911282188803679,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/0f6fed956ecc6968fbc8f3612413c353550568ca92d8a66274fc667eb7942af3/preview.png",
+          "metadata_path": "/demo/assets/0f6fed956ecc6968fbc8f3612413c353550568ca92d8a66274fc667eb7942af3/metadata.json",
+          "fits_path": "/demo/assets/0f6fed956ecc6968fbc8f3612413c353550568ca92d8a66274fc667eb7942af3/original.fits",
+          "fits_sha256": "5fc258a31ee4388cbacf2205b7f07a4f4f4fad5693f231845e2129f3b96fbc99",
+          "preview_sha256": "1309dc1557ff00453c26d87eaa74086f70dbf3ee4fb99827aeb7aeae426bcff9",
+          "metadata_sha256": "71e41e092c7022ef3d92459e3401b6f838d3e9fad69df6180783b46b8e0fad1c",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "5fc258a31ee4388cbacf2205b7f07a4f4f4fad5693f231845e2129f3b96fbc99"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-267",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.4463528057064,
+            "predicted_dec": 4.767115893195262
+          }
+        },
+        {
+          "image_id": "749c10f87e3b531fa424666bdb17c4a4de0612d646a7846a3b1ac155a4da813a",
+          "obs_id": "2025W33_2C_0386_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W33_2C_0386_3/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W33_2C/l2b-v20-2025-267/3/level2_2025W33_2C_0386_3D3_spx_l2b-v20-2025-267.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2025-08-16T03:19:14.791Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 1.646004294235401,
+            "bandwidth_um": 0.03933433026675682,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/749c10f87e3b531fa424666bdb17c4a4de0612d646a7846a3b1ac155a4da813a/preview.png",
+          "metadata_path": "/demo/assets/749c10f87e3b531fa424666bdb17c4a4de0612d646a7846a3b1ac155a4da813a/metadata.json",
+          "fits_path": "/demo/assets/749c10f87e3b531fa424666bdb17c4a4de0612d646a7846a3b1ac155a4da813a/original.fits",
+          "fits_sha256": "d1bd0bfde3ddebb81f65c15d600abd1d87a0ae6c5f11e3e555f2204c1312455b",
+          "preview_sha256": "6896e3ea42b5dbca8ed062e34af06d3f58572e3fb2339633b8409394b862d106",
+          "metadata_sha256": "4ddf89e84ef3b4bd3be91038f3e3f3a804f0fdf38740836ae0d2dafccf97bdb8",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "d1bd0bfde3ddebb81f65c15d600abd1d87a0ae6c5f11e3e555f2204c1312455b"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-267",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.44635264013755,
+            "predicted_dec": 4.767118026253363
+          }
+        },
+        {
+          "image_id": "99b61ce8046ef937e6fddff4f32d8716af34e211ce053dd6690a7115c02b0942",
+          "obs_id": "2025W34_1B_0164_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W34_1B_0164_1/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W34_1B/l2b-v20-2025-267/3/level2_2025W34_1B_0164_1D3_spx_l2b-v20-2025-267.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2025-08-18T20:28:41.370Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 1.7081349295816737,
+            "bandwidth_um": 0.040771418371467846,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/99b61ce8046ef937e6fddff4f32d8716af34e211ce053dd6690a7115c02b0942/preview.png",
+          "metadata_path": "/demo/assets/99b61ce8046ef937e6fddff4f32d8716af34e211ce053dd6690a7115c02b0942/metadata.json",
+          "fits_path": "/demo/assets/99b61ce8046ef937e6fddff4f32d8716af34e211ce053dd6690a7115c02b0942/original.fits",
+          "fits_sha256": "a23a665bbcdc170eb63362775a2edbaa6ba7eb9cc82fb18a5fa328d55d31071c",
+          "preview_sha256": "8903eafe9a2a095aa2a48505f9ff2245b8974906647ba666b177dafc6fadcc21",
+          "metadata_sha256": "5e6e2fcedd5e8246cc6496b83c01b6c033484933bdcc4d1da7a17d5d24a5f409",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "a23a665bbcdc170eb63362775a2edbaa6ba7eb9cc82fb18a5fa328d55d31071c"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-267",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.44635097941995,
+            "predicted_dec": 4.767139421621991
+          }
+        },
+        {
+          "image_id": "a381c8fcfae0d1a1a8af0f729a9345c59f12a8a148dad37add80a9d687cdf12d",
+          "obs_id": "2025W34_2B_0030_2",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W34_2B_0030_2/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W34_2B/l2b-v20-2025-269/3/level2_2025W34_2B_0030_2D3_spx_l2b-v20-2025-269.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2025-08-21T15:22:34.917Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 1.873118321896594,
+            "bandwidth_um": 0.046735948535800605,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/a381c8fcfae0d1a1a8af0f729a9345c59f12a8a148dad37add80a9d687cdf12d/preview.png",
+          "metadata_path": "/demo/assets/a381c8fcfae0d1a1a8af0f729a9345c59f12a8a148dad37add80a9d687cdf12d/metadata.json",
+          "fits_path": "/demo/assets/a381c8fcfae0d1a1a8af0f729a9345c59f12a8a148dad37add80a9d687cdf12d/original.fits",
+          "fits_sha256": "29393fca70c780a5b8bf14bd36cd993a6c2c1273a2aa968f82a0b9659e25fa16",
+          "preview_sha256": "0b90868b1d5f626dc9e2c3d36ec326f0111ca6352cd71cb360c1459121719c2e",
+          "metadata_sha256": "f47f2fa45e9acd85dbaf8ba480c245534d3b1a9b13a328069b5574b8bc533bc2",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "29393fca70c780a5b8bf14bd36cd993a6c2c1273a2aa968f82a0b9659e25fa16"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-269",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.4463492743328,
+            "predicted_dec": 4.76716138861271
+          }
+        },
+        {
+          "image_id": "8dd2744163f3bd7fe909a00e8a7094b6701ecfe2932182f5944c692478cd66a5",
+          "obs_id": "2025W35_1A_0008_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W35_1A_0008_1/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W35_1A/l2b-v20-2025-269/3/level2_2025W35_1A_0008_1D3_spx_l2b-v20-2025-269.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2025-08-25T00:49:34.286Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 2.0064413596483193,
+            "bandwidth_um": 0.049684995350893116,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/8dd2744163f3bd7fe909a00e8a7094b6701ecfe2932182f5944c692478cd66a5/preview.png",
+          "metadata_path": "/demo/assets/8dd2744163f3bd7fe909a00e8a7094b6701ecfe2932182f5944c692478cd66a5/metadata.json",
+          "fits_path": "/demo/assets/8dd2744163f3bd7fe909a00e8a7094b6701ecfe2932182f5944c692478cd66a5/original.fits",
+          "fits_sha256": "77c7f77bbdedaf3c1c4996bbb94b01255c9014669cf385c21b15fa172c18b87d",
+          "preview_sha256": "ab5a90514eed18fd38e7300d5302e938c45ea2b083e059fb432827217c731081",
+          "metadata_sha256": "e7503fe83d8221171c04f813a630a5dae43e8912b5eb0297048d5e48d0051b47",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "77c7f77bbdedaf3c1c4996bbb94b01255c9014669cf385c21b15fa172c18b87d"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-269",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.44634719835665,
+            "predicted_dec": 4.767188133842081
+          }
+        },
+        {
+          "image_id": "df7511e9d7a90add343d73cf9cde0aa674b244d988a0c6d768557366bfbeaad8",
+          "obs_id": "2025W35_1A_0484_2",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W35_1A_0484_2/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W35_1A/l2b-v20-2025-269/3/level2_2025W35_1A_0484_2D3_spx_l2b-v20-2025-269.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2025-08-27T11:37:04.954Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 2.250409038794809,
+            "bandwidth_um": 0.056033531425609476,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/df7511e9d7a90add343d73cf9cde0aa674b244d988a0c6d768557366bfbeaad8/preview.png",
+          "metadata_path": "/demo/assets/df7511e9d7a90add343d73cf9cde0aa674b244d988a0c6d768557366bfbeaad8/metadata.json",
+          "fits_path": "/demo/assets/df7511e9d7a90add343d73cf9cde0aa674b244d988a0c6d768557366bfbeaad8/original.fits",
+          "fits_sha256": "c422b955480597ac9d10791a6975a3df0d741c2f4802d2ab2c42543e59962a56",
+          "preview_sha256": "1a9726e440cada6238409ac77c30ce30a04a746ef5b48be6a50ed79a6e3c47bd",
+          "metadata_sha256": "2cfce010db5965f6bcc1ba174436b013b0b3e1c1cf17edd6c539734f7bdd1db5",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "c422b955480597ac9d10791a6975a3df0d741c2f4802d2ab2c42543e59962a56"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-269",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.44634569988256,
+            "predicted_dec": 4.767207438992348
+          }
+        },
+        {
+          "image_id": "ddf77357de8aa6c15cb0ce2414d23974b1c527950f920033339a2a90845d8775",
+          "obs_id": "2026W12_1A_0598_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W12_1A_0598_1/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W12_1A/l2b-v24-2026-082/3/level2_2026W12_1A_0598_1D3_spx_l2b-v24-2026-082.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2026-03-19T07:25:17.581Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 1.7936084032530133,
+            "bandwidth_um": 0.04419564810782686,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/ddf77357de8aa6c15cb0ce2414d23974b1c527950f920033339a2a90845d8775/preview.png",
+          "metadata_path": "/demo/assets/ddf77357de8aa6c15cb0ce2414d23974b1c527950f920033339a2a90845d8775/metadata.json",
+          "fits_path": "/demo/assets/ddf77357de8aa6c15cb0ce2414d23974b1c527950f920033339a2a90845d8775/original.fits",
+          "fits_sha256": "e3425f19cf5307cc8c78df4263ecf56342bd074607090c7f0ceb40b4e6481ebb",
+          "preview_sha256": "9528119a8be9686ba7e01c34ea6bda438fe2d1f88873d83954f9507c036eff65",
+          "metadata_sha256": "8a387abe5096aa57d357189a2a378748ad04b338d11f458d844701ca1765f810",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "e3425f19cf5307cc8c78df4263ecf56342bd074607090c7f0ceb40b4e6481ebb"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v24-2026-082",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.4462210184742,
+            "predicted_dec": 4.768813733364512
+          }
+        },
+        {
+          "image_id": "1d44e5c993c1146abed3f0dab6b62a8f407183612b37f3c4f993a59d85236e13",
+          "obs_id": "2026W12_1A_0598_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W12_1A_0598_3/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W12_1A/l2b-v24-2026-082/3/level2_2026W12_1A_0598_3D3_spx_l2b-v24-2026-082.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2026-03-19T07:29:35.444Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 1.8784630065467591,
+            "bandwidth_um": 0.04625392665820018,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/1d44e5c993c1146abed3f0dab6b62a8f407183612b37f3c4f993a59d85236e13/preview.png",
+          "metadata_path": "/demo/assets/1d44e5c993c1146abed3f0dab6b62a8f407183612b37f3c4f993a59d85236e13/metadata.json",
+          "fits_path": "/demo/assets/1d44e5c993c1146abed3f0dab6b62a8f407183612b37f3c4f993a59d85236e13/original.fits",
+          "fits_sha256": "4c2d5086f7ad858c6182b330f295b388393c27c7617f1f68124fcdd51aa10654",
+          "preview_sha256": "32ce0c9a7ed7355457f9314d1d1d33ae1f5aaec9f82f00834583fd43cf1652f0",
+          "metadata_sha256": "d179307a94a0f6e620cc4ecb3a66a80cb6a58b143bb9f54ccb9867e6e0d9e63c",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "4c2d5086f7ad858c6182b330f295b388393c27c7617f1f68124fcdd51aa10654"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v24-2026-082",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.4462210166483,
+            "predicted_dec": 4.768813756888542
+          }
+        },
+        {
+          "image_id": "9a4a6ab016dcbedf03535f09b2bf2d71ece5fb4e1c95ae9e10a7e43e8d571bb9",
+          "obs_id": "2026W12_1A_0610_2",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W12_1A_0610_2/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W12_1A/l2b-v24-2026-082/3/level2_2026W12_1A_0610_2D3_spx_l2b-v24-2026-082.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2026-03-19T09:05:05.189Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 2.01233253445329,
+            "bandwidth_um": 0.04933088811915448,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/9a4a6ab016dcbedf03535f09b2bf2d71ece5fb4e1c95ae9e10a7e43e8d571bb9/preview.png",
+          "metadata_path": "/demo/assets/9a4a6ab016dcbedf03535f09b2bf2d71ece5fb4e1c95ae9e10a7e43e8d571bb9/metadata.json",
+          "fits_path": "/demo/assets/9a4a6ab016dcbedf03535f09b2bf2d71ece5fb4e1c95ae9e10a7e43e8d571bb9/original.fits",
+          "fits_sha256": "c8be056167063a89ffc3fcbccccea4f8192e40b1514725841bf79f338ae04843",
+          "preview_sha256": "6c16a39895b68dbae5500405f2d30b269a34b7f18455dd533b902fdb100adc3c",
+          "metadata_sha256": "627c20fdb18e22599e653576af0ea748c9ce9e720cb74437fbc273efd7d47569",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "c8be056167063a89ffc3fcbccccea4f8192e40b1514725841bf79f338ae04843"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v24-2026-082",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.4462209760822,
+            "predicted_dec": 4.768814279508148
+          }
+        },
+        {
+          "image_id": "b4a5eddd7a911b01027c2a65e9de8a5eadd491ae34c41e11b295997677dea263",
+          "obs_id": "2026W12_2A_0324_2",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W12_2A_0324_2/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W12_2A/l2b-v24-2026-083/3/level2_2026W12_2A_0324_2D3_spx_l2b-v24-2026-083.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2026-03-21T06:43:19.849Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 2.3946581267980553,
+            "bandwidth_um": 0.058369142173723916,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/b4a5eddd7a911b01027c2a65e9de8a5eadd491ae34c41e11b295997677dea263/preview.png",
+          "metadata_path": "/demo/assets/b4a5eddd7a911b01027c2a65e9de8a5eadd491ae34c41e11b295997677dea263/metadata.json",
+          "fits_path": "/demo/assets/b4a5eddd7a911b01027c2a65e9de8a5eadd491ae34c41e11b295997677dea263/original.fits",
+          "fits_sha256": "49b6ef4663cc2b2ed6f6a3329eb6c2db5f4cf6654200f75547fca0d9c1724980",
+          "preview_sha256": "7fc25181366b08e157379765e81b57dd3d348c1158958ddf05f06a54b3ba63c8",
+          "metadata_sha256": "9f0839bd7794d63cba7d44e71b04d30d30be3478b9e092a4d4d0252b18296c6c",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "49b6ef4663cc2b2ed6f6a3329eb6c2db5f4cf6654200f75547fca0d9c1724980"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v24-2026-083",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.4462198128826,
+            "predicted_dec": 4.7688292652132
+          }
+        },
+        {
+          "image_id": "f5c4c6d3756de9abbaf415462f2620d8d242a1fe804c47cb5f198e3d1e63eee7",
+          "obs_id": "2026W12_2A_0520_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W12_2A_0520_3/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W12_2A/l2b-v24-2026-083/3/level2_2026W12_2A_0520_3D3_spx_l2b-v24-2026-083.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2026-03-22T08:48:38.251Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 2.2568150219463163,
+            "bandwidth_um": 0.0563575188167581,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/f5c4c6d3756de9abbaf415462f2620d8d242a1fe804c47cb5f198e3d1e63eee7/preview.png",
+          "metadata_path": "/demo/assets/f5c4c6d3756de9abbaf415462f2620d8d242a1fe804c47cb5f198e3d1e63eee7/metadata.json",
+          "fits_path": "/demo/assets/f5c4c6d3756de9abbaf415462f2620d8d242a1fe804c47cb5f198e3d1e63eee7/original.fits",
+          "fits_sha256": "eb1ee7dcd94b40ec01eed256a175eb14778ba34b299a7e6d62fd49b262d550f0",
+          "preview_sha256": "57f5d2781bef1e7d615578570dd5dfd1ec2f8af17d3dc3b23cef9cf0b994c6e1",
+          "metadata_sha256": "eb6bcb9485030624dba053562364d05ae48dab2edfdb3b6eab056505113e795e",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "eb1ee7dcd94b40ec01eed256a175eb14778ba34b299a7e6d62fd49b262d550f0"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v24-2026-083",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.44621914794453,
+            "predicted_dec": 4.768837831726851
+          }
+        },
+        {
+          "image_id": "b856d9e220882909fe997926f4b0b829fa4dc77082eea1a396e64632b866dae4",
+          "obs_id": "2026W13_1A_0129_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W13_1A_0129_3/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W13_1A/l2b-v24-2026-088/3/level2_2026W13_1A_0129_3D3_spx_l2b-v24-2026-088.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2026-03-23T15:46:14.307Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 1.7002588072793843,
+            "bandwidth_um": 0.04075748380988684,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/b856d9e220882909fe997926f4b0b829fa4dc77082eea1a396e64632b866dae4/preview.png",
+          "metadata_path": "/demo/assets/b856d9e220882909fe997926f4b0b829fa4dc77082eea1a396e64632b866dae4/metadata.json",
+          "fits_path": "/demo/assets/b856d9e220882909fe997926f4b0b829fa4dc77082eea1a396e64632b866dae4/original.fits",
+          "fits_sha256": "24f9928d9996dc8779b187bd1ecbb0aa8d8d6100b860d12e01a05c08bcd7de68",
+          "preview_sha256": "66edf1f3a4d30fcb4bd07436b06a31af8396f00d9af30b5c8238d8bfc17e5470",
+          "metadata_sha256": "4af9e6395e217836c996da089c6435e4a82a7ca1418aa3ef12ddcfad922d0e44",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "24f9928d9996dc8779b187bd1ecbb0aa8d8d6100b860d12e01a05c08bcd7de68"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v24-2026-088",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.44621835884004,
+            "predicted_dec": 4.7688479978981375
+          }
+        },
+        {
+          "image_id": "b559f3026790e327ae5477f35330a6b549e921c3bc6fd7a2762fd393fd6c0d9f",
+          "obs_id": "2026W15_2A_0137_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2026W15_2A_0137_1/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2026W15_2A/l2b-v24-2026-105/3/level2_2026W15_2A_0137_1D3_spx_l2b-v24-2026-105.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2026-04-10T00:43:17.258Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 1.7932961132346081,
+            "bandwidth_um": 0.04418118214052098,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/b559f3026790e327ae5477f35330a6b549e921c3bc6fd7a2762fd393fd6c0d9f/preview.png",
+          "metadata_path": "/demo/assets/b559f3026790e327ae5477f35330a6b549e921c3bc6fd7a2762fd393fd6c0d9f/metadata.json",
+          "fits_path": "/demo/assets/b559f3026790e327ae5477f35330a6b549e921c3bc6fd7a2762fd393fd6c0d9f/original.fits",
+          "fits_sha256": "13d71e12fb95b40f777bfa04ff87c4cc2a88baf54d582bcd0a71e7fbbf50d5d5",
+          "preview_sha256": "7909e90ab4cd8408839c47571723f98ee6681f7901a00e5fc2de90165d8301ba",
+          "metadata_sha256": "e5896bae2dcffe1c695c5044d8a8b936726a6829680b95ae3f1f988cec05833f",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "13d71e12fb95b40f777bfa04ff87c4cc2a88baf54d582bcd0a71e7fbbf50d5d5"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v24-2026-105",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.4462077316584,
+            "predicted_dec": 4.768984909726568
+          }
+        },
+        {
+          "image_id": "1d84a65ab87e4fa5a263cd63aecfd3540b9a33c4118cf78b3b089e8b35bdadd5",
+          "obs_id": "2026W33_2A_0594_4",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr3?2026W33_2A_0594_4/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W33_2A/l2b-v27-2026-241/3/level2_2026W33_2A_0594_4D3_spx_l2b-v27-2026-241.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2026-08-16T15:08:22.122Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 1.6558573379736987,
+            "bandwidth_um": 0.03956452854191597,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/1d84a65ab87e4fa5a263cd63aecfd3540b9a33c4118cf78b3b089e8b35bdadd5/preview.png",
+          "metadata_path": "/demo/assets/1d84a65ab87e4fa5a263cd63aecfd3540b9a33c4118cf78b3b089e8b35bdadd5/metadata.json",
+          "fits_path": "/demo/assets/1d84a65ab87e4fa5a263cd63aecfd3540b9a33c4118cf78b3b089e8b35bdadd5/original.fits",
+          "fits_sha256": "c2d92d4f0c68f3f71eefd5a6e81fbe7ef17a1c17f503f31e90d5abec84b9ec94",
+          "preview_sha256": "a71a495e15b636ecfba5ff62d0cc58b7a16b6ce9b090c556726bf4a664d7941d",
+          "metadata_sha256": "415ada0976e46cb78a34fecd25d53e9cfb5a07dedffbace646a6fad3e61c66b1",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "c2d92d4f0c68f3f71eefd5a6e81fbe7ef17a1c17f503f31e90d5abec84b9ec94"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr3",
+            "calibration": "l2b-v27-2026-241",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.44612906542125,
+            "predicted_dec": 4.769998379686685
+          }
+        },
+        {
+          "image_id": "40af20efb4bdd8eafea020f126bc300ba428dd4799eba732d78cdbeeb92de024",
+          "obs_id": "2026W34_1A_0007_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr3?2026W34_1A_0007_1/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W34_1A/l2b-v27-2026-243/3/level2_2026W34_1A_0007_1D3_spx_l2b-v27-2026-243.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2026-08-17T00:48:07.353Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 1.6878993277524992,
+            "bandwidth_um": 0.04018487163137569,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/40af20efb4bdd8eafea020f126bc300ba428dd4799eba732d78cdbeeb92de024/preview.png",
+          "metadata_path": "/demo/assets/40af20efb4bdd8eafea020f126bc300ba428dd4799eba732d78cdbeeb92de024/metadata.json",
+          "fits_path": "/demo/assets/40af20efb4bdd8eafea020f126bc300ba428dd4799eba732d78cdbeeb92de024/original.fits",
+          "fits_sha256": "32588f0c0b4ba7a6cb69834fc4093438a1b31d851601f0ac27d29c905e0d46ba",
+          "preview_sha256": "fcb5f0da0f30b8ab11563927c09b39bb205bd1e658302d6ee1476ba61e098376",
+          "metadata_sha256": "c813ff82cd801a2d5a5dc639b7c7c012b32b5e624f186735ed5d1fd7bcaccd41",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "32588f0c0b4ba7a6cb69834fc4093438a1b31d851601f0ac27d29c905e0d46ba"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr3",
+            "calibration": "l2b-v27-2026-243",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.4461288191433,
+            "predicted_dec": 4.770001552522642
+          }
+        },
+        {
+          "image_id": "a13c450ab3bfdb247ce014edf3a01220c974d7ecf3a10439ad102adcaef4713f",
+          "obs_id": "2026W34_1A_0007_4",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr3?2026W34_1A_0007_4/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W34_1A/l2b-v27-2026-243/3/level2_2026W34_1A_0007_4D3_spx_l2b-v27-2026-243.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2026-08-17T00:54:34.146Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 1.8083184499582676,
+            "bandwidth_um": 0.04466444897551497,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/a13c450ab3bfdb247ce014edf3a01220c974d7ecf3a10439ad102adcaef4713f/preview.png",
+          "metadata_path": "/demo/assets/a13c450ab3bfdb247ce014edf3a01220c974d7ecf3a10439ad102adcaef4713f/metadata.json",
+          "fits_path": "/demo/assets/a13c450ab3bfdb247ce014edf3a01220c974d7ecf3a10439ad102adcaef4713f/original.fits",
+          "fits_sha256": "288e8b09dfd004a7d7c715ddd76ce1e21b561e2f9f7944914a08045c6524739c",
+          "preview_sha256": "37a5054ea0aafe086d3729950849a9f989207b3cdfa0ef9b41dba072ba879356",
+          "metadata_sha256": "f847fd37da604f7d347b7bbcdb4d9dde24f637e250b432de051130743369ae69",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "288e8b09dfd004a7d7c715ddd76ce1e21b561e2f9f7944914a08045c6524739c"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr3",
+            "calibration": "l2b-v27-2026-243",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.4461288164047,
+            "predicted_dec": 4.770001587804745
+          }
+        },
+        {
+          "image_id": "863d3c8b567d21fb985276e8d3b19684cfa367a543405caeaa35067931283254",
+          "obs_id": "2026W34_1A_0176_2",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr3?2026W34_1A_0176_2/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W34_1A/l2b-v27-2026-243/3/level2_2026W34_1A_0176_2D3_spx_l2b-v27-2026-243.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2026-08-17T20:25:21.494Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 2.3259109101964883,
+            "bandwidth_um": 0.05793908725055767,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/863d3c8b567d21fb985276e8d3b19684cfa367a543405caeaa35067931283254/preview.png",
+          "metadata_path": "/demo/assets/863d3c8b567d21fb985276e8d3b19684cfa367a543405caeaa35067931283254/metadata.json",
+          "fits_path": "/demo/assets/863d3c8b567d21fb985276e8d3b19684cfa367a543405caeaa35067931283254/original.fits",
+          "fits_sha256": "2376deb025db41ae6ea0096e7b11d567acfed47b01411e049df941002c2484d8",
+          "preview_sha256": "4a359572726c038ea6ac1140858bfaf8dab4eceb99d954986290d20d1359bd03",
+          "metadata_sha256": "88fb2fe85ef13696645d7c2693ac5a58ef4c1cb8ec38c2d49dea46a4a6cd83ff",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "2376deb025db41ae6ea0096e7b11d567acfed47b01411e049df941002c2484d8"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr3",
+            "calibration": "l2b-v27-2026-243",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.44612831905556,
+            "predicted_dec": 4.7700079952301895
+          }
+        },
+        {
+          "image_id": "3affb52e42c4b5061dd3f38312e56edad51c1b852d2bc3831dd3861fab20b1b3",
+          "obs_id": "2026W34_1A_0308_2",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr3?2026W34_1A_0308_2/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W34_1A/l2b-v27-2026-243/3/level2_2026W34_1A_0308_2D3_spx_l2b-v27-2026-243.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2026-08-18T14:18:37.836Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 1.893715230725336,
+            "bandwidth_um": 0.04679957849442536,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/3affb52e42c4b5061dd3f38312e56edad51c1b852d2bc3831dd3861fab20b1b3/preview.png",
+          "metadata_path": "/demo/assets/3affb52e42c4b5061dd3f38312e56edad51c1b852d2bc3831dd3861fab20b1b3/metadata.json",
+          "fits_path": "/demo/assets/3affb52e42c4b5061dd3f38312e56edad51c1b852d2bc3831dd3861fab20b1b3/original.fits",
+          "fits_sha256": "59185daeb9f87def8bcb72b73bb08ee35ce0d4a0cefd1abb4794c0a113808ae8",
+          "preview_sha256": "df29df304b6a3b3d2f184102cdb4b6b972bb8b5ad8a111f487ff48fa2e6d154d",
+          "metadata_sha256": "39b37479c848395d841e9660455f95ca364f1b46b9f1db42cd2302150daa0067",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "59185daeb9f87def8bcb72b73bb08ee35ce0d4a0cefd1abb4794c0a113808ae8"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr3",
+            "calibration": "l2b-v27-2026-243",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.4461278631314,
+            "predicted_dec": 4.770013868971459
+          }
+        },
+        {
+          "image_id": "417d3ed0a3ca4c0ca1832905ad7787a2e59436da12ee168103b947ac6c9c7a51",
+          "obs_id": "2026W34_1A_0431_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr3?2026W34_1A_0431_1/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W34_1A/l2b-v27-2026-243/3/level2_2026W34_1A_0431_1D3_spx_l2b-v27-2026-243.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2026-08-19T04:56:44.494Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 2.0282418973622587,
+            "bandwidth_um": 0.050169439119682704,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/417d3ed0a3ca4c0ca1832905ad7787a2e59436da12ee168103b947ac6c9c7a51/preview.png",
+          "metadata_path": "/demo/assets/417d3ed0a3ca4c0ca1832905ad7787a2e59436da12ee168103b947ac6c9c7a51/metadata.json",
+          "fits_path": "/demo/assets/417d3ed0a3ca4c0ca1832905ad7787a2e59436da12ee168103b947ac6c9c7a51/original.fits",
+          "fits_sha256": "60deea7fb2836d85d119e5855c76448dd6f85e2bba8cfc5ae907284a962d0643",
+          "preview_sha256": "2a5e5c1caa29c1012c0e49e1893c7bcc35bd254ba0c08395b7ec778a0f9ce57e",
+          "metadata_sha256": "6c886385451188d01b2c83f953fd015a37fe31b220e7743bd8a8c26d75b383e4",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "60deea7fb2836d85d119e5855c76448dd6f85e2bba8cfc5ae907284a962d0643"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr3",
+            "calibration": "l2b-v27-2026-243",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.44612749011094,
+            "predicted_dec": 4.770018674650873
+          }
+        },
+        {
+          "image_id": "34d38788092bd48e47c65b4950e70e1d14fac1bec664f6a61ab52424587a66e1",
+          "obs_id": "2026W34_2A_0081_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr3?2026W34_2A_0081_1/D3",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/level2/2026W34_2A/l2b-v27-2026-243/3/level2_2026W34_2A_0081_1D3_spx_l2b-v27-2026-243.fits?center=269.446230,4.768670&size=0.4370deg",
+          "observed_at_utc": "2026-08-20T21:44:53.540Z",
+          "detector": 3,
+          "spectral": {
+            "wavelength_um": 2.2235211272101405,
+            "bandwidth_um": 0.05562050936344325,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/34d38788092bd48e47c65b4950e70e1d14fac1bec664f6a61ab52424587a66e1/preview.png",
+          "metadata_path": "/demo/assets/34d38788092bd48e47c65b4950e70e1d14fac1bec664f6a61ab52424587a66e1/metadata.json",
+          "fits_path": "/demo/assets/34d38788092bd48e47c65b4950e70e1d14fac1bec664f6a61ab52424587a66e1/original.fits",
+          "fits_sha256": "100f584f790cae4eeaf5ac29f602d50dd45114433d88f7c0e8e2e0f660a7c362",
+          "preview_sha256": "435c54da40f3221be0f78e918df6cc7142f33accda38d9243c7664912ec7d5d2",
+          "metadata_sha256": "f94a921cdf7657edf5276386d9b47a8bc2a9445aa483edb56357ea660669b1f8",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "100f584f790cae4eeaf5ac29f602d50dd45114433d88f7c0e8e2e0f660a7c362"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr3",
+            "calibration": "l2b-v27-2026-243",
+            "ra": 269.44623,
+            "dec": 4.76867,
+            "position_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre (Gaia DR3 position at 2026-03-01). The marker is Gaia DR3 4472832130942575872 propagated linearly by its proper motion to each exposure; annual parallax (up to 0.55″) and perspective acceleration are ignored (under 0.1 pixel). Not a measured position.",
+            "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+            "archive_em_min_m": 1.6301e-6,
+            "archive_em_max_m": 2.4346e-6,
+            "predicted_ra": 269.4461264501412,
+            "predicted_dec": 4.770032072740072
+          }
+        }
+      ]
+    },
+    {
+      "id": "3i-atlas",
+      "name": "3I/ATLAS — interstellar comet, 14 Dec 2025",
+      "ra": 167.2031,
+      "dec": 5.1481,
+      "coordinate_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+      "science_context": "The third known interstellar object. Twelve exposures over 3.3 hours on 14 December 2025 in detector D5 (about 3.8–4.4 µm, a range that includes the 4.26 µm CO₂ band) and six simultaneous D2 frames (about 1.1–1.65 µm). Every cutout has the same sky centre, so the stars stay fixed while the comet crosses about 0.16° (roughly 95 pixels) of the field. The marker shows IRSA’s predicted comet position for each exposure, not a measured position. IRSA warns of low signal-to-noise at many wavelengths, and the comet’s brightness changes with the wavelength at its position.",
+      "status": "ready",
+      "missing_reason": null,
+      "observations": [
+        {
+          "image_id": "db2cb7a2964892e80fd4acae5b4c78f361d98b5d96bb89dff4185f3ec86981b5",
+          "obs_id": "2025W50_2A_0685_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0685_1/D2",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/2/level2_2025W50_2A_0685_1D2_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T04:26:46.211Z",
+          "detector": 2,
+          "spectral": {
+            "wavelength_um": 1.21719786532401,
+            "bandwidth_um": 0.029292426157430048,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/db2cb7a2964892e80fd4acae5b4c78f361d98b5d96bb89dff4185f3ec86981b5/preview.png",
+          "metadata_path": "/demo/assets/db2cb7a2964892e80fd4acae5b4c78f361d98b5d96bb89dff4185f3ec86981b5/metadata.json",
+          "fits_path": "/demo/assets/db2cb7a2964892e80fd4acae5b4c78f361d98b5d96bb89dff4185f3ec86981b5/original.fits",
+          "fits_sha256": "a6090ba87b16f9b4afe2fb5327f9af2b16d295802f6b2750885a14e65ef8db2e",
+          "preview_sha256": "7bb1b835d374aa13a9b8d8e70018a89e9fd3deef3035b50ea8deb9acc3a5f7e0",
+          "metadata_sha256": "7cbd69f001c06065caf815944987e3d580819f3439423200cbc988743015f5ad",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "a6090ba87b16f9b4afe2fb5327f9af2b16d295802f6b2750885a14e65ef8db2e"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 1.1032999999999999e-6,
+            "archive_em_max_m": 1.6498999999999999e-6,
+            "predicted_ra": 167.27908911453292,
+            "predicted_dec": 5.121576578325088
+          }
+        },
+        {
+          "image_id": "f1658e2a46825cb972bd9c4f7b08304c737ab2c61dd2a9428d7f7bc00d6ac9a5",
+          "obs_id": "2025W50_2A_0685_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0685_1/D5",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0685_1D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T04:26:46.211Z",
+          "detector": 5,
+          "spectral": {
+            "wavelength_um": 3.9584586514325735,
+            "bandwidth_um": 0.036584538141734006,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/f1658e2a46825cb972bd9c4f7b08304c737ab2c61dd2a9428d7f7bc00d6ac9a5/preview.png",
+          "metadata_path": "/demo/assets/f1658e2a46825cb972bd9c4f7b08304c737ab2c61dd2a9428d7f7bc00d6ac9a5/metadata.json",
+          "fits_path": "/demo/assets/f1658e2a46825cb972bd9c4f7b08304c737ab2c61dd2a9428d7f7bc00d6ac9a5/original.fits",
+          "fits_sha256": "76bfebf0b3b18487aa342c9288f70383ed0ca61880e63d063d913a31ca76ae84",
+          "preview_sha256": "12e163a8084eaf4d47429e5f65ebcb20901d82b3b9a25b8c605346cb55243c99",
+          "metadata_sha256": "5f4be8797518ca183a0c89a4153b5f684a2521c1f45098b14dc0845e00900805",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "76bfebf0b3b18487aa342c9288f70383ed0ca61880e63d063d913a31ca76ae84"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 3.8113e-6,
+            "archive_em_max_m": 4.43e-6,
+            "predicted_ra": 167.27908911453292,
+            "predicted_dec": 5.121576578325088
+          }
+        },
+        {
+          "image_id": "21511e4b902af37187d807a053734c233b0c011c12fd25f59b55088c045fb42a",
+          "obs_id": "2025W50_2A_0685_2",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0685_2/D5",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0685_2D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T04:28:55.142Z",
+          "detector": 5,
+          "spectral": {
+            "wavelength_um": 3.9932990762953207,
+            "bandwidth_um": 0.03671730808877006,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/21511e4b902af37187d807a053734c233b0c011c12fd25f59b55088c045fb42a/preview.png",
+          "metadata_path": "/demo/assets/21511e4b902af37187d807a053734c233b0c011c12fd25f59b55088c045fb42a/metadata.json",
+          "fits_path": "/demo/assets/21511e4b902af37187d807a053734c233b0c011c12fd25f59b55088c045fb42a/original.fits",
+          "fits_sha256": "fef7fffb5e2cb8c06642dd9837de29146368585e69afed07e0ce00dee595b2c5",
+          "preview_sha256": "3b068998e0bdd7ba28bdacc43fd41b168f018819af17e2a74b48ee7b9075bdee",
+          "metadata_sha256": "94d2691d4ab5d6e642b863a8c008cdd5a9df11759ce428c7a3e267cb57cdca17",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "fef7fffb5e2cb8c06642dd9837de29146368585e69afed07e0ce00dee595b2c5"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 3.8113e-6,
+            "archive_em_max_m": 4.43e-6,
+            "predicted_ra": 167.27744067241156,
+            "predicted_dec": 5.122151278393035
+          }
+        },
+        {
+          "image_id": "1b7164044ce2a16b74355737bdb86d31baba6af7b9fabdf327d5ea1f258ff4e4",
+          "obs_id": "2025W50_2A_0685_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0685_3/D2",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/2/level2_2025W50_2A_0685_3D2_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T04:31:04.072Z",
+          "detector": 2,
+          "spectral": {
+            "wavelength_um": 1.2761495315149467,
+            "bandwidth_um": 0.030360252260539303,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/1b7164044ce2a16b74355737bdb86d31baba6af7b9fabdf327d5ea1f258ff4e4/preview.png",
+          "metadata_path": "/demo/assets/1b7164044ce2a16b74355737bdb86d31baba6af7b9fabdf327d5ea1f258ff4e4/metadata.json",
+          "fits_path": "/demo/assets/1b7164044ce2a16b74355737bdb86d31baba6af7b9fabdf327d5ea1f258ff4e4/original.fits",
+          "fits_sha256": "6bb0e8b404d92b8e9ad11c65617615c7b77d359c53d347b29a5c0e4a872c3c5d",
+          "preview_sha256": "a52ba1207f297945d096e6f6d3f5e47f99ff978f2deb0bfc1a6953530fbff5fb",
+          "metadata_sha256": "3d6dc718316f2241306f6d358873423c828cf9dd97bf8ede3583c57fb9600813",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "6bb0e8b404d92b8e9ad11c65617615c7b77d359c53d347b29a5c0e4a872c3c5d"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 1.1032999999999999e-6,
+            "archive_em_max_m": 1.6498999999999999e-6,
+            "predicted_ra": 167.27579224044294,
+            "predicted_dec": 5.12272596967069
+          }
+        },
+        {
+          "image_id": "fa8e7aeb539d3fb5c4c233c26ad50ec63d17683e3a9ea46f4b5f8d6b6fa8f0a1",
+          "obs_id": "2025W50_2A_0685_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0685_3/D5",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0685_3D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T04:31:04.072Z",
+          "detector": 5,
+          "spectral": {
+            "wavelength_um": 4.028083398139363,
+            "bandwidth_um": 0.036686600176822605,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/fa8e7aeb539d3fb5c4c233c26ad50ec63d17683e3a9ea46f4b5f8d6b6fa8f0a1/preview.png",
+          "metadata_path": "/demo/assets/fa8e7aeb539d3fb5c4c233c26ad50ec63d17683e3a9ea46f4b5f8d6b6fa8f0a1/metadata.json",
+          "fits_path": "/demo/assets/fa8e7aeb539d3fb5c4c233c26ad50ec63d17683e3a9ea46f4b5f8d6b6fa8f0a1/original.fits",
+          "fits_sha256": "75768b82419ddfacc257563b2e3cdbbea08a3925ae2247258267ce76499cb278",
+          "preview_sha256": "44a67f8ae462459e1d2c5b991bc0a90f1132a825aa03468b23e677be75428219",
+          "metadata_sha256": "f2c7a38bbe6d29c31400f39d07798a36aac4215ffaa6db4c9d566054f1d8b360",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "75768b82419ddfacc257563b2e3cdbbea08a3925ae2247258267ce76499cb278"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 3.8113e-6,
+            "archive_em_max_m": 4.43e-6,
+            "predicted_ra": 167.27579224044294,
+            "predicted_dec": 5.12272596967069
+          }
+        },
+        {
+          "image_id": "365d37aae3571c7a8e18b953abcb5e21e7f976df82270c4007cfd5db209b28a3",
+          "obs_id": "2025W50_2A_0685_4",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0685_4/D5",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0685_4D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T04:33:13.004Z",
+          "detector": 5,
+          "spectral": {
+            "wavelength_um": 4.0633129543066175,
+            "bandwidth_um": 0.03674840609757025,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/365d37aae3571c7a8e18b953abcb5e21e7f976df82270c4007cfd5db209b28a3/preview.png",
+          "metadata_path": "/demo/assets/365d37aae3571c7a8e18b953abcb5e21e7f976df82270c4007cfd5db209b28a3/metadata.json",
+          "fits_path": "/demo/assets/365d37aae3571c7a8e18b953abcb5e21e7f976df82270c4007cfd5db209b28a3/original.fits",
+          "fits_sha256": "2480eed5e7e38fd15ffbf74ea02e1807ec3308d95eeaad5447dd23bd35cc5c91",
+          "preview_sha256": "4bc7ad37f7a4d44561fead786c1c520c77dee4bd15ea3147c3327cb49fb7082d",
+          "metadata_sha256": "ff4c9b3c24e714085ac6e2c766b0d1776fee2cebeb8e8e303136cf49d6bb416f",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "2480eed5e7e38fd15ffbf74ea02e1807ec3308d95eeaad5447dd23bd35cc5c91"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 3.8113e-6,
+            "archive_em_max_m": 4.43e-6,
+            "predicted_ra": 167.27414377886691,
+            "predicted_dec": 5.123300666018959
+          }
+        },
+        {
+          "image_id": "7fd4c506b8d6d20101eb1eba1a2f16bb6c5c8cb91e57de373b44cbb759a94735",
+          "obs_id": "2025W50_2A_0698_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0698_1/D5",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0698_1D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T06:01:11.490Z",
+          "detector": 5,
+          "spectral": {
+            "wavelength_um": 4.097274050142319,
+            "bandwidth_um": 0.03680846702277654,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/7fd4c506b8d6d20101eb1eba1a2f16bb6c5c8cb91e57de373b44cbb759a94735/preview.png",
+          "metadata_path": "/demo/assets/7fd4c506b8d6d20101eb1eba1a2f16bb6c5c8cb91e57de373b44cbb759a94735/metadata.json",
+          "fits_path": "/demo/assets/7fd4c506b8d6d20101eb1eba1a2f16bb6c5c8cb91e57de373b44cbb759a94735/original.fits",
+          "fits_sha256": "fa8a8132a57c431739078af072c5b465c595692a1d41f513d3575ec12ebd6cfe",
+          "preview_sha256": "9ddd38b363419746b82927056329fe974656c59d6ff358526d71df379aa1c928",
+          "metadata_sha256": "3573ee53155cf75948db09211c5cba8df1729826e5dbf779479d591b0900dcc1",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "fa8a8132a57c431739078af072c5b465c595692a1d41f513d3575ec12ebd6cfe"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 3.8113e-6,
+            "archive_em_max_m": 4.43e-6,
+            "predicted_ra": 167.20665303736263,
+            "predicted_dec": 5.146825168641826
+          }
+        },
+        {
+          "image_id": "bc3b9d28fb10f7b1302923cce2907b7512b5e219ad1c2602d9aa938ec4e30d49",
+          "obs_id": "2025W50_2A_0698_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0698_1/D2",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/2/level2_2025W50_2A_0698_1D2_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T06:01:11.491Z",
+          "detector": 2,
+          "spectral": {
+            "wavelength_um": 1.3360434814871631,
+            "bandwidth_um": 0.03223758659819492,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/bc3b9d28fb10f7b1302923cce2907b7512b5e219ad1c2602d9aa938ec4e30d49/preview.png",
+          "metadata_path": "/demo/assets/bc3b9d28fb10f7b1302923cce2907b7512b5e219ad1c2602d9aa938ec4e30d49/metadata.json",
+          "fits_path": "/demo/assets/bc3b9d28fb10f7b1302923cce2907b7512b5e219ad1c2602d9aa938ec4e30d49/original.fits",
+          "fits_sha256": "f83d50ab6a40e2fdf44e783ec7936b9dad5cf19fcaceec2df56da3e060293708",
+          "preview_sha256": "d742fd9682d443dab7f0ccb3b76b3aaf88a7de06898e0d18a2eab5f7851f1741",
+          "metadata_sha256": "3fe944ec43043d2b5d19373d64feba5faf82014e2c6154ceb9ddd88be3c29d1b",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "f83d50ab6a40e2fdf44e783ec7936b9dad5cf19fcaceec2df56da3e060293708"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 1.1032999999999999e-6,
+            "archive_em_max_m": 1.6498999999999999e-6,
+            "predicted_ra": 167.20665302521547,
+            "predicted_dec": 5.146825172875038
+          }
+        },
+        {
+          "image_id": "c59e18a4b5bee7fc31fd7774ffa9225d11a3b6254bb0387accec01d9ec9adae5",
+          "obs_id": "2025W50_2A_0698_2",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0698_2/D5",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0698_2D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T06:03:20.422Z",
+          "detector": 5,
+          "spectral": {
+            "wavelength_um": 4.133158161359675,
+            "bandwidth_um": 0.03679686028729467,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/c59e18a4b5bee7fc31fd7774ffa9225d11a3b6254bb0387accec01d9ec9adae5/preview.png",
+          "metadata_path": "/demo/assets/c59e18a4b5bee7fc31fd7774ffa9225d11a3b6254bb0387accec01d9ec9adae5/metadata.json",
+          "fits_path": "/demo/assets/c59e18a4b5bee7fc31fd7774ffa9225d11a3b6254bb0387accec01d9ec9adae5/original.fits",
+          "fits_sha256": "e39bdb010fed69ac9e8fd847862450a09e053599c323bfd0fc327292c4cad25c",
+          "preview_sha256": "f4159015589b6bb508fc6d658710935ed7588b477b172e1826f771cfb5d29dfd",
+          "metadata_sha256": "0f6ee1ffe689ed544880b0962cf7e433f9fd9d264a1677142fdfb2c83769b96f",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "e39bdb010fed69ac9e8fd847862450a09e053599c323bfd0fc327292c4cad25c"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 3.8113e-6,
+            "archive_em_max_m": 4.43e-6,
+            "predicted_ra": 167.20500444973925,
+            "predicted_dec": 5.14739968815294
+          }
+        },
+        {
+          "image_id": "8ea3299c01418141a8296b6553bf03c4ff3e83646cfae5d836056947d9e82b8d",
+          "obs_id": "2025W50_2A_0698_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0698_3/D5",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0698_3D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T06:05:29.353Z",
+          "detector": 5,
+          "spectral": {
+            "wavelength_um": 4.169098432578636,
+            "bandwidth_um": 0.03673058123624,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/8ea3299c01418141a8296b6553bf03c4ff3e83646cfae5d836056947d9e82b8d/preview.png",
+          "metadata_path": "/demo/assets/8ea3299c01418141a8296b6553bf03c4ff3e83646cfae5d836056947d9e82b8d/metadata.json",
+          "fits_path": "/demo/assets/8ea3299c01418141a8296b6553bf03c4ff3e83646cfae5d836056947d9e82b8d/original.fits",
+          "fits_sha256": "76ffb1c76462aa59eb9971100644902869836d720ec79f3f2f90d0622b8ebf7b",
+          "preview_sha256": "b5859978bc278d706f7d19a711276ac3634e7b86e111d4f2423d1b3d3f49b9f7",
+          "metadata_sha256": "37a2b40811cb74e3150d976ee66cf4133163309dd723d6ca2738d6cd741b5d74",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "76ffb1c76462aa59eb9971100644902869836d720ec79f3f2f90d0622b8ebf7b"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 3.8113e-6,
+            "archive_em_max_m": 4.43e-6,
+            "predicted_ra": 167.20335587130242,
+            "predicted_dec": 5.147974199186135
+          }
+        },
+        {
+          "image_id": "ad91a28acac6e015a1e428bbd5dad2710b0d6e73461a9ffca7210a0846381417",
+          "obs_id": "2025W50_2A_0698_4",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0698_4/D2",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/2/level2_2025W50_2A_0698_4D2_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T06:07:38.283Z",
+          "detector": 2,
+          "spectral": {
+            "wavelength_um": 1.434565794396743,
+            "bandwidth_um": 0.03482210774443094,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/ad91a28acac6e015a1e428bbd5dad2710b0d6e73461a9ffca7210a0846381417/preview.png",
+          "metadata_path": "/demo/assets/ad91a28acac6e015a1e428bbd5dad2710b0d6e73461a9ffca7210a0846381417/metadata.json",
+          "fits_path": "/demo/assets/ad91a28acac6e015a1e428bbd5dad2710b0d6e73461a9ffca7210a0846381417/original.fits",
+          "fits_sha256": "a9ce8668589817936347f6acba6b9823b4400449e2c296e96fc41c79de099566",
+          "preview_sha256": "f24e24b1de8faf7788d64b4d27958ff5cf0083341196c03f5949fe3f43f6b813",
+          "metadata_sha256": "bac2d8941dd7a983cb821b9ccbab1e32ba65024caea1ecd046169b430710b794",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "a9ce8668589817936347f6acba6b9823b4400449e2c296e96fc41c79de099566"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 1.1032999999999999e-6,
+            "archive_em_max_m": 1.6498999999999999e-6,
+            "predicted_ra": 167.20170730314166,
+            "predicted_dec": 5.148548701361233
+          }
+        },
+        {
+          "image_id": "906ecec49ed3310c467093c2384ff0c5a2e25cee7d5e58982bb861160c13d29b",
+          "obs_id": "2025W50_2A_0698_4",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0698_4/D5",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0698_4D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T06:07:38.283Z",
+          "detector": 5,
+          "spectral": {
+            "wavelength_um": 4.205032975882326,
+            "bandwidth_um": 0.036519769606362565,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/906ecec49ed3310c467093c2384ff0c5a2e25cee7d5e58982bb861160c13d29b/preview.png",
+          "metadata_path": "/demo/assets/906ecec49ed3310c467093c2384ff0c5a2e25cee7d5e58982bb861160c13d29b/metadata.json",
+          "fits_path": "/demo/assets/906ecec49ed3310c467093c2384ff0c5a2e25cee7d5e58982bb861160c13d29b/original.fits",
+          "fits_sha256": "c9de92a14c83a8d230325bf062291b18afb9d60f2b9c4e2495da675454f76e0e",
+          "preview_sha256": "9f4a823296699684a9efbdbb2d7c0f3725db70f5dc5dabed01ee2e3760af535e",
+          "metadata_sha256": "ccbb44a867f0ade6b37762994ab275fb6ad6b49c8cdf9e4f02dfc9b8776c7adf",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "c9de92a14c83a8d230325bf062291b18afb9d60f2b9c4e2495da675454f76e0e"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 3.8113e-6,
+            "archive_em_max_m": 4.43e-6,
+            "predicted_ra": 167.20170730314166,
+            "predicted_dec": 5.148548701361233
+          }
+        },
+        {
+          "image_id": "cb06a4ac46748c46cc92fd748060a6e068d290ccf4aaf0a29f1debbd16bf57b6",
+          "obs_id": "2025W50_2A_0712_1",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0712_1/D5",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0712_1D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T07:39:57.704Z",
+          "detector": 5,
+          "spectral": {
+            "wavelength_um": 4.239823324354463,
+            "bandwidth_um": 0.0367342424705182,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/cb06a4ac46748c46cc92fd748060a6e068d290ccf4aaf0a29f1debbd16bf57b6/preview.png",
+          "metadata_path": "/demo/assets/cb06a4ac46748c46cc92fd748060a6e068d290ccf4aaf0a29f1debbd16bf57b6/metadata.json",
+          "fits_path": "/demo/assets/cb06a4ac46748c46cc92fd748060a6e068d290ccf4aaf0a29f1debbd16bf57b6/original.fits",
+          "fits_sha256": "65bdc700a3ae6e9f9316c7eae4c9187fbc0eee07f1f6a338177a8dc0a817e0c3",
+          "preview_sha256": "aa2a5f88948666328c36b96985c57e8f02ced2298bae3c1e56d1a5013e5cee7f",
+          "metadata_sha256": "fbecec16c3ba75b9f47436b1518c0cfbe46153015d68cae30a3a11333171a34a",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "65bdc700a3ae6e9f9316c7eae4c9187fbc0eee07f1f6a338177a8dc0a817e0c3"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 3.8113e-6,
+            "archive_em_max_m": 4.43e-6,
+            "predicted_ra": 167.13087450913795,
+            "predicted_dec": 5.173227913957699
+          }
+        },
+        {
+          "image_id": "e9e0ac6aec47bdb0a0cdfaeeeb67314db61f534d25f4a04b6850746f822fd524",
+          "obs_id": "2025W50_2A_0712_2",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0712_2/D2",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/2/level2_2025W50_2A_0712_2D2_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T07:42:06.635Z",
+          "detector": 2,
+          "spectral": {
+            "wavelength_um": 1.5033397872340377,
+            "bandwidth_um": 0.03690041885810168,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/e9e0ac6aec47bdb0a0cdfaeeeb67314db61f534d25f4a04b6850746f822fd524/preview.png",
+          "metadata_path": "/demo/assets/e9e0ac6aec47bdb0a0cdfaeeeb67314db61f534d25f4a04b6850746f822fd524/metadata.json",
+          "fits_path": "/demo/assets/e9e0ac6aec47bdb0a0cdfaeeeb67314db61f534d25f4a04b6850746f822fd524/original.fits",
+          "fits_sha256": "2a34d18b8f1d407c09a221a708be1999a199754bc1c954757bbbae24a91999ac",
+          "preview_sha256": "f383ac13bb9859702e847a4386dcac229c16646d2c20b13ce9f58d8d024a14fd",
+          "metadata_sha256": "aeb27ad7f2ba30a9f7816393e9a5e0a0e0db42ca14471e909457601534f21a81",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "2a34d18b8f1d407c09a221a708be1999a199754bc1c954757bbbae24a91999ac"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 1.1032999999999999e-6,
+            "archive_em_max_m": 1.6498999999999999e-6,
+            "predicted_ra": 167.12922579980165,
+            "predicted_dec": 5.173802232742921
+          }
+        },
+        {
+          "image_id": "0a9ae4e1fe9af1393adb21edd38e9fa5e43c2a3a6b08b08fa18377fc8151c9ad",
+          "obs_id": "2025W50_2A_0712_2",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0712_2/D5",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0712_2D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T07:42:06.635Z",
+          "detector": 5,
+          "spectral": {
+            "wavelength_um": 4.276535422265851,
+            "bandwidth_um": 0.037252856922934424,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/0a9ae4e1fe9af1393adb21edd38e9fa5e43c2a3a6b08b08fa18377fc8151c9ad/preview.png",
+          "metadata_path": "/demo/assets/0a9ae4e1fe9af1393adb21edd38e9fa5e43c2a3a6b08b08fa18377fc8151c9ad/metadata.json",
+          "fits_path": "/demo/assets/0a9ae4e1fe9af1393adb21edd38e9fa5e43c2a3a6b08b08fa18377fc8151c9ad/original.fits",
+          "fits_sha256": "3c0cf94a6870eb8ff3f9b5102db249efdbfd31bc60bfb1535425cf753bbaba6f",
+          "preview_sha256": "62028847bf174bcdadcc8c933e3baf58b6ebd1f83e26dfa3c288e19bfb9b54ea",
+          "metadata_sha256": "17859c8a4986acdfd52c477eeaa0aec3de178a6277d45a8de752db2d96990532",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "3c0cf94a6870eb8ff3f9b5102db249efdbfd31bc60bfb1535425cf753bbaba6f"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 3.8113e-6,
+            "archive_em_max_m": 4.43e-6,
+            "predicted_ra": 167.12922579980165,
+            "predicted_dec": 5.173802232742921
+          }
+        },
+        {
+          "image_id": "9943894e717488f1268495e06965462796ca3052739865f7dd9638409f171301",
+          "obs_id": "2025W50_2A_0712_3",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0712_3/D5",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0712_3D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T07:44:15.566Z",
+          "detector": 5,
+          "spectral": {
+            "wavelength_um": 4.313147007954987,
+            "bandwidth_um": 0.03747625329041362,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/9943894e717488f1268495e06965462796ca3052739865f7dd9638409f171301/preview.png",
+          "metadata_path": "/demo/assets/9943894e717488f1268495e06965462796ca3052739865f7dd9638409f171301/metadata.json",
+          "fits_path": "/demo/assets/9943894e717488f1268495e06965462796ca3052739865f7dd9638409f171301/original.fits",
+          "fits_sha256": "51fdafaa53f71bce38969b262432b9a89a759435dc9d7bf71f10de955ff65d21",
+          "preview_sha256": "77d25d83525ec676e6c3ed16fa53caa950840b55a6a820fab7acbf1bf8998dd7",
+          "metadata_sha256": "3334e97cfb549971173f357be7d98bfe8f48794b8371cd957d4d1cc7e7e28ed7",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "51fdafaa53f71bce38969b262432b9a89a759435dc9d7bf71f10de955ff65d21"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 3.8113e-6,
+            "archive_em_max_m": 4.43e-6,
+            "predicted_ra": 167.127577087617,
+            "predicted_dec": 5.174376547217039
+          }
+        },
+        {
+          "image_id": "8e3835a3209a6802e08de45ebd8c136fac348361d6afc5151656254108b6641b",
+          "obs_id": "2025W50_2A_0712_4",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0712_4/D2",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/2/level2_2025W50_2A_0712_4D2_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T07:46:24.496Z",
+          "detector": 2,
+          "spectral": {
+            "wavelength_um": 1.5772810486051865,
+            "bandwidth_um": 0.03832821514309226,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/8e3835a3209a6802e08de45ebd8c136fac348361d6afc5151656254108b6641b/preview.png",
+          "metadata_path": "/demo/assets/8e3835a3209a6802e08de45ebd8c136fac348361d6afc5151656254108b6641b/metadata.json",
+          "fits_path": "/demo/assets/8e3835a3209a6802e08de45ebd8c136fac348361d6afc5151656254108b6641b/original.fits",
+          "fits_sha256": "34589a8ea80e2df38ce59330a65c9695039575737df3544f0f6353d885eb59fe",
+          "preview_sha256": "7694e67b9d20facc25840a3a2f86f5da8821d13a7538a098589d6deea0e5f59c",
+          "metadata_sha256": "20ef7759bf274f751aea04a80cb07720c0f9ec354f6da5f5f9838600121af097",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "34589a8ea80e2df38ce59330a65c9695039575737df3544f0f6353d885eb59fe"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 1.1032999999999999e-6,
+            "archive_em_max_m": 1.6498999999999999e-6,
+            "predicted_ra": 167.12592838474777,
+            "predicted_dec": 5.174950853142384
+          }
+        },
+        {
+          "image_id": "69eefb4c20801ca31cfefd39366c95027ce458fc1dd749655c54b92482b5ffd7",
+          "obs_id": "2025W50_2A_0712_4",
+          "access_url": "https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=ivo://irsa.ipac/spherex_qr2?2025W50_2A_0712_4/D5",
+          "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/5/level2_2025W50_2A_0712_4D5_spx_l2b-v20-2025-349.fits?center=167.203100,5.148100&size=0.4370deg",
+          "observed_at_utc": "2025-12-14T07:46:24.496Z",
+          "detector": 5,
+          "spectral": {
+            "wavelength_um": 4.350175153098855,
+            "bandwidth_um": 0.03757490880796504,
+            "source": "WCS-WAVE / alternate WCS W",
+            "approximate": true
+          },
+          "preview_path": "/demo/assets/69eefb4c20801ca31cfefd39366c95027ce458fc1dd749655c54b92482b5ffd7/preview.png",
+          "metadata_path": "/demo/assets/69eefb4c20801ca31cfefd39366c95027ce458fc1dd749655c54b92482b5ffd7/metadata.json",
+          "fits_path": "/demo/assets/69eefb4c20801ca31cfefd39366c95027ce458fc1dd749655c54b92482b5ffd7/original.fits",
+          "fits_sha256": "f9ab9188e1764fa8226a1b66e0359e9bb87ffc943a8f3493f07dccd2f632fa7f",
+          "preview_sha256": "6aadbfd4ccaee1482858a79f61d31a18e3da8322a1141f01517c80d28f987564",
+          "metadata_sha256": "9357ec2437ea5cc1a9447222fa820cfeac1c689b6db5f0a43aaee1e4405f25f0",
+          "provenance": {
+            "verification": "FITS headers, local source record, SHA-256 and target WCS checked; origin not independently re-fetched",
+            "renderer": "backend.app.fits_image.render_fits",
+            "renderer_sha256": "acaf470ad998f46fde7280f483bc40750de195f5403cb3f0c75145f9f92b122a",
+            "versions": {
+              "astropy": "8.0.2",
+              "numpy": "2.5.4",
+              "Pillow": "13.0.0"
+            },
+            "registration": "native detector; no spatial registration",
+            "normalization": "independent 1–99 percentile asinh stretch; invalid pixels transparent",
+            "science_values": "original FITS copied byte-for-byte",
+            "source_sha256": "f9ab9188e1764fa8226a1b66e0359e9bb87ffc943a8f3493f07dccd2f632fa7f"
+          },
+          "acquisition": {
+            "mission": "SPHEREx",
+            "data_release": "spherex_qr2",
+            "calibration": "l2b-v20-2025-349",
+            "ra": 167.2031,
+            "dec": 5.1481,
+            "position_source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot",
+            "position_mode": "fixed-sky-region",
+            "position_note": "Fixed sky centre at the mean of IRSA’s predicted comet path for these exposures, so stars stay put and the comet moves. The marker is IRSA’s predicted comet_ra/comet_dec for each exposure, not a measured position.",
+            "discovery_sha256": "11ff6a524c1b344b3c15c4875429b5b89fd053a18eef4d66328a5632382ef4af",
+            "archive_em_min_m": 3.8113e-6,
+            "archive_em_max_m": 4.43e-6,
+            "predicted_ra": 167.12592838474777,
+            "predicted_dec": 5.174950853142384
+          }
         }
       ]
     }

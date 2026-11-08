@@ -1,0 +1,746 @@
+{
+  "target": {
+    "id": "barnard",
+    "name": "Barnard’s Star — fast-moving nearby red dwarf",
+    "ra": 269.44623,
+    "dec": 4.76867,
+    "coordinate_source": "https://irsa.ipac.caltech.edu/TAP/sync?LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id,ra,dec,ref_epoch,pmra,pmdec,parallax,phot_g_mean_mag+FROM+gaia_dr3_source+WHERE+source_id=4472832130942575872",
+    "science_context": "The nearest single star to the Sun (about 6 light-years) and the star with the fastest known motion across the sky: about 10.4″ per year, mostly northward (Gaia DR3), which is 1.7 SPHEREx pixels. Detector D3 (about 1.6–2.4 µm) at three epochs: August 2025 and March 2026 (data release QR2) and August 2026 (QR3). The marker shows the Gaia position propagated to each exposure, not a measured position. The star is bright enough to saturate its core (OVERFLOW flags), so a position needs a centroid and is best averaged over several frames: a one-year test averaging three and four frames measured 9.2″ per year against 10.39″ from Gaia. The epochs mix two data releases, so positions can be compared but brightness should not be."
+  },
+  "cutout_deg": 0.437,
+  "wavelength_match_um": 0.02,
+  "discovery_table": "demo/discovery/barnard.vot",
+  "discovery_sha256": "d3fb20424a08b48af1629b6dc6d4af60d2b8ee3e0cd274a2fdb5b352de48bf0d",
+  "rules": {
+    "epochs": [
+      [
+        "August 2025",
+        "2025-08-15",
+        "2025-09-01"
+      ],
+      [
+        "March 2026",
+        "2026-03-11",
+        "2026-04-15"
+      ],
+      [
+        "August 2026",
+        "2026-08-16",
+        "2026-09-01"
+      ]
+    ],
+    "releases": [
+      "spherex_qr2",
+      "spherex_qr3"
+    ],
+    "groups": [
+      {
+        "detector": 3,
+        "candidates": 12,
+        "quota": 7
+      }
+    ],
+    "seed_pairs": 2
+  },
+  "frames": [
+    {
+      "obs_id": "2025W33_2C_0321_1",
+      "detector": 3,
+      "epoch": "August 2025",
+      "observed_at_utc": "2025-08-15T20:45:11.338",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-267",
+      "sha256": "23cd818f76d1666f8039be78ac0560263d675b2191059db8abfada6181434388",
+      "wavelength_um_at_centre": 2.307805654819207,
+      "wavelength_um_at_marker": 2.3073987220205376,
+      "predicted": [
+        269.44635280753175,
+        4.767115869679113
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 2026W34_1A_0176_2 D3 (August 2026) within 0.0183 µm"
+    },
+    {
+      "obs_id": "2025W33_2C_0321_3",
+      "detector": 3,
+      "epoch": "August 2025",
+      "observed_at_utc": "2025-08-15T20:49:29.198",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-267",
+      "sha256": "5fc258a31ee4388cbacf2205b7f07a4f4f4fad5693f231845e2129f3b96fbc99",
+      "wavelength_um_at_centre": 2.4109487166586403,
+      "wavelength_um_at_marker": 2.410632340116018,
+      "predicted": [
+        269.4463528057064,
+        4.767115893195262
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 2026W12_2A_0324_2 D3 (March 2026) within 0.0006 µm"
+    },
+    {
+      "obs_id": "2025W33_2C_0386_3",
+      "detector": 3,
+      "epoch": "August 2025",
+      "observed_at_utc": "2025-08-16T03:19:14.791",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-267",
+      "sha256": "d1bd0bfde3ddebb81f65c15d600abd1d87a0ae6c5f11e3e555f2204c1312455b",
+      "wavelength_um_at_centre": 1.632263041031433,
+      "wavelength_um_at_marker": 1.631966745649709,
+      "predicted": [
+        269.44635264013755,
+        4.767118026253363
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 2026W33_2A_0594_4 D3 (August 2026) within 0.0179 µm"
+    },
+    {
+      "obs_id": "2025W34_1B_0164_1",
+      "detector": 3,
+      "epoch": "August 2025",
+      "observed_at_utc": "2025-08-18T20:28:41.370",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-267",
+      "sha256": "a23a665bbcdc170eb63362775a2edbaa6ba7eb9cc82fb18a5fa328d55d31071c",
+      "wavelength_um_at_centre": 1.708254281826801,
+      "wavelength_um_at_marker": 1.7079458622187416,
+      "predicted": [
+        269.44635097941995,
+        4.767139421621991
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 1 frame(s) of another epoch"
+    },
+    {
+      "obs_id": "2025W34_1B_0164_2",
+      "detector": 3,
+      "epoch": "August 2025",
+      "observed_at_utc": "2025-08-18T20:30:50.301",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-267",
+      "sha256": "aa2683f65ef4f277ef877529051c4fda1996ba2cd20ec62b61b1e2d02625f256",
+      "wavelength_um_at_centre": 1.7480081757593484,
+      "wavelength_um_at_marker": 1.7476995696007047,
+      "predicted": [
+        269.44635097850727,
+        4.767139433380065
+      ],
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2025W34_2B_0030_1",
+      "detector": 3,
+      "epoch": "August 2025",
+      "observed_at_utc": "2025-08-21T15:20:25.986",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-269",
+      "sha256": "488e6465d22c22353415f07721d1a751af483929bd49cd961f0cd44bff137df8",
+      "wavelength_um_at_centre": 1.8305682236228948,
+      "wavelength_um_at_marker": 1.830244221551991,
+      "predicted": [
+        269.44634927524544,
+        4.767161376854635
+      ],
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2025W34_2B_0030_2",
+      "detector": 3,
+      "epoch": "August 2025",
+      "observed_at_utc": "2025-08-21T15:22:34.917",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-269",
+      "sha256": "29393fca70c780a5b8bf14bd36cd993a6c2c1273a2aa968f82a0b9659e25fa16",
+      "wavelength_um_at_centre": 1.8731532303803664,
+      "wavelength_um_at_marker": 1.872817931208428,
+      "predicted": [
+        269.4463492743328,
+        4.76716138861271
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 2026W12_1A_0598_3 D3 (March 2026) within 0.0055 µm"
+    },
+    {
+      "obs_id": "2025W34_2B_0030_4",
+      "detector": 3,
+      "epoch": "August 2025",
+      "observed_at_utc": "2025-08-21T15:26:52.779",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-269",
+      "sha256": "410de2ae6e22b42f60f0f622b64d167072bf39bccb4e91d7b764910c57b9f410",
+      "wavelength_um_at_centre": 1.9610347569117244,
+      "wavelength_um_at_marker": 1.9606848926911065,
+      "predicted": [
+        269.44634927250746,
+        4.767161412128858
+      ],
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2025W35_1A_0008_1",
+      "detector": 3,
+      "epoch": "August 2025",
+      "observed_at_utc": "2025-08-25T00:49:34.286",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-269",
+      "sha256": "77c7f77bbdedaf3c1c4996bbb94b01255c9014669cf385c21b15fa172c18b87d",
+      "wavelength_um_at_centre": 2.006552591850908,
+      "wavelength_um_at_marker": 2.006208784885837,
+      "predicted": [
+        269.44634719835665,
+        4.767188133842081
+      ],
+      "selected": true,
+      "reason": "spread in time within the epoch"
+    },
+    {
+      "obs_id": "2025W35_1A_0008_3",
+      "detector": 3,
+      "epoch": "August 2025",
+      "observed_at_utc": "2025-08-25T00:53:52.148",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-269",
+      "sha256": "fe3dcf42d8681c53bb094cab328f06640bef3873d2f4951de0ab9a821920173b",
+      "wavelength_um_at_centre": 2.100907949319762,
+      "wavelength_um_at_marker": 2.1005436987789716,
+      "predicted": [
+        269.4463471965313,
+        4.7671881573582295
+      ],
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2025W35_1A_0008_4",
+      "detector": 3,
+      "epoch": "August 2025",
+      "observed_at_utc": "2025-08-25T00:56:01.079",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-269",
+      "sha256": "765a500955d3f13986a280115f07473ac85782de2485dbe1e7811f80aff8cece",
+      "wavelength_um_at_centre": 2.1493886728914924,
+      "wavelength_um_at_marker": 2.149024245286413,
+      "predicted": [
+        269.4463471956186,
+        4.767188169116304
+      ],
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2025W35_1A_0484_2",
+      "detector": 3,
+      "epoch": "August 2025",
+      "observed_at_utc": "2025-08-27T11:37:04.954",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v20-2025-269",
+      "sha256": "c422b955480597ac9d10791a6975a3df0d741c2f4802d2ab2c42543e59962a56",
+      "wavelength_um_at_centre": 2.2502541232097943,
+      "wavelength_um_at_marker": 2.2498789912615362,
+      "predicted": [
+        269.44634569988256,
+        4.767207438992348
+      ],
+      "selected": true,
+      "reason": "spread in time within the epoch"
+    },
+    {
+      "obs_id": "2026W12_1A_0598_1",
+      "detector": 3,
+      "epoch": "March 2026",
+      "observed_at_utc": "2026-03-19T07:25:17.581",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v24-2026-082",
+      "sha256": "e3425f19cf5307cc8c78df4263ecf56342bd074607090c7f0ceb40b4e6481ebb",
+      "wavelength_um_at_centre": 1.7934866061671362,
+      "wavelength_um_at_marker": 1.7934555101168317,
+      "predicted": [
+        269.4462210184742,
+        4.768813733364512
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 2026W34_1A_0007_4 D3 (August 2026) within 0.0148 µm"
+    },
+    {
+      "obs_id": "2026W12_1A_0598_3",
+      "detector": 3,
+      "epoch": "March 2026",
+      "observed_at_utc": "2026-03-19T07:29:35.444",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v24-2026-082",
+      "sha256": "4c2d5086f7ad858c6182b330f295b388393c27c7617f1f68124fcdd51aa10654",
+      "wavelength_um_at_centre": 1.8786197516111978,
+      "wavelength_um_at_marker": 1.8785875289212957,
+      "predicted": [
+        269.4462210166483,
+        4.768813756888542
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 2025W34_2B_0030_2 D3 (August 2025) within 0.0055 µm"
+    },
+    {
+      "obs_id": "2026W12_1A_0598_4",
+      "detector": 3,
+      "epoch": "March 2026",
+      "observed_at_utc": "2026-03-19T07:31:44.376",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v24-2026-082",
+      "sha256": "30fb1f09a0a415b94e892e9893af8e43570ff5d1d0b15482dddfb2ee99ad2308",
+      "wavelength_um_at_centre": 1.9226135675716196,
+      "wavelength_um_at_marker": 1.922581327810629,
+      "predicted": [
+        269.4462210157356,
+        4.768813768646616
+      ],
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2026W12_1A_0610_2",
+      "detector": 3,
+      "epoch": "March 2026",
+      "observed_at_utc": "2026-03-19T09:05:05.189",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v24-2026-082",
+      "sha256": "c8be056167063a89ffc3fcbccccea4f8192e40b1514725841bf79f338ae04843",
+      "wavelength_um_at_centre": 2.0123329480823777,
+      "wavelength_um_at_marker": 2.01229928154123,
+      "predicted": [
+        269.4462209760822,
+        4.768814279508148
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 1 frame(s) of another epoch"
+    },
+    {
+      "obs_id": "2026W12_1A_0610_4",
+      "detector": 3,
+      "epoch": "March 2026",
+      "observed_at_utc": "2026-03-19T09:09:23.051",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v24-2026-082",
+      "sha256": "65f7c250b19dde624a41afe37012206982ab994180fcea1630d178b126db330f",
+      "wavelength_um_at_centre": 2.1068326944797,
+      "wavelength_um_at_marker": 2.1067969719481385,
+      "predicted": [
+        269.4462209742563,
+        4.768814303032178
+      ],
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2026W12_2A_0324_2",
+      "detector": 3,
+      "epoch": "March 2026",
+      "observed_at_utc": "2026-03-21T06:43:19.849",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v24-2026-083",
+      "sha256": "49b6ef4663cc2b2ed6f6a3329eb6c2db5f4cf6654200f75547fca0d9c1724980",
+      "wavelength_um_at_centre": 2.4115295041864737,
+      "wavelength_um_at_marker": 2.4114954827261963,
+      "predicted": [
+        269.4462198128826,
+        4.7688292652132
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 2025W33_2C_0321_3 D3 (August 2025) within 0.0006 µm"
+    },
+    {
+      "obs_id": "2026W12_2A_0520_1",
+      "detector": 3,
+      "epoch": "March 2026",
+      "observed_at_utc": "2026-03-22T08:44:20.389",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v24-2026-083",
+      "sha256": "e17196235e49fb872ee13d969123cb416332498fb6a915a2802bdb78e3937aa7",
+      "wavelength_um_at_centre": 2.1551442738092006,
+      "wavelength_um_at_marker": 2.1551027096539785,
+      "predicted": [
+        269.44621914976983,
+        4.768837808210703
+      ],
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2026W12_2A_0520_3",
+      "detector": 3,
+      "epoch": "March 2026",
+      "observed_at_utc": "2026-03-22T08:48:38.251",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v24-2026-083",
+      "sha256": "eb1ee7dcd94b40ec01eed256a175eb14778ba34b299a7e6d62fd49b262d550f0",
+      "wavelength_um_at_centre": 2.256646385041956,
+      "wavelength_um_at_marker": 2.2566029332345123,
+      "predicted": [
+        269.44621914794453,
+        4.768837831726851
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 1 frame(s) of another epoch"
+    },
+    {
+      "obs_id": "2026W13_1A_0129_1",
+      "detector": 3,
+      "epoch": "March 2026",
+      "observed_at_utc": "2026-03-23T15:41:56.446",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v24-2026-088",
+      "sha256": "c43f4611e79cbb6ea061229a4ea1552f5c9dd68478e06181b814f0987ea33467",
+      "wavelength_um_at_centre": 1.6245869201686938,
+      "wavelength_um_at_marker": 1.6245527786744238,
+      "predicted": [
+        269.4462183606654,
+        4.768847974381988
+      ],
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2026W13_1A_0129_3",
+      "detector": 3,
+      "epoch": "March 2026",
+      "observed_at_utc": "2026-03-23T15:46:14.307",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v24-2026-088",
+      "sha256": "24f9928d9996dc8779b187bd1ecbb0aa8d8d6100b860d12e01a05c08bcd7de68",
+      "wavelength_um_at_centre": 1.700105832662246,
+      "wavelength_um_at_marker": 1.7000698953716804,
+      "predicted": [
+        269.44621835884004,
+        4.7688479978981375
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 2026W34_1A_0007_1 D3 (August 2026) within 0.0122 µm"
+    },
+    {
+      "obs_id": "2026W13_1A_0129_4",
+      "detector": 3,
+      "epoch": "March 2026",
+      "observed_at_utc": "2026-03-23T15:48:23.238",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v24-2026-088",
+      "sha256": "ddd603bdb3166675e43014e85c07fb383d93628e61c276e0b1be164528c26a63",
+      "wavelength_um_at_centre": 1.7397850190748194,
+      "wavelength_um_at_marker": 1.7397490600354852,
+      "predicted": [
+        269.44621835792736,
+        4.768848009656211
+      ],
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2026W15_2A_0137_1",
+      "detector": 3,
+      "epoch": "March 2026",
+      "observed_at_utc": "2026-04-10T00:43:17.258",
+      "data_release": "spherex_qr2",
+      "calibration": "l2b-v24-2026-105",
+      "sha256": "13d71e12fb95b40f777bfa04ff87c4cc2a88baf54d582bcd0a71e7fbbf50d5d5",
+      "wavelength_um_at_centre": 1.7932926122202035,
+      "wavelength_um_at_marker": 1.7932244471213759,
+      "predicted": [
+        269.4462077316584,
+        4.768984909726568
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 1 frame(s) of another epoch"
+    },
+    {
+      "obs_id": "2026W33_2A_0594_4",
+      "detector": 3,
+      "epoch": "August 2026",
+      "observed_at_utc": "2026-08-16T15:08:22.122",
+      "data_release": "spherex_qr3",
+      "calibration": "l2b-v27-2026-241",
+      "sha256": "c2d92d4f0c68f3f71eefd5a6e81fbe7ef17a1c17f503f31e90d5abec84b9ec94",
+      "wavelength_um_at_centre": 1.6501796143530314,
+      "wavelength_um_at_marker": 1.6504346256281468,
+      "predicted": [
+        269.44612906542125,
+        4.769998379686685
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 2025W33_2C_0386_3 D3 (August 2025) within 0.0179 µm"
+    },
+    {
+      "obs_id": "2026W34_1A_0007_1",
+      "detector": 3,
+      "epoch": "August 2026",
+      "observed_at_utc": "2026-08-17T00:48:07.353",
+      "data_release": "spherex_qr3",
+      "calibration": "l2b-v27-2026-243",
+      "sha256": "32588f0c0b4ba7a6cb69834fc4093438a1b31d851601f0ac27d29c905e0d46ba",
+      "wavelength_um_at_centre": 1.6878918153612363,
+      "wavelength_um_at_marker": 1.6881476031492602,
+      "predicted": [
+        269.4461288191433,
+        4.770001552522642
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 2026W13_1A_0129_3 D3 (March 2026) within 0.0122 µm"
+    },
+    {
+      "obs_id": "2026W34_1A_0007_3",
+      "detector": 3,
+      "epoch": "August 2026",
+      "observed_at_utc": "2026-08-17T00:52:25.215",
+      "data_release": "spherex_qr3",
+      "calibration": "l2b-v27-2026-243",
+      "sha256": "81d4a7cbff84163b6ea16425a5f853132ac3f7ae447168cc6cd235d94a589eb3",
+      "wavelength_um_at_centre": 1.7668494094628555,
+      "wavelength_um_at_marker": 1.767118091238596,
+      "predicted": [
+        269.4461288173174,
+        4.7700015760466705
+      ],
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2026W34_1A_0007_4",
+      "detector": 3,
+      "epoch": "August 2026",
+      "observed_at_utc": "2026-08-17T00:54:34.146",
+      "data_release": "spherex_qr3",
+      "calibration": "l2b-v27-2026-243",
+      "sha256": "288e8b09dfd004a7d7c715ddd76ce1e21b561e2f9f7944914a08045c6524739c",
+      "wavelength_um_at_centre": 1.8082923440367287,
+      "wavelength_um_at_marker": 1.808578589418836,
+      "predicted": [
+        269.4461288164047,
+        4.770001587804745
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 2026W12_1A_0598_1 D3 (March 2026) within 0.0148 µm"
+    },
+    {
+      "obs_id": "2026W34_1A_0176_2",
+      "detector": 3,
+      "epoch": "August 2026",
+      "observed_at_utc": "2026-08-17T20:25:21.494",
+      "data_release": "spherex_qr3",
+      "calibration": "l2b-v27-2026-243",
+      "sha256": "2376deb025db41ae6ea0096e7b11d567acfed47b01411e049df941002c2484d8",
+      "wavelength_um_at_centre": 2.3261269107722047,
+      "wavelength_um_at_marker": 2.3264793088071336,
+      "predicted": [
+        269.44612831905556,
+        4.7700079952301895
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 2025W33_2C_0321_1 D3 (August 2025) within 0.0183 µm"
+    },
+    {
+      "obs_id": "2026W34_1A_0238_1",
+      "detector": 3,
+      "epoch": "August 2026",
+      "observed_at_utc": "2026-08-18T04:31:38.232",
+      "data_release": "spherex_qr3",
+      "calibration": "l2b-v27-2026-243",
+      "sha256": "b5d8ce7d60b05c1f718464fdba4be9d6d9c5ca46ad7ae01a6169b241fa7bce14",
+      "wavelength_um_at_centre": 2.3787051201855993,
+      "wavelength_um_at_marker": 2.37906548169489,
+      "predicted": [
+        269.4461281124849,
+        4.770010656511108
+      ],
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2026W34_1A_0308_2",
+      "detector": 3,
+      "epoch": "August 2026",
+      "observed_at_utc": "2026-08-18T14:18:37.836",
+      "data_release": "spherex_qr3",
+      "calibration": "l2b-v27-2026-243",
+      "sha256": "59185daeb9f87def8bcb72b73bb08ee35ce0d4a0cefd1abb4794c0a113808ae8",
+      "wavelength_um_at_centre": 1.8937905817039546,
+      "wavelength_um_at_marker": 1.8940898873501861,
+      "predicted": [
+        269.4461278631314,
+        4.770013868971459
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 1 frame(s) of another epoch"
+    },
+    {
+      "obs_id": "2026W34_1A_0308_3",
+      "detector": 3,
+      "epoch": "August 2026",
+      "observed_at_utc": "2026-08-18T14:20:46.767",
+      "data_release": "spherex_qr3",
+      "calibration": "l2b-v27-2026-243",
+      "sha256": "41ad5ec16fe3228a5ab9f8239f2812f4dc7380b92d77e861241448e8edd5c61c",
+      "wavelength_um_at_centre": 1.937700311233681,
+      "wavelength_um_at_marker": 1.937999819057903,
+      "predicted": [
+        269.4461278622181,
+        4.770013880737414
+      ],
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2026W34_1A_0431_1",
+      "detector": 3,
+      "epoch": "August 2026",
+      "observed_at_utc": "2026-08-19T04:56:44.494",
+      "data_release": "spherex_qr3",
+      "calibration": "l2b-v27-2026-243",
+      "sha256": "60deea7fb2836d85d119e5855c76448dd6f85e2bba8cfc5ae907284a962d0643",
+      "wavelength_um_at_centre": 2.0280936677081285,
+      "wavelength_um_at_marker": 2.0284066565463603,
+      "predicted": [
+        269.44612749011094,
+        4.770018674650873
+      ],
+      "selected": true,
+      "reason": "wavelength at the target matches 1 frame(s) of another epoch"
+    },
+    {
+      "obs_id": "2026W34_1A_0431_2",
+      "detector": 3,
+      "epoch": "August 2026",
+      "observed_at_utc": "2026-08-19T04:58:53.426",
+      "data_release": "spherex_qr3",
+      "calibration": "l2b-v27-2026-243",
+      "sha256": "8940ff1a545a0912f5816a49b69eefcb94f13a28d92416cfe0af2f096426a8dd",
+      "wavelength_um_at_centre": 2.075182619162115,
+      "wavelength_um_at_marker": 2.0755143278508346,
+      "predicted": [
+        269.44612748919826,
+        4.770018686408947
+      ],
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2026W34_1A_0431_4",
+      "detector": 3,
+      "epoch": "August 2026",
+      "observed_at_utc": "2026-08-19T05:03:11.288",
+      "data_release": "spherex_qr3",
+      "calibration": "l2b-v27-2026-243",
+      "sha256": "814cdab1e274fb7b9afca0567d9424819b7227d017c50a5d1200ed13f306dad6",
+      "wavelength_um_at_centre": 2.173078321512593,
+      "wavelength_um_at_marker": 2.17342460412613,
+      "predicted": [
+        269.4461274873729,
+        4.770018709925095
+      ],
+      "selected": false,
+      "reason": "not selected"
+    },
+    {
+      "obs_id": "2026W34_2A_0081_1",
+      "detector": 3,
+      "epoch": "August 2026",
+      "observed_at_utc": "2026-08-20T21:44:53.540",
+      "data_release": "spherex_qr3",
+      "calibration": "l2b-v27-2026-243",
+      "sha256": "100f584f790cae4eeaf5ac29f602d50dd45114433d88f7c0e8e2e0f660a7c362",
+      "wavelength_um_at_centre": 2.2234970036187525,
+      "wavelength_um_at_marker": 2.2238469317931315,
+      "predicted": [
+        269.4461264501412,
+        4.770032072740072
+      ],
+      "selected": true,
+      "reason": "spread in time within the epoch"
+    }
+  ],
+  "failures": [],
+  "inputs": [
+    {
+      "fits": "acquired/barnard/e014c51e9426d052ac1b203d1a73802bb489106e47e77891981af67bdfe09b02/original.fits",
+      "metadata": "source-records/23cd818f76d1666f8039be78ac0560263d675b2191059db8abfada6181434388.json"
+    },
+    {
+      "fits": "acquired/barnard/1e9b5708565ea871b71a9118b6b58396a376e7bbd6bce3736e680a1afa158a17/original.fits",
+      "metadata": "source-records/5fc258a31ee4388cbacf2205b7f07a4f4f4fad5693f231845e2129f3b96fbc99.json"
+    },
+    {
+      "fits": "acquired/barnard/83ddc2f735cf631b9c94bc0800d2892ba676a8ac5cbcfe0d51809ef2538ea61e/original.fits",
+      "metadata": "source-records/d1bd0bfde3ddebb81f65c15d600abd1d87a0ae6c5f11e3e555f2204c1312455b.json"
+    },
+    {
+      "fits": "acquired/barnard/fb3caca9573818fb9729f652569720e1e421f3946fac3bda2d1bc6a557eab9a4/original.fits",
+      "metadata": "source-records/a23a665bbcdc170eb63362775a2edbaa6ba7eb9cc82fb18a5fa328d55d31071c.json"
+    },
+    {
+      "fits": "acquired/barnard/5d06b07ae43a197ddf38ff344a7ebe16973854233b4405c4d41be4ac1529cf28/original.fits",
+      "metadata": "source-records/29393fca70c780a5b8bf14bd36cd993a6c2c1273a2aa968f82a0b9659e25fa16.json"
+    },
+    {
+      "fits": "acquired/barnard/cdc00da7f6ded64fc41a20fea826216cf3d3de6d8ae4e26111b67d6a42a89c01/original.fits",
+      "metadata": "source-records/77c7f77bbdedaf3c1c4996bbb94b01255c9014669cf385c21b15fa172c18b87d.json"
+    },
+    {
+      "fits": "acquired/barnard/2ab419b04026f5727231f2a2d230e54ce391c9698bf5f0a5bbaf3231afa5cdbc/original.fits",
+      "metadata": "source-records/c422b955480597ac9d10791a6975a3df0d741c2f4802d2ab2c42543e59962a56.json"
+    },
+    {
+      "fits": "acquired/barnard/864226801537053e4856dc2648de98453be6dd657b0edd003e2d08aa6552b9fc/original.fits",
+      "metadata": "source-records/e3425f19cf5307cc8c78df4263ecf56342bd074607090c7f0ceb40b4e6481ebb.json"
+    },
+    {
+      "fits": "acquired/barnard/abb0f6f5546932fad0c4af4d9b716f3af0afff9023c0cd74eefe217eab20c468/original.fits",
+      "metadata": "source-records/4c2d5086f7ad858c6182b330f295b388393c27c7617f1f68124fcdd51aa10654.json"
+    },
+    {
+      "fits": "acquired/barnard/d186a727817940dfd027ec5efb77f85cf0114a66ad13285a7c932cb6841f9a1c/original.fits",
+      "metadata": "source-records/c8be056167063a89ffc3fcbccccea4f8192e40b1514725841bf79f338ae04843.json"
+    },
+    {
+      "fits": "acquired/barnard/629cc818a93f49916030f2ac93e819fc3c59f398159cdb7859a6a6894b4ca155/original.fits",
+      "metadata": "source-records/49b6ef4663cc2b2ed6f6a3329eb6c2db5f4cf6654200f75547fca0d9c1724980.json"
+    },
+    {
+      "fits": "acquired/barnard/a599db82858aa67eed7c3dbce3770965083bbbfe13638bc6d363e29c1ff475a6/original.fits",
+      "metadata": "source-records/eb1ee7dcd94b40ec01eed256a175eb14778ba34b299a7e6d62fd49b262d550f0.json"
+    },
+    {
+      "fits": "acquired/barnard/38f5dbac6d51662f9dbf87fe3253f5f769b909c5df31b4457585dd903d82c86a/original.fits",
+      "metadata": "source-records/24f9928d9996dc8779b187bd1ecbb0aa8d8d6100b860d12e01a05c08bcd7de68.json"
+    },
+    {
+      "fits": "acquired/barnard/5ab7a774bf2ccc41ccf7ddc319c7fdf8a0f92720de71da7bb1a330572c8234a3/original.fits",
+      "metadata": "source-records/13d71e12fb95b40f777bfa04ff87c4cc2a88baf54d582bcd0a71e7fbbf50d5d5.json"
+    },
+    {
+      "fits": "acquired/barnard/26bd10b8cda120dbd1eacd3157f14c4e0a799f60ba4370d603ef09e0e7cd64fd/original.fits",
+      "metadata": "source-records/c2d92d4f0c68f3f71eefd5a6e81fbe7ef17a1c17f503f31e90d5abec84b9ec94.json"
+    },
+    {
+      "fits": "acquired/barnard/76bf9daaf0acca5f5440973eea8331a379e8b33fe69129b70d1fa9c38fe05a32/original.fits",
+      "metadata": "source-records/32588f0c0b4ba7a6cb69834fc4093438a1b31d851601f0ac27d29c905e0d46ba.json"
+    },
+    {
+      "fits": "acquired/barnard/74d253ce18b9b1b888d49932caa344cacba5ca969ac9ee8ca34b497678ad0c23/original.fits",
+      "metadata": "source-records/288e8b09dfd004a7d7c715ddd76ce1e21b561e2f9f7944914a08045c6524739c.json"
+    },
+    {
+      "fits": "acquired/barnard/098e7db894a02beb9f3cd85e83018dce7b0207725030e7a3a8a9530c13df9c2a/original.fits",
+      "metadata": "source-records/2376deb025db41ae6ea0096e7b11d567acfed47b01411e049df941002c2484d8.json"
+    },
+    {
+      "fits": "acquired/barnard/4c419b7d302e6596ea37e5b59947e6b1eb6d3b4fb1bef60c4c38cf2cc2bb9259/original.fits",
+      "metadata": "source-records/59185daeb9f87def8bcb72b73bb08ee35ce0d4a0cefd1abb4794c0a113808ae8.json"
+    },
+    {
+      "fits": "acquired/barnard/1a668cc676db96d9ab1068bfd4920af048c1b8bb6d7895cc1926e2a0c1ba00d6/original.fits",
+      "metadata": "source-records/60deea7fb2836d85d119e5855c76448dd6f85e2bba8cfc5ae907284a962d0643.json"
+    },
+    {
+      "fits": "acquired/barnard/1cf929ab54dbd35b7093eeb6d96da990b48aa4f95fa38918ac26b0770f931438/original.fits",
+      "metadata": "source-records/100f584f790cae4eeaf5ac29f602d50dd45114433d88f7c0e8e2e0f660a7c362.json"
+    }
+  ]
+}
