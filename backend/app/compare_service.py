@@ -43,7 +43,7 @@ def _notes(result, frames):
     notes = ['Real NASA/IPAC IRSA SPHEREx data, downloaded through this server\'s image cache. '
              'No motion, variability or discovery is claimed.']
     if result['stretch']['shared']:
-        notes.append('A and B share one brightness scale, so their brightness can be compared.')
+        notes.append('A and B share one brightness scale, for visual comparison; this does not establish photometric equivalence.')
     else:
         notes.append('A and B each have their own brightness scale; do not compare their brightness by eye.')
     if result['validation']['mode'] == 'wavelength':
@@ -96,7 +96,7 @@ class CompareService:
             raise ImageError('The comparison service is busy. Please retry shortly.', 503, 'compare_busy')
         try:
             inputs = [self._resolve(ref, ra, dec, size_deg) for ref in (a, b)]
-            key = json.dumps({'v': 'compare-v1', 'a': inputs[0]['sha256'], 'b': inputs[1]['sha256'],
+            key = json.dumps({'v': 'compare-v2-scientific-gate', 'a': inputs[0]['sha256'], 'b': inputs[1]['sha256'],
                               'ra': round(ra, 6), 'dec': round(dec, 6), 'size': round(size_deg, 4),
                               'mode': mode, 'match_scale': bool(match_scale)}, sort_keys=True)
             compare_id = hashlib.sha256(key.encode()).hexdigest()

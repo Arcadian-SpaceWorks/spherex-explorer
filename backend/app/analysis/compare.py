@@ -223,6 +223,12 @@ def load_frame(path, ra, dec, size_deg, *, source='file', settings=DEFAULT_SETTI
             obs_id = keyword('OBSID')
             detector = finite(keyword('DETECTOR'))
             observed_at_utc, mjd = _observed(keyword)
+            if str(keyword('TIMESYS') or 'UTC').strip().upper() != 'UTC' or (mjd is not None and not math.isfinite(mjd)):
+                observed_at_utc, mjd = None, None
+            science_metadata = {'physical_unit': str(keyword('BUNIT') or ''),
+                                'variance_available': 'VARIANCE' in hdul,
+                                'psf_available': 'PSF' in hdul,
+                                'flags_available': 'FLAGS' in hdul}
 
         cut_options = dict(position=target, size=size_deg * u.deg, wcs=wcs, mode='partial')
         try:
@@ -237,6 +243,7 @@ def load_frame(path, ra, dec, size_deg, *, source='file', settings=DEFAULT_SETTI
     good = cut_data[valid_cut]
     core = cut_data[_box(tx, ty, settings.core_box_px)]
     diagnostics = {
+        **science_metadata,
         'sky_level': float(np.percentile(good, 5)) if good.size else None,
         'zodi_median': float(np.nanmedian(zodi_cut)) if zodi_cut is not None and np.isfinite(zodi_cut).any() else None,
         'core_median': float(np.nanmedian(core)) if np.isfinite(core).any() else None,
@@ -315,6 +322,8 @@ def validate(a, b, mode, *, overlap=None, require_overlap=True, settings=DEFAULT
     limit = settings.max_wavelength_delta_um
 
     if mode == 'time':
+        if same_exposure:
+            add('duplicate_observation', 'reject', 'Identical observation IDs cannot establish temporal change.')
         if a.detector is None or b.detector is None or a.detector != b.detector:
             add('band_mismatch', 'reject', 'Time comparison needs two images from the same detector.',
                 band_a=a.band, band_b=b.band)

@@ -3,6 +3,7 @@
 Runs inside the isolated FITS worker process (see fits_worker.py). No network access.
 """
 from pathlib import Path
+from .detection import detect_changes
 
 import numpy as np
 from PIL import Image
@@ -69,11 +70,12 @@ def compare_files(path_a, path_b, ra, dec, size_deg, mode, out_dir, source_a='fi
         _save(rgba, out / PREVIEWS['difference'])
         diff_summary = {**result.diagnostics(), 'display': display}
 
-    return {'decision': check.decision, 'validation': check.to_dict(),
+    return {'context': 'real_observation_comparison', 'decision': check.decision, 'validation': check.to_dict(),
             'frames': [dict(frame.summary(), role=role) for role, frame in (('a', a.frame), ('b', b.frame))],
             'grid': grid.summary(), 'cutout_deg_used': cutout_deg, 'overlap_fraction': overlap,
             'stretch': {'method': 'asinh', 'percentiles': [1, 99], 'shared': shared,
                         'a': scalings['a'], 'b': scalings['b']},
             'difference': diff_summary,
+            'detection': detect_changes(a, b, grid, check),
             'previews': {role: name for role, name in PREVIEWS.items()
                          if role != 'difference' or diff_summary is not None}}

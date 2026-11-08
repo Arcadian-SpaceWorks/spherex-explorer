@@ -4,7 +4,7 @@ import { formatUtcLabel, wavelengthLabel } from '../timeline';
 import DownloadProgress, { useElapsed } from './DownloadProgress';
 
 const VERDICTS = {
-  ACCEPT: {time: 'Directly comparable', wavelength: 'Side by side'},
+  ACCEPT: {time: 'Visual difference available', wavelength: 'Side by side'},
   WARN: {time: 'Blink only', wavelength: 'Side by side, with caveats'},
   REJECT: {time: 'Not directly comparable', wavelength: 'Not comparable'},
 };
@@ -97,6 +97,13 @@ function Result({result}) {
       <tr><th>Source</th>{frames.map(f => <td key={f.role}>{f.provenance?.source === 'irsa_cutout' ? 'IRSA cutout' : f.provenance?.source || '—'}</td>)}</tr>
     </tbody></table></div>
     <p className="result-note" data-testid="compare-summary">Overlap {Math.round(result.overlap_fraction * 100)}% · wavelength difference {number(result.validation.wavelength_delta_um, 4)} µm · {formatSeparation(result.validation.time_separation_hours)} apart{result.cache_hit ? ' · from the comparison cache' : ''}</p>
+    {result.detection && <section aria-label="Scientific change detection">
+      <h3>Scientific change detection</h3>
+      <p>{result.detection.status === 'unavailable' ? 'Visual comparison only — scientific change detection unavailable.' : result.detection.status}</p>
+      <p>{result.detection.conclusion}</p>
+      <ul>{result.detection.reasons.map(reason => <li key={reason}>{reason}</li>)}</ul>
+      <ul>{result.detection.limitations.map(reason => <li key={reason}>{reason}</li>)}</ul>
+    </section>}
     {result.notes.map(note => <p key={note} className="image-science-note">{note}</p>)}
   </div>;
 }
@@ -146,6 +153,7 @@ export default function ComparePanel({picks, target, onRemove, onSwap}) {
     {ready && a && b && <p className="result-note">{detectorOf(a) === detectorOf(b) ? 'Same detector' : 'Different detectors'} · {formatSeparation(hoursApart(a, b))} apart (archive times).</p>}
     <button type="button" className="compare-run" disabled={!ready || loading || hints.some(hint => hint.startsWith('A and B are the same'))} onClick={compare}>
       {result || error ? 'Compare again' : 'Compare A and B'}</button>
+    <button type="button" className="secondary" disabled={!ready || loading || mode !== 'time'} onClick={compare}>Detect Changes — check scientific eligibility</button>
     {loading && <DownloadProgress title="Downloading both cutouts from IRSA and aligning them" elapsed={elapsed}
       onCancel={() => {request.current?.abort('user'); setLoading(false);}}/>}
     {error && <p className="error" role="alert">{error}</p>}

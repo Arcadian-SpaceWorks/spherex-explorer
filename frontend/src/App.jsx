@@ -1,3 +1,4 @@
+import DetectionLab from './components/DetectionLab';
 import DemoTargetSummary from './components/DemoTargetSummary';
 import { useRef, useState, useEffect } from 'react';
 import SkyMap from './components/SkyMap';
@@ -126,6 +127,7 @@ export default function App() {
     {mode === 'live' && result?.count > 0 && <ComparePanel key={`${picks.a?.access_url}|${picks.b?.access_url}|${selected.ra}|${selected.dec}`}
       picks={picks} target={selected} onRemove={role => setPicks(current => ({...current, [role]: null}))}
       onSwap={() => setPicks(current => ({a: current.b, b: current.a}))}/>}
+    <DetectionLab/>
     <TemporalImageExplorer result={result} loading={loading} error={error} target={selected}/>
     <ImageInspector observation={imageObservation} target={selected}/></main><footer><span>Arcadian SkyTracker · Milestone 02</span><span>Sky atlas by <a href="https://aladin.cds.unistra.fr/AladinLite/">Aladin Lite / CDS</a> · DSS2 imagery · Observations from <a href="https://irsa.ipac.caltech.edu/Missions/spherex.html">NASA/IPAC IRSA</a></span></footer></div>;
 }
