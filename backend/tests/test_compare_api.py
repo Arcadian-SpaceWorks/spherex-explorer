@@ -115,6 +115,11 @@ def test_accepted_time_pair_returns_aligned_previews_difference_and_provenance(s
         assert png(client, data['previews'][role]).shape == (176, 176, 4)
     assert any('No motion' in note for note in data['notes'])
     assert data['cache_hit'] is False
+    assert data['context'] == 'real_observation_comparison'
+    assert data['detection']['status'] == 'unavailable'
+    assert data['detection']['candidates'] == []
+    assert any('PSF' in reason for reason in data['detection']['reasons'])
+    assert any('Spectral response' in reason for reason in data['detection']['reasons'])
 
 
 def test_wavelength_mismatch_warns_and_never_makes_a_difference_image(setup):
@@ -164,6 +169,8 @@ def test_small_cutouts_are_reported_not_hidden(setup):
 @pytest.mark.parametrize('change, status', [
     (lambda b: b['a'].update(image_id='a' * 64), 422),  # Both image_id and access_url.
     (lambda b: b.update(mode='motion'), 422),
+    (lambda b: b.update(context='synthetic_injection_validation'), 422),
+    (lambda b: b.update(evidence={'calibration_verified': True, 'psf_verified': True}), 422),
     (lambda b: b.update(size_deg=0.9), 422),
     (lambda b: b.update(ra=400), 422),
     (lambda b: b.update(zodi_subtract=True), 422),  # Unknown fields are refused.

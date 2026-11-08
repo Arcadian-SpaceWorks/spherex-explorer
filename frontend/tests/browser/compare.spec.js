@@ -208,3 +208,21 @@ test('wavelength at target: measured on demand, from comparisons, and same-wavel
   await expect(cell(rows[0]).locator('.wavelength-badge')).toHaveText('≈ A');
   await expect(cell(rows[3]).locator('.wavelength-badge')).toHaveCount(0);  // 2.486 um: far from A.
 });
+
+test('scientific eligibility remains unavailable for accepted visual comparisons', async ({page}) => {
+  await setup(page, {compare: (route, body) => route.fulfill({json: {
+    ...compareResult(body), context: 'real_observation_comparison',
+    detection: {status: 'unavailable', candidates: [],
+      conclusion: 'The observations are insufficient for scientifically reliable automatic change detection.',
+      reasons: ['PSF equivalence is unverified.', 'Field-wide spectral response equivalence is unverified.'],
+      limitations: ['No motion or source identity is inferred.']}
+  }})});
+  await pickButton(page, rows[1], 'A').click();
+  await pickButton(page, rows[0], 'B').click();
+  const compare = panel(page);
+  await compare.getByRole('button', {name: 'Detect Changes — check scientific eligibility'}).click();
+  await expect(compare).toContainText('Visual comparison only — scientific change detection unavailable.');
+  await expect(compare).toContainText('PSF equivalence is unverified.');
+  await compare.getByRole('button', {name: 'Difference', exact: true}).click();
+  await expect(compare.getByTestId('compare-image-difference')).toBeVisible();
+});
