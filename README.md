@@ -33,9 +33,23 @@ The platform is intended for students and educators, astronomy enthusiasts and c
 | Image Comparison | Displays real Before and After images, and a signed difference image only when the comparison checks allow one. It explains why a visual difference may be scientifically uncertain. |
 | Offline Demo Mode | Bundles 60 real SPHEREx FITS cutouts and previews across M101, M31, Barnard's Star, and 3I/ATLAS. Search, playback, and comparison of these files do not require IRSA. |
 | 3I/ATLAS views | Shows fixed-sky and prediction-centered views. Dashed cyan rings mark official predicted positions. Local image checks report nearby excesses without identifying them as comet detections. |
+| Spectral fingerprint | Measures the selected position in every SPHEREx exposure that covers it and plots its 0.75–5 µm spectrum, with the ice, gas and dust bands found and the brightness of each observing season. |
 | Bounded processing | Uses local caches, limited downloads, checksum checks for bundled data, and an isolated FITS processing worker. |
 
 The scientific change-detection code includes conservative eligibility checks. Current real-observation results do **not** establish an astrophysical discovery, verified comet motion, or calibrated comet brightening. A separate synthetic validation tool exists behind a developer flag and is not part of the normal visitor workflow.
+
+## Spectral fingerprints
+
+SPHEREx measures each sky point at one wavelength per exposure, so the hundreds of exposures of a point are its spectrum. In **Live Mode**, pick a position or one of the guided targets and choose **Measure the spectrum**. One IRSA query finds the exposures, and about 0.3 MB of each 70 MB product is read from the AWS Open Data mirror of the archive, so a 400-exposure spectrum takes roughly 25 to 70 seconds and fills in as it is measured. **Demo Mode** measures the bundled frames offline; the 3I/ATLAS set shows the comet's CO2 gas emission.
+
+The panel shows every exposure as a point with its uncertainty, coloured by observing season. It lists the bands found (water, CO2 and CO ice, comet gas, PAH dust, hydrogen lines) with their strength, and separately those looked for and not found. It compares the brightness of each season at matching wavelengths, overlays 2MASS and WISE catalogue values as an independent check, offers a redshift ruler for galaxies and quasars, and exports a CSV of every exposure including the rejected ones and why. Thresholds are conservative (5σ and 8 % of the continuum), and a forced measurement is never presented as a detection.
+
+~~~bash
+.venv/bin/python scripts/spectrum.py 69.97458 26.05278      # protostar L1527: water, CO2 and CO ice
+.venv/bin/python scripts/spectrum.py --comet                 # 3I/ATLAS at IRSA's predicted positions
+~~~
+
+Sources brighter than roughly 100 mJy saturate and are reported as such; pixels are 6 arcseconds, so close neighbours are blended. The method, its limits, the API and the results checked against known sources are in [docs/spectral-fingerprint.md](docs/spectral-fingerprint.md).
 
 ## Technology and architecture
 

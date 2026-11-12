@@ -10,10 +10,11 @@ import ComparePanel from './components/ComparePanel';
 import { sameObservation } from './compareAdapter';
 import { demoResult, loadDemoManifest } from './demoAdapter';
 import WavelengthFilter from './components/WavelengthFilter';
+import SpectrumPanel from './components/SpectrumPanel';
 import { ALL_FILTER, filterParams, filterDemoResult } from './wavelengths';
 const MODES = [
-  {id:'live', icon:'◉', badge:'Needs internet', title:'Live Mode', tagline:'Query NASA/IPAC IRSA in real time', points:['Pick any point on the interactive sky atlas','Fresh SPHEREx observation search & cutouts'], best:'exploring your own targets'},
-  {id:'demo', icon:'▶', badge:'Works offline', title:'Demo Mode', tagline:'Instant tour of preloaded real observations', points:['Curated targets, ready immediately','No network or IRSA queries required'], best:'presentations & a quick first look'},
+  {id:'live', icon:'◉', badge:'Needs internet', title:'Live Mode', tagline:'Query NASA/IPAC IRSA in real time', points:['Pick any point on the interactive sky atlas','Its 0.75–5 µm spectrum from every SPHEREx exposure'], best:'exploring your own targets'},
+  {id:'demo', icon:'▶', badge:'Works offline', title:'Demo Mode', tagline:'Instant tour of preloaded real observations', points:['Curated targets with spectra, ready immediately','No network or IRSA queries required'], best:'presentations & a quick first look'},
 ];
 export default function App() {
   const [mode, setMode] = useState(() => new URLSearchParams(window.location.search).get('mode') === 'demo' ? 'demo' : 'live');
@@ -92,7 +93,7 @@ export default function App() {
       if (request.current === controller) setError(controller.signal.aborted ? 'The observation search timed out.' : err.message);
     } finally {clearTimeout(timeout); if (request.current === controller) setLoading(false);}
   }
-  return <div className="app"><header><a className="brand" href="/" aria-label="Arcadian SkyTracker home"><span className="brand-icon">✳</span><span>ARCADIAN<span className="brand-sub">SKYTRACKER</span></span></a><div className="header-context">NASA SPACE APPS CHALLENGE 2026 <span>Planet X & SPHEREx · Team prototype</span></div><span className="milestone">02 / FITS EXPLORER</span></header>
+  return <div className="app"><header><a className="brand" href="/" aria-label="Arcadian SkyTracker home"><span className="brand-icon">✳</span><span>ARCADIAN<span className="brand-sub">SKYTRACKER</span></span></a><div className="header-context">NASA SPACE APPS CHALLENGE 2026 <span>Planet X & SPHEREx · Team prototype</span></div><span className="milestone">03 / SPECTRAL FINGERPRINTS</span></header>
     <main>
     <section className="panel mode-panel" aria-label="Data mode">
       <fieldset className="mode-choice" role="radiogroup" aria-label="Data mode">
@@ -117,12 +118,14 @@ export default function App() {
         </form>{manifest.targets.find(target => target.id === demoTargetId)?.missing_reason && <p role="status">{manifest.targets.find(target => target.id === demoTargetId).missing_reason}</p>}</>}
       </>}
     </section>
-    <div className="intro"><div><div className="eyebrow">EXPLORE THE INFRARED UNIVERSE</div><h1>A point in the sky.<br className="mobile-break"/> A place to begin.</h1><p>Navigate the celestial sphere and discover SPHEREx coverage.</p></div><div className="fov"><span>FIELD OF VIEW</span><strong data-testid="fov">{mode === 'demo' ? 'Preloaded cutouts' : fov ? `${fov[0].toFixed(3)}° × ${fov[1].toFixed(3)}°` : 'Connecting…'}</strong></div></div>
+    <div className="intro"><div><div className="eyebrow">EXPLORE THE INFRARED UNIVERSE</div><h1>Every point in the sky<br className="mobile-break"/> has a spectrum.</h1><p>Pick any position and read its infrared fingerprint from SPHEREx: ices, gas, dust, and how they change with time.</p></div><div className="fov"><span>FIELD OF VIEW</span><strong data-testid="fov">{mode === 'demo' ? 'Preloaded cutouts' : fov ? `${fov[0].toFixed(3)}° × ${fov[1].toFixed(3)}°` : 'Connecting…'}</strong></div></div>
     {mode === 'live' ? <div className="workspace"><section className="map-panel"><div className="map-heading"><span><i/> CELESTIAL ATLAS</span><span>ICRS / DSS2 COLOR</span></div><SkyMap selected={selected} navigation={navigation} onSelect={select} onFov={setFov}/></section><CoordinatePanel selected={selected} onGo={point => {select(point); setNavigation({...point});}} onSearch={() => search()} loading={loading} filter={filter} onFilterChange={changeFilter} filterError={filterError}/></div> : <section className="panel demo-region" aria-label="Preloaded sky region">
       <h2>{manifest?.targets.find(target => target.id === demoTargetId)?.name || 'Preloaded sky region'}</h2>
       <DemoTargetSummary target={manifest?.targets.find(target => target.id === demoTargetId)}/>
       {manifest && <p>Reference ICRS RA {selected.ra.toFixed(6)}°, Dec {selected.dec.toFixed(6)}°. For tracking targets this reference is the first prepared frame; each image records its own center. The cutouts below retain native detector orientation and may have different coverage. Live Mode provides the interactive Aladin sky atlas.</p>}
     </section>}
+    <SpectrumPanel mode={mode} selected={selected} demoTargetId={demoTargetId} onGo={point => {select(point); setNavigation({...point});}}/>
+    <div className="section-divider"><div className="eyebrow">THE EXPOSURES BEHIND THE SPECTRUM</div><p>Search, view and compare the individual SPHEREx images of this position.</p></div>
     <ObservationsTable mode={mode} result={result} loading={loading} error={error} selectedObservation={imageObservation} onViewImage={setImageObservation}
       compare={{...picks, onPick: pick}} target={selected}/>
     {result?.count > 0 && <ComparePanel key={`${picks.a?.access_url}|${picks.b?.access_url}|${selected.ra}|${selected.dec}`}
@@ -130,5 +133,5 @@ export default function App() {
       onSwap={() => setPicks(current => ({a: current.b, b: current.a}))}/>}
     {import.meta.env.VITE_ENABLE_DETECTION_LAB === 'true' && <DetectionLab/>}
     <TemporalImageExplorer result={result} loading={loading} error={error} target={selected}/>
-    <ImageInspector observation={imageObservation} target={selected}/></main><footer><span>Arcadian SkyTracker · Milestone 02</span><span>Sky atlas by <a href="https://aladin.cds.unistra.fr/AladinLite/">Aladin Lite / CDS</a> · DSS2 imagery · Observations from <a href="https://irsa.ipac.caltech.edu/Missions/spherex.html">NASA/IPAC IRSA</a></span></footer></div>;
+    <ImageInspector observation={imageObservation} target={selected}/></main><footer><span>Arcadian SkyTracker · Milestone 03</span><span>Sky atlas by <a href="https://aladin.cds.unistra.fr/AladinLite/">Aladin Lite / CDS</a> · DSS2 imagery · Observations from <a href="https://irsa.ipac.caltech.edu/Missions/spherex.html">NASA/IPAC IRSA</a></span></footer></div>;
 }
