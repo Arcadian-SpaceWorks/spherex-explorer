@@ -1,6 +1,19 @@
 # Arcadian SkyTracker
 
-Arcadian SkyTracker now includes Milestone 2: a real SPHEREx FITS image inspector, alongside the existing interactive celestial map and live observation discovery for a NASA Space Apps Challenge 2026 team prototype. This prototype does not claim NASA endorsement or detect Planet X.
+Arcadian SkyTracker turns any point of the sky into its infrared spectrum (0.75 to 5 µm) by measuring that point in every public SPHEREx exposure that covers it, then reports which ice, gas and dust bands are present and whether the source changed between observing seasons. It is a NASA Space Apps Challenge 2026 team prototype. It does not claim NASA endorsement or detect Planet X.
+
+## Spectral fingerprints (Milestone 3)
+
+SPHEREx measures each sky point at one wavelength per exposure, so the hundreds of exposures of a point are its spectrum. In **Live Mode**, pick a position (or one of the guided targets) and choose **Measure the spectrum**: one IRSA query finds the exposures, and about 0.3 MB of each 70 MB product is read from the AWS Open Data mirror, so a 400-exposure spectrum takes roughly 25 to 70 seconds and fills in as it is measured. **Demo Mode** measures the preloaded frames offline; the 3I/ATLAS set shows the comet's CO2 gas emission.
+
+The panel shows every exposure as a point with its uncertainty, coloured by observing season; the bands found (water, CO2 and CO ice, comet gas, PAH, hydrogen lines) with their strength, and separately those looked for and not found; the brightness of each season relative to the best-observed one; 2MASS and WISE catalogue values as an independent check; a redshift ruler for galaxies and quasars; and a CSV of every exposure including the rejected ones and why. Thresholds are conservative (5σ and 8 % of the continuum) and a forced measurement is never presented as a detection.
+
+```bash
+.venv/bin/python scripts/spectrum.py 69.97458 26.05278      # protostar L1527: water, CO2 and CO ice
+.venv/bin/python scripts/spectrum.py --comet                 # 3I/ATLAS at IRSA's predicted positions
+```
+
+Method, limits, the API and the results checked against known sources are in [docs/spectral-fingerprint.md](docs/spectral-fingerprint.md). The image tools described below remain as the way to inspect the individual exposures behind a spectrum.
 
 ## Run locally on Fedora
 
@@ -63,6 +76,8 @@ backend/
   app/image_service.py          Small local FITS/preview cache
   app/fits_image.py             Science HDU selection, display stretch, spatial/spectral WCS
   app/fits_worker.py            Isolated native decoder with resource limits
+  app/spectrum/                 Spectra: archive lookup, range reads, photometry, band and season analysis, API
+  tests/test_spectrum.py        Spectrum tests (synthetic exposures served by a fake range-request session)
   tests/test_api.py             Existing observation API tests
   tests/test_images.py          Synthetic MEF, mocked download, cache and image API tests
   requirements.txt              Exact Python dependency versions

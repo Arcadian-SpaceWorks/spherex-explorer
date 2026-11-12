@@ -14,6 +14,8 @@ app.include_router(demo_router)
 app.include_router(compare_router)
 from .validation_api import router as validation_router
 app.include_router(validation_router)
+from .spectrum.api import router as spectrum_router
+app.include_router(spectrum_router)
 
 
 @app.exception_handler(ImageError)
