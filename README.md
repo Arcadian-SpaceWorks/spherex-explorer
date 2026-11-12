@@ -1,250 +1,225 @@
 # Arcadian SkyTracker
 
-Arcadian SkyTracker turns any point of the sky into its infrared spectrum (0.75 to 5 µm) by measuring that point in every public SPHEREx exposure that covers it, then reports which ice, gas and dust bands are present and whether the source changed between observing seasons. It is a NASA Space Apps Challenge 2026 team prototype. It does not claim NASA endorsement or detect Planet X.
+**Explore a Changing Universe**
 
-## Spectral fingerprints (Milestone 3)
+Arcadian SkyTracker is an interactive astronomical exploration platform developed by **Arcadian SpaceWorks** for the **NASA Space Apps Challenge**. It helps visitors find real NASA SPHEREx infrared observations, browse them over time, compare images, and understand what the available data can—and cannot—show.
 
-SPHEREx measures each sky point at one wavelength per exposure, so the hundreds of exposures of a point are its spectrum. In **Live Mode**, pick a position (or one of the guided targets) and choose **Measure the spectrum**: one IRSA query finds the exposures, and about 0.3 MB of each 70 MB product is read from the AWS Open Data mirror, so a 400-exposure spectrum takes roughly 25 to 70 seconds and fills in as it is measured. **Demo Mode** measures the preloaded frames offline; the 3I/ATLAS set shows the comet's CO2 gas emission.
+## Project overview
 
-The panel shows every exposure as a point with its uncertainty, coloured by observing season; the bands found (water, CO2 and CO ice, comet gas, PAH, hydrogen lines) with their strength, and separately those looked for and not found; the brightness of each season relative to the best-observed one; 2MASS and WISE catalogue values as an independent check; a redshift ruler for galaxies and quasars; and a CSV of every exposure including the rejected ones and why. Thresholds are conservative (5σ and 8 % of the continuum) and a forced measurement is never presented as a detection.
+NASA's SPHEREx mission surveys the sky in infrared light. Its open observations are valuable, but FITS images, sky coordinates, detector metadata, and changing wavelengths can be difficult to explore without specialist software. Arcadian SkyTracker puts those observations into a visual workflow for learning and preliminary investigation.
 
-```bash
+### The problem
+
+- Astronomical FITS files and their metadata are unfamiliar to many visitors.
+- Finding observations of the same sky region at different times takes several steps.
+- Images can look different because of wavelength, calibration, or image processing rather than a changing object.
+
+### Our solution: Explore → Compare → Understand
+
+1. **Explore:** choose a point on the sky or a curated target, then browse available observations.
+2. **Compare:** select two real images or move through them with the Time Slider.
+3. **Understand:** inspect dates, image differences, compatibility checks, and a plain-English explanation of the evidence and its limits.
+
+The platform is intended for students and educators, astronomy enthusiasts and citizen scientists, and researchers doing an initial look at SPHEREx data. It is an exploration tool, not a discovery confirmation pipeline.
+
+## Features
+
+| Feature | What it does |
+| --- | --- |
+| Interactive sky map | Uses Aladin Lite and a DSS2 optical sky background to select ICRS coordinates in Live Mode. |
+| Live SPHEREx search | Queries NASA/IPAC IRSA for observations covering a selected sky position; filters by detector or archive wavelength bounds. |
+| FITS image inspector | Opens bounded SPHEREx cutouts, shows a display preview, and provides pixel, WCS, and available spectral readouts. Original FITS bytes remain available to download. |
+| Time Slider | Browses observations by actual UTC time, with playback and on-demand comparison of suitable epochs. |
+| Image Comparison | Displays real Before and After images, and a signed difference image only when the comparison checks allow one. It explains why a visual difference may be scientifically uncertain. |
+| Offline Demo Mode | Bundles 60 real SPHEREx FITS cutouts and previews across M101, M31, Barnard's Star, and 3I/ATLAS. Search, playback, and comparison of these files do not require IRSA. |
+| 3I/ATLAS views | Shows fixed-sky and prediction-centered views. Dashed cyan rings mark official predicted positions. Local image checks report nearby excesses without identifying them as comet detections. |
+| Spectral fingerprint | Measures the selected position in every SPHEREx exposure that covers it and plots its 0.75–5 µm spectrum, with the ice, gas and dust bands found and the brightness of each observing season. |
+| Bounded processing | Uses local caches, limited downloads, checksum checks for bundled data, and an isolated FITS processing worker. |
+
+The scientific change-detection code includes conservative eligibility checks. Current real-observation results do **not** establish an astrophysical discovery, verified comet motion, or calibrated comet brightening. A separate synthetic validation tool exists behind a developer flag and is not part of the normal visitor workflow.
+
+## Spectral fingerprints
+
+SPHEREx measures each sky point at one wavelength per exposure, so the hundreds of exposures of a point are its spectrum. In **Live Mode**, pick a position or one of the guided targets and choose **Measure the spectrum**. One IRSA query finds the exposures, and about 0.3 MB of each 70 MB product is read from the AWS Open Data mirror of the archive, so a 400-exposure spectrum takes roughly 25 to 70 seconds and fills in as it is measured. **Demo Mode** measures the bundled frames offline; the 3I/ATLAS set shows the comet's CO2 gas emission.
+
+The panel shows every exposure as a point with its uncertainty, coloured by observing season. It lists the bands found (water, CO2 and CO ice, comet gas, PAH dust, hydrogen lines) with their strength, and separately those looked for and not found. It compares the brightness of each season at matching wavelengths, overlays 2MASS and WISE catalogue values as an independent check, offers a redshift ruler for galaxies and quasars, and exports a CSV of every exposure including the rejected ones and why. Thresholds are conservative (5σ and 8 % of the continuum), and a forced measurement is never presented as a detection.
+
+~~~bash
 .venv/bin/python scripts/spectrum.py 69.97458 26.05278      # protostar L1527: water, CO2 and CO ice
 .venv/bin/python scripts/spectrum.py --comet                 # 3I/ATLAS at IRSA's predicted positions
-```
+~~~
 
-Method, limits, the API and the results checked against known sources are in [docs/spectral-fingerprint.md](docs/spectral-fingerprint.md). The image tools described below remain as the way to inspect the individual exposures behind a spectrum.
+Sources brighter than roughly 100 mJy saturate and are reported as such; pixels are 6 arcseconds, so close neighbours are blended. The method, its limits, the API and the results checked against known sources are in [docs/spectral-fingerprint.md](docs/spectral-fingerprint.md).
 
-## Run locally on Fedora
+## Technology and architecture
 
-Prerequisites: Python 3.12+ (tested here with 3.14.8), Node.js 22.12+ (tested with 22.22.2), npm, internet access, and a WebGL2-capable browser. On Fedora, install missing runtimes with `sudo dnf install python3 python3-pip nodejs npm`.
+The frontend uses **React 19**, **Vite 6**, and **Aladin Lite 3.8.1**. The backend uses **Python**, **FastAPI**, **Astropy**, **NumPy**, **SciPy**, **reproject**, and **Pillow** for archive access, FITS/WCS processing, comparison, and previews. Dependencies are pinned in [frontend/package.json](frontend/package.json), [frontend/package-lock.json](frontend/package-lock.json), and [backend/requirements.txt](backend/requirements.txt).
 
-From the repository root:
+~~~mermaid
+flowchart LR
+    U[Visitor] --> F[React / Vite frontend]
+    F --> B[FastAPI backend]
+    B --> I[NASA/IPAC IRSA<br/>Live Mode]
+    F --> D[Bundled demo manifest<br/>and previews]
+    B --> A[Bundled original FITS<br/>Demo Mode analysis]
+~~~
 
-```bash
+Vite proxies requests beginning with /api to FastAPI. Demo previews and the manifest are served locally; FITS readouts and comparisons still use the backend. There is no database or user account service.
+
+## Getting started
+
+### Prerequisites
+
+- **Python 3.12 or newer** with the standard venv module. The setup script checks this requirement.
+- **Node.js and npm.** Node.js 22 is the version used for current local development; the pinned Vite package declares support for Node 18, 20, and 22 or newer.
+- A modern browser. Live sky-map viewing needs WebGL and network access.
+- Free local ports **8000** (API) and **5173** (frontend), unless you configure different ports for the one-command launcher.
+
+On Linux or macOS, clone and install from the repository root:
+
+~~~bash
+git clone https://github.com/Arcadian-SpaceWorks/spherex-explorer.git
+cd spherex-explorer
 ./scripts/setup.sh
-```
+~~~
 
-`setup.sh` stops with a clear message if `python3` is older than 3.12.
+The setup script creates a local .venv, installs the pinned Python packages, and runs npm ci for the frontend. No environment variables or external services are required for the bundled Demo Mode. Installation itself needs access to the Python and npm package registries.
 
-Start everything from **one terminal** (runs `setup.sh` first if needed; Ctrl+C stops both servers):
+### Start the application
 
-```bash
+On Linux, or on macOS with **Bash 4.3 or newer**, the recommended one-terminal launcher is:
+
+~~~bash
 ./scripts/start.sh
-```
+~~~
 
-It never stops anything it did not start: if port 8000 or 5173 is already in use, it says so and exits. Other ports: `SKYTRACKER_BACKEND_PORT=8010 SKYTRACKER_FRONTEND_PORT=5180 ./scripts/start.sh`.
+It starts both servers, installs dependencies first if they are missing, and stops its own processes on Ctrl+C. It exits if either configured port is already occupied. For different ports:
 
-Or run these in separate terminals:
+~~~bash
+SKYTRACKER_BACKEND_PORT=8010 SKYTRACKER_FRONTEND_PORT=5180 ./scripts/start.sh
+~~~
 
-```bash
+macOS's default Bash is older than the launcher's required Bash version. On macOS, or if you prefer two terminals, use the scripts below after setup:
+
+~~~bash
+# Terminal 1, from the repository root
 ./scripts/backend.sh
-```
+~~~
 
-```bash
+~~~bash
+# Terminal 2, from the repository root
 ./scripts/frontend.sh
-```
+~~~
 
-Open http://127.0.0.1:5173. Backend API docs: http://127.0.0.1:8000/docs. Vite proxies `/api` to FastAPI on port 8000, so no permissive CORS configuration is needed. Both servers bind to loopback. Stop with Ctrl+C.
+Open **http://127.0.0.1:5173/** for the app and **http://127.0.0.1:8000/docs** for the API documentation. To open directly in Demo Mode, use **http://127.0.0.1:5173/?mode=demo**. The two-terminal scripts use fixed default ports; the one-terminal launcher supports the port variables above. The frontend proxy follows the launcher-selected API port.
 
-Equivalent commands after setup:
+The equivalent manual commands, after setup, are:
 
-```bash
-.venv/bin/python -m uvicorn backend.app.main:app --reload --host 127.0.0.1 --port 8000
+~~~bash
+# Terminal 1, repository root
+.venv/bin/python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
+~~~
+
+~~~bash
+# Terminal 2, repository root
 npm --prefix frontend run dev
-```
+~~~
 
-## Use the map
+Useful optional settings include SKYTRACKER_FITS_CACHE_DIR for the downloaded FITS cache, SKYTRACKER_FITS_MAX_BYTES for its per-file size limit, and SKYTRACKER_DEMO_DIR to point the backend at another validated demo bundle. The defaults work for the bundled data. See [backend/app/image_download.py](backend/app/image_download.py), [backend/app/compare_service.py](backend/app/compare_service.py), and [backend/app/demo.py](backend/app/demo.py) for the complete configuration and limits.
 
-- Drag to pan; scroll/pinch or use Aladin's controls to zoom.
-- Click the sky to select an ICRS coordinate in decimal degrees. A mint cross marks the selection. Drag releases do not select a new target.
-- Enter RA in `[0, 360)` and Dec in `[-90, 90]`, then choose **Go To Coordinates**. This selects and centers the target. The initial target is M101.
-- The dashboard shows horizontal × vertical field of view in degrees, refreshed on zoom and resize.
-- Choose **Search SPHEREx Observations** to query image footprints covering the selected point. Searching uses the selected location, not unsubmitted form edits or the map center.
-- Changing the selected point clears results and cancels the previous request. Results are explicitly live, empty, or unavailable; the application contains no demonstration observations.
+## Demo Mode
 
-The background is the real DSS2 color HiPS optical survey rendered by Aladin, not SPHEREx imagery. The returned table contains SPHEREx observation metadata. Coverage alone is not a source detection or evidence of motion.
+Open the demo URL above or choose **Demo Mode** in the app. Select **M101** (3 frames), **M31** (18), **Barnard's Star** (21), or **3I/ATLAS** (18). These are preserved real SPHEREx observations with checksummed FITS, preview, and metadata files.
 
-## Structure
+Use the Time Slider to browse actual UTC acquisition times or press Play. To compare, choose **A** and **B** in the observation table and press **Find Changes** in the existing comparison panel. The panel shows the real images and an explanation; it enables the Difference view only when its compatibility checks permit one. Expand **How did we reach this conclusion?** for observation IDs, wavelength and quality information, and processing limits.
 
-```text
-backend/
-  app/main.py                   FastAPI routes and coordinate validation
-  app/irsa.py                   IRSA TAP client, schema check, VOTable parsing
-  app/images.py                 Image preparation, preview, pixel and download routes
-  app/image_download.py         IRSA URL validation, DataLink resolution, bounded streaming
-  app/image_service.py          Small local FITS/preview cache
-  app/fits_image.py             Science HDU selection, display stretch, spatial/spectral WCS
-  app/fits_worker.py            Isolated native decoder with resource limits
-  app/spectrum/                 Spectra: archive lookup, range reads, photometry, band and season analysis, API
-  tests/test_spectrum.py        Spectrum tests (synthetic exposures served by a fake range-request session)
-  tests/test_api.py             Existing observation API tests
-  tests/test_images.py          Synthetic MEF, mocked download, cache and image API tests
-  requirements.txt              Exact Python dependency versions
-frontend/
-  src/App.jsx                   Selection and request lifecycle
-  src/aladin.js                 Version-pinned official npm API loader
-  src/coordinates.js            Coordinate/click validation
-  src/components/SkyMap.jsx     Genuine Aladin sky map and marker
-  src/components/CoordinatePanel.jsx
-  src/components/ObservationsTable.jsx
-  src/components/ImageInspector.jsx
-  src/styles.css                Responsive dark dashboard
-  tests/coordinates.test.js     Coordinate and drag-release tests
-  tests/browser/                Existing map checks, image UI tests, optional live FITS check
-  tests/fixtures/               Small, explicitly synthetic browser-only MEF/PNG/JSON
-  package-lock.json             Reproducible npm dependency resolution
-scripts/                        Setup and local launch scripts
-docs/                          API provenance and verification notes
-```
+The bundled target list, previews, FITS analysis, and comparison run without IRSA access. **Keep both local servers running** for FITS readouts, registered tracking views, and comparisons. The live Aladin sky map is shown in Live Mode and loads external sky-survey tiles; Demo Mode uses its local target view instead.
 
-## API and data semantics
+Validate the bundled data before a presentation:
 
-```bash
-curl 'http://127.0.0.1:8000/api/observations?ra=210.80227&dec=54.34895'
-```
+~~~bash
+.venv/bin/python scripts/prepare_demo.py --validate frontend/public/demo
+~~~
 
-`GET /api/observations` requires finite numeric `ra` and `dec`. Invalid coordinates return HTTP 422. Successful upstream queries return HTTP 200 with `status: "live"`, input coordinates, provenance, `count`, `limit`, `truncated`, and `observations`. A valid zero-row response remains live. Service failures, schema changes, or invalid TAP responses return HTTP 503 with `status: "unavailable"` and an empty observation list, never fabricated substitutes.
+See [Demo architecture](docs/demo-architecture.md) and [target provenance](docs/demo-target-showcase.md).
 
-The backend calls `https://irsa.ipac.caltech.edu/TAP/sync` with ADQL. On first use in each backend process it verifies the required columns against the service's `TAP_SCHEMA.columns`; only successful verification is cached. The data query selects at most 101 rows from `spherex.obscore`, uses `CONTAINS(POINT('ICRS', ra, dec), s_region)` for exact point-in-image-footprint matching, orders by newest start time, and returns up to 100 rows. A 101st row or TAP `OVERFLOW` sets `truncated: true`. This is a bounded metadata browser, not an exhaustive export. Synchronous queries have a 10-second connect / 50-second read timeout; the frontend has a 65-second deadline. Retry after an unavailable response. The first request can include schema-verification overhead.
+## Live Mode
 
-Metadata: observation ID, collection, detector bandpass, image center RA/Dec, start UTC derived with Astropy from `t_min` MJD, exposure seconds, wavelength bounds converted from meters to micrometers, access URL and MIME type. Access links are IRSA DataLink metadata endpoints, not guaranteed direct FITS files. Missing values display `—`. There is a small local FITS file cache; there is no database, authentication, ML, or image differencing.
+Choose **Live Mode**, click the Aladin map or enter RA and Dec, then select **Search SPHEREx Observations**. The backend queries NASA/IPAC IRSA for actual observation metadata. Filter the results by detector or archive wavelength bounds, open an observation in the FITS viewer, or select two rows for comparison.
 
-## View a real SPHEREx FITS image
+Live Mode needs access to **IRSA** for searches and FITS cutouts and to the external sky-survey service for Aladin's background tiles. New images can take time to download and process; repeated requests may use the local cache. The inspector requests a small cutout by default and offers an explicit full-detector option. Search and image retrieval have bounded time and size limits; an unavailable archive returns an error rather than invented observations.
 
-Search the archive as before, then click **View Image** or select a row (Enter/Space also works). The inspector appears beneath the table. It resolves the selected observation’s `access_url`; for DataLink responses it follows the unique FITS `#this` product, then requests the documented cutout by default. Full detector retrieval is an explicit inspector choice. No product path is guessed or calibration file substituted. The first load may take several minutes. Reopening a cached image is much faster.
+Same-detector images can still represent different wavelengths at the selected position. A difference preview or an accepted visual comparison does not by itself establish physical variability. Scientific screening stays unavailable when essential calibration, spectral, registration, PSF, or uncertainty evidence is missing.
 
-- Use + / −, Fit image, drag, or the arrow buttons to zoom and pan the preview.
-- Click an image pixel for its original surface brightness, flags, ICRS position, and approximate wavelength/bandwidth where the file supports them.
-- The mint target cross is computed from the original spatial WCS. An outside-image target or missing WCS is reported explicitly. The full image is not recentered or rotated to north-up; native detector x increases right and y increases up. UI pixel coordinates are zero-based.
-- `IMAGE` is selected by extension name after inspecting the HDUs, regardless of extension order. The primary HDU is not assumed to contain science pixels. Expand **FITS HDUs and WCS metadata** to inspect the inventory and headers.
-- The grayscale PNG is a visualization only: 1st–99th percentile limits, asinh `a=0.1`, and nearest-neighbor downsampling to a maximum dimension of 1024. Nonfinite/masked pixels and documented FLAGS bits 6/7/9 (NONFUNC, DICHROIC, MISSING_DATA) are transparent. Other quality flags remain visible and can be inspected. All-invalid images fail explicitly; constant valid images display neutral gray.
-- Wavelength varies over the detector. Archive wavelength bounds describe the observation, not every pixel. Readouts use the file's alternate spectral WCS `W` and `WCS-WAVE` table with spatial SIP distortion disabled for that spectral transformation. Missing/unsupported spectral metadata remains unavailable. These approximate values support visualization; scientific wavelength analysis needs the calibrated CWAVE/CBAND products.
-- **Download original FITS** streams the unchanged, complete cached file, including every HDU, WCS and lookup table. The API also returns its SHA-256 checksum. Reload the observation if the cache entry has expired. No zodiacal subtraction, reprojection or scientific pixel modification is performed.
+## Example: explore 3I/ATLAS
 
-The existing setup and launch commands still apply. Re-run `./scripts/setup.sh` after updating to install the added Pillow dependency.
+1. Open **http://127.0.0.1:5173/?mode=demo** and select **3I/ATLAS**.
+2. Move the Time Slider through its 18 real observations from 14 December 2025. The dates are actual exposure times.
+3. Switch between **Fixed sky** and **Follow predicted comet**. Cyan dashed rings show positions from the verified IRSA prediction table. The scientific details describe local image checks near those positions.
+4. Select two observations as A and B, press **Find Changes**, and read the result and expandable scientific details.
 
-### Quick cutouts (default) and full detector images
+The bundled sequence has 12 exposure IDs and 13 exact UTC timestamps across about 3.33 hours. The official predicted separation between its first and last positions is about 581.80 arcseconds. Image checks find local excesses near some predictions, but do not establish their identity or calibrated positional uncertainty. The app therefore does not report verified comet motion. See [comet analysis and limitations](docs/comet-integration.md).
 
-The inspector and Time Slider request the same **0.3 degree cutout** around the selected target, allowing identical requests to reuse one cached FITS and preview. The inspector also provides an explicit **Full detector image (slow)** option. Existing API callers that omit `cutout_deg` retain full-image behavior.
+## Scientific integrity
 
-The backend resolves the archive DataLink product URL and appends `?center=RA,DEC&size=0.3000deg` only to an allowlisted `/ibe/data/spherex/` product. This follows the [official IRSA cutout documentation](https://irsa.ipac.caltech.edu/ibe/cutouts.html). Unsupported product URLs fail explicitly; there is no automatic full-file fallback. Large parent-file size metadata does not block a cutout, but the downloaded response still has byte, pixel and time limits.
+SPHEREx uses infrared filters whose effective wavelength changes across an image. Images from different wavelengths may show different structures even if the sky has not changed. Alignment, background, calibration, image sharpness (PSF), quality flags, and uncertainty all affect a comparison.
 
-Cutout cache keys include the product URL, target (six decimal places) and size (four decimal places). Full images have separate entries. Main's bounded request queue serializes download/render work and lets duplicate requests reuse the result. Full images and cutouts have independent count limits and share the idle TTL.
-
-The returned MEF bytes are stored unchanged, including all returned HDUs, headers, masks and WCS tables. Only the PNG uses display stretching and masking. The requested angular size follows detector axes and can be clipped at detector edges; it is not guaranteed to be north-up or exactly square on the sky. Wavelength readouts use available alternate WCS tables and remain approximate; missing spectral metadata is reported as unavailable.
-
-Tests mock the network. Run `.venv/bin/python scripts/smoke_cutout.py` for one live 0.02 degree cutout with a 16 MiB transfer limit, a 90 second download budget and temporary cache. Network and IRSA processing time vary; no fixed loading-time claim is made.
-
-### Image endpoints and limits
-
-`POST /api/images` accepts `{ "access_url": "<actual IRSA metadata URL>", "ra": 210.80227, "dec": 54.34895 }`. RA/Dec are optional as a pair and used only for locating the selected target. Add `"cutout_deg": 0.3` (0.02 to 1.0, requires RA/Dec) to request an IRSA cutout of that width instead of the full file. The response contains the image identifier, preview/original URLs, HDU inventory, scaling, WCS metadata, image-center readout and target position.
-
-- `GET /api/images/{id}/preview`: derived RGBA PNG.
-- `GET /api/images/{id}/original`: original FITS attachment, streamed from disk.
-- `GET /api/images/{id}/pixel?x=37&y=546`: zero-based pixel and WCS readout.
-
-Only HTTPS on the exact `irsa.ipac.caltech.edu` host, port 443, and the SPHEREx DataLink/product path prefixes is accepted. Credentials, other hosts/IP literals, traversal paths and non-public DNS addresses are rejected. Each redirect and DataLink destination is checked again. Environment proxies and `.netrc` credentials are disabled for this public-file downloader. No remote URLs are passed to Astropy.
-
-Downloads use 64 KiB chunks, a 10-second connect timeout, 30-second read timeout and a configurable overall deadline checked between chunks. Both announced lengths and actual streamed bytes are limited; partial failures are removed. DataLink tables have a separate 2 MiB bound. Only uncompressed FITS containers are supported. The frontend waits up to 12 minutes for preparation; changing the row or sky target cancels the UI request, while an already-running server download may finish within its bound and populate the cache.
-
-Configure these environment variables **before starting the backend**:
-
-| Variable | Default | Meaning |
-| --- | --- | --- |
-| `SKYTRACKER_FITS_MAX_BYTES` | `134217728` | 128 MiB per original FITS download |
-| `SKYTRACKER_FITS_DOWNLOAD_SECONDS` | `600` | Overall remote-download deadline, seconds |
-| `SKYTRACKER_FITS_CACHE_DIR` | repository `.cache/arcadian-fits-v1` | Cache directory; an absolute override is recommended |
-| `SKYTRACKER_FITS_CACHE_ENTRIES` | `3` | Maximum completed full-detector originals/previews |
-| `SKYTRACKER_CUTOUT_CACHE_ENTRIES` | `3` | Maximum completed cutout originals/previews |
-| `SKYTRACKER_FITS_CACHE_TTL` | `3600` | Idle expiry, seconds |
-| `SKYTRACKER_FITS_MAX_PIXELS` | `8000000` | Maximum science-image pixels before loading its array |
-
-All numeric limits must be positive. Retained FITS occupy at most (full entry count + cutout entry count) × maximum file bytes, plus previews/metadata and one temporary preparation. Cache pruning occurs on access; expired entries and stale partial directories are removed. Thread and file locks serialize download/decoding work; ordinary concurrent requests use a bounded waiting queue and reuse completed results; queue saturation or wait timeout returns a retryable 503. Open file downloads remain valid even if their cache entry is subsequently evicted. Cache files are ignored by Git.
-
-FITS/WCS processing runs in a child process with a 60-second wall limit, 55-second CPU limit, 3 GiB address-space limit and no core dumps, so malformed native-decoder input does not terminate the API. The default scripts target Linux/Fedora. The API returns explicit errors: 400 unsafe URL; 413 file/pixel limit; 422 unsupported/invalid/all-masked FITS; 404 cache miss; 502 upstream/decoder failure; 503 busy; 504 timeout; 507 cache unavailable.
-
-### Pair suggestions for time comparison
-
-`GET /api/pairs?ra=10.6847&dec=41.2687&band=SPHEREx-D1&per_visit=1` suggests which observations of one sky point are fair to compare over time (ported from PR #1):
-
-1. Searches **one band** and groups the results into **visits** (runs separated by more than 20 days).
-2. Per visit, **shortlists** the `per_visit` observations whose image centre is closest to the target (a heuristic to limit downloads; at most 12 per request).
-3. Fetches a **0.437° cutout** for each (the size `POST /api/compare` needs; cached) and reads the **wavelength at the target pixel**. If it cannot be read it stays unknown; the image-centre value is never substituted.
-4. Ranks pairs with the **same rules as `POST /api/compare`** (same detector, at least 1 hour apart, target wavelengths within 0.02 µm). Overlap is only checked when a pair is compared. Each pair carries IRSA `access_url`s and cached `image_id`s.
-
-First use takes minutes (one cutout per candidate, roughly 20–60 s each). A suggestion is not evidence of motion or of any new object. Live check: `.venv/bin/python scripts/smoke_pairs.py` (suggests M31 D1 pairs, then compares the best one and checks both agree).
+The app distinguishes **what the pixels show**, **what observation metadata predict**, and **what scientific evidence supports**. It can display visual residuals while blocking unsupported astronomical change claims. Its controlled synthetic tests validate software behavior only; they are not observations or discoveries. Read the [real-observation assessment](docs/final-real-analysis.md) and [scientific change-detection notes](docs/scientific-change-detection.md) for the current evidence and limits.
 
 ## Tests and build
 
-```bash
+Run these commands from the repository root after setup:
+
+~~~bash
 .venv/bin/python -m pytest backend/tests -q
 npm --prefix frontend test
 npm --prefix frontend run build
 npm --prefix frontend run test:browser
-```
+~~~
 
-Browser tests use installed Chrome at `/usr/bin/google-chrome`; override with `CHROME_PATH=/absolute/path/to/chrome`. They launch dedicated Vite and FastAPI servers on ports 5174 and 8001; the live search test queries the real IRSA archive. Real map tests require internet and WebGL; they exercise the official pinned Aladin API, rather than a mocked sky map. API unit tests use labeled test fixtures and do not require IRSA availability. See [verification notes](docs/verification.md) for checks actually run.
+Backend tests and most browser tests use mocked network responses or labeled synthetic fixtures. The standard Playwright suite also includes a live IRSA metadata search and map checks that need network access. Its live FITS download tests are **opt-in** with SKYTRACKER_LIVE_FITS=1 and can transfer real archive data; leave that setting unset for routine checks.
 
-The full-file live browser test is opt-in because it can download roughly 70 MB:
+Playwright starts its own test servers on ports **8001** and **5174**. Its configuration expects Chrome at /usr/bin/google-chrome by default; set CHROME_PATH to an absolute Chrome executable path on another system. For focused local-data browser checks without an archive query:
 
-```bash
-SKYTRACKER_LIVE_FITS=1 npm --prefix frontend run test:browser
-```
+~~~bash
+npm --prefix frontend run test:browser -- tests/browser/demo.spec.js tests/browser/comet-tracking.spec.js
+~~~
 
-The other image-browser tests use clearly labeled synthetic MEF/PNG fixtures and mocked image HTTP responses. These fixtures are never loaded by the application itself. See [Milestone 2 verification](docs/milestone-2.md) for actual checks and limitations.
+The developer-only synthetic validation UI is hidden by default and can be enabled with VITE_ENABLE_DETECTION_LAB=true when starting Vite. Its results must never be presented as real astronomical detections.
 
-`frontend/dist/` is the production frontend build. To serve it elsewhere, configure the same-origin `/api` reverse proxy to FastAPI. Deployment is outside this local milestone.
+## Project structure
 
-### Time-slider playback and time-lapse export
+~~~text
+backend/
+  app/                 FastAPI routes, IRSA client, FITS service, comparison and analysis
+  tests/               API, image, science and regression tests
+  requirements.txt     Pinned Python dependencies
+frontend/
+  src/                 React application and Aladin integration
+  public/demo/         Bundled real observations, manifest, previews and FITS
+  tests/               Unit and Playwright browser tests
+  package.json         Frontend scripts and dependencies
+scripts/               Setup, launch and data-validation utilities
+demo/discovery/         Bundled target-discovery metadata and ephemeris table
+docs/                   Scientific provenance, validation and architecture notes
+~~~
 
-**Play** steps through the observations in time order. Each step waits until its image has loaded (live frames can take a minute) and then shows it for 1.5 s; playback stops at the last observation (**Replay** starts again). **Export time-lapse video** records the sequence as a WebM file, one second per observation, at most 24 observations (each live frame may need a download; filter by detector for long sequences). Every video frame carries its source, UTC time, observation, detector, wavelength at the target and, burned in, the caveats: each frame has its own brightness scale, images keep native detector orientation (not registered), mixed detectors are flagged, and no change or motion is validated. Ported from Danae's `feature/time-slider` work.
+## Team and credits
 
-The FITS decoder worker applies its CPU, memory and core-dump limits wherever the platform allows. If a platform refuses one (macOS does not support the memory limit), the worker still runs and the API log warns once which limits are missing.
+**Arcadian SpaceWorks** developed this project for the NASA Space Apps Challenge. Verified Git commit authors include **PantelisZeritis, AndrewMpel, Andreas Belias, and Danae**; the commit history records contributions without assigning unverified roles.
 
-## Official sources and attribution
+SPHEREx data and archive services come from **NASA/IPAC IRSA**. The sky atlas uses **Aladin Lite** from CDS and its external survey imagery. We acknowledge NASA Space Apps and the open-source projects named in the dependency manifests. This is an independent team project and does not imply NASA endorsement.
 
-- [Aladin Lite official API documentation](https://cds-astro.github.io/aladin-lite/), [stable v3.8.1 release](https://github.com/cds-astro/aladin-lite/releases/tag/v3.8.1), [pinned JavaScript build](https://aladin.cds.unistra.fr/AladinLite/api/v3/3.8.1/aladin.js).
-- [IRSA SPHEREx help](https://irsa.ipac.caltech.edu/onlinehelp/spherex/help.pdf) documents `spherex.obscore`.
-- [Official SPHEREx archive data access documentation](https://github.com/Caltech-IPAC/spherex-archive-documentation/blob/main/documentation/spherex_data_access.md).
-- [Official IRSA TAP service documentation](https://irsa.ipac.caltech.edu/TAP/) and [IRSA SPHEREx footprint-query tutorial](https://github.com/Caltech-IPAC/irsa-tutorials/blob/main/tutorials/spherex/spherex_cutouts.md).
-- [Schema verification details](docs/data-sources.md).
+## Future roadmap
 
-Aladin Lite is developed by CDS, Strasbourg Observatory. Its built-in bottom-right logo/link remains intact and unobscured. DSS2 HiPS tiles are loaded from the [STScI public mirror](https://stpubdata.s3.us-east-1.amazonaws.com/mast/skybackgrounds/DSSColor/properties), listed in the [official CDS survey registry](https://alasky.cds.unistra.fr/MocServer/query?ID=CDS%2FP%2FDSS2%2Fcolor&fmt=html&get=record). DSS2 survey attribution is available through Aladin's survey information. SPHEREx metadata is served by NASA/IPAC IRSA. Survey tiles and IRSA need network connectivity; Aladin JS/CSS/WebAssembly are bundled locally after installation; map failure is explicitly reported and never replaced with a simulated star field.
+- Calibrated multi-epoch change detection with stronger wavelength, PSF and uncertainty evidence.
+- Moving-object tracking that can associate sources across frames and measure positional uncertainty.
+- Additional astronomy missions and datasets.
+- Scientifically supported light curves and spectral analysis.
+- More guided educational and citizen-science experiences.
 
-SPHEREx image conventions: [official product guide](https://github.com/Caltech-IPAC/spherex-archive-documentation/blob/main/documentation/spherex_data_products.md), [IRSA spatial/spectral WCS tutorial](https://github.com/Caltech-IPAC/irsa-tutorials/blob/main/tutorials/spherex/spherex_intro.md), and [pixel flag definitions](https://irsa.ipac.caltech.edu/onlinehelp/spherex/spherex/sp.html).
+These are proposed improvements, not current detection claims.
 
-### Preloaded presentation mode
+## License
 
-Open `/?mode=demo` or choose **Demo Mode** in the Data mode selector. Four targets are included: three preserved real SPHEREx cutouts for the M101 region, and larger sets of 0.437° cutouts for the M31 core (18 frames: three survey passes, one exposure per detector), Barnard’s Star (21 frames at three epochs over a year, with Gaia-predicted positions) and comet 3I/ATLAS (18 frames over 3.3 hours on a fixed sky centre, with IRSA’s predicted comet positions). The larger sets are chosen and fetched by `scripts/acquire_demo_targets.py`; see [the showcase notes](docs/demo-target-showcase.md#larger-sets-m31-barnards-star-and-3iatlas). Demo playback uses local PNGs and manifests, with local FastAPI FITS pixel readouts. Live Mode retains the existing IRSA search/cutout pipeline.
-
-Validate assets before presenting: `.venv/bin/python scripts/prepare_demo.py --validate frontend/public/demo`. For offline preparation, provenance, deployment and scaling instructions, see [the hybrid demo architecture](docs/demo-architecture.md). PNGs are independently stretched previews; the application makes no validated motion or variability claim.
-
-### Detector / product-wavelength filters and image waiting state
-
-Live searches accept an optional `band=SPHEREx-D1` through `SPHEREx-D6`, or
-`wavelength_um` in the supported input range 0.7–5.1 µm. The latter filters real
-ObsCore `em_min`/`em_max` metadata in metres; it does not establish the wavelength
-at the exact selected pixel. Unknown/inconsistent bounds remain visible and are
-flagged. Detector labels are not exact wavelengths. The same controls filter the
-preloaded demo inventory locally; M101 frames have unknown product bounds and
-remain visible for numeric wavelength filtering. A D5 filter selects two real
-frames across the two preserved UTC epochs.
-
-Image loading shows elapsed time and an indeterminate indicator. The API supplies
-no byte/stage progress or completion estimate. **Stop waiting** aborts the browser
-request; server work already underway may complete and be cached. No extra image
-polling is introduced. Cutouts now have a separate configurable retention limit:
-`SKYTRACKER_CUTOUT_CACHE_ENTRIES` defaults to 3; `SKYTRACKER_FITS_CACHE_ENTRIES`
-continues to limit full-detector files. See the
-[integration review](docs/image-progress-wavelength-integration.md) for scientific
-limitations, validation results and exact integration scope.
-
-### Expanded real-data demo showcase
-
-The dedicated target showcase preserves the M101 fallback and uses selected real QR2 cutouts for additional targets. The target selector reports unavailable candidates explicitly; preview animation is not a validated measurement of motion or variability. Frame-specific tracking coordinates, release/calibration, actual UTC coverage and provenance accompany the images. See [target discovery, bounded acquisition and offline reproduction](docs/demo-target-showcase.md).
-
-```bash
-.venv/bin/python scripts/prepare_demo.py --validate frontend/public/demo
-.venv/bin/python scripts/validate_demo_science.py frontend/public/demo
-```
+This repository currently has **no LICENSE file**. No open-source license terms have been specified by the project maintainers.
