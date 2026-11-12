@@ -74,6 +74,8 @@ class Frame:
     zodi: np.ndarray | None = None
     provenance: dict = field(default_factory=dict)
     diagnostics: dict = field(default_factory=dict)
+    flags: np.ndarray | None = None       # FLAGS bit plane of the cutout (0 outside the image).
+    flag_names: dict = field(default_factory=dict)  # Bit number -> name, from the MP_* header keywords.
 
     @property
     def band(self):
@@ -83,7 +85,8 @@ class Frame:
         return {'obs_id': self.obs_id, 'band': self.band, 'detector': self.detector,
                 'observed_at_utc': self.observed_at_utc, 'mjd': self.mjd,
                 'wavelength_um': self.wavelength_um, 'bandwidth_um': self.bandwidth_um,
-                'diagnostics': dict(self.diagnostics), 'provenance': dict(self.provenance)}
+                'diagnostics': dict(self.diagnostics), 'provenance': dict(self.provenance),
+                'flag_names': {str(bit): name for bit, name in sorted(self.flag_names.items())}}
 
 
 @dataclass(frozen=True)
@@ -106,6 +109,7 @@ class AlignedFrame:
     frame: Frame
     data: np.ndarray
     valid: np.ndarray
+    flags: np.ndarray | None = None  # Nearest-pixel FLAGS on the grid (bits are never interpolated).
 
 
 @dataclass(frozen=True)
@@ -212,8 +216,13 @@ def load_frame(path, ra, dec, size_deg, *, source='file', settings=DEFAULT_SETTI
             spectral = wavelength_at(hdu, hdul, x, y)
             data = np.asarray(hdu.data, dtype=np.float64)
             valid = np.isfinite(data)
+            flags, flag_names = None, {}
             if 'FLAGS' in hdul and hdul['FLAGS'].shape == data.shape and np.issubdtype(hdul['FLAGS'].data.dtype, np.integer):
-                valid &= (hdul['FLAGS'].data & BAD_FLAGS) == 0
+                flags = np.asarray(hdul['FLAGS'].data, dtype=np.int64)
+                valid &= (flags & BAD_FLAGS) == 0
+                for key, value in hdul['FLAGS'].header.items():
+                    if key.startswith('MP_') and isinstance(value, int) and 0 <= value < 63:
+                        flag_names[value] = key[3:]
             zodi = None
             if 'ZODI' in hdul and hdul['ZODI'].shape == data.shape:
                 zodi = np.asarray(hdul['ZODI'].data, dtype=np.float64)
@@ -229,6 +238,7 @@ def load_frame(path, ra, dec, size_deg, *, source='file', settings=DEFAULT_SETTI
             cut = Cutout2D(np.where(valid, data, np.nan), fill_value=np.nan, **cut_options)
             valid_cut = Cutout2D(valid.astype(np.float32), fill_value=0, **cut_options).data > .5
             zodi_cut = Cutout2D(zodi, fill_value=np.nan, **cut_options).data if zodi is not None else None
+            flags_cut = Cutout2D(flags, fill_value=0, **cut_options).data.astype(np.int64) if flags is not None else None
         except NoOverlapError as exc:
             raise FrameError('target_outside', 'The requested cutout does not overlap this image.') from exc
 
@@ -251,7 +261,7 @@ def load_frame(path, ra, dec, size_deg, *, source='file', settings=DEFAULT_SETTI
                  observed_at_utc=observed_at_utc, mjd=mjd,
                  wavelength_um=spectral['wavelength_um'] if spectral else None,
                  bandwidth_um=spectral['bandwidth_um'] if spectral else None,
-                 zodi=zodi_cut, provenance=provenance, diagnostics=diagnostics)
+                 zodi=zodi_cut, provenance=provenance, diagnostics=diagnostics, flags=flags_cut, flag_names=flag_names)
 
 
 def common_grid(ra, dec, size_deg, pixel_scale_arcsec=SPHEREX_PIXEL_SCALE_ARCSEC):
@@ -282,8 +292,14 @@ def align(frames, grid):
                                                shape_out=grid.shape, order='bilinear')
             coverage = reproject_interp((frame.valid.astype(np.float64), frame.wcs), grid.wcs,
                                         shape_out=grid.shape, order='bilinear', return_footprint=False)
+            flags = None
+            if frame.flags is not None:
+                # Bit planes up to bit 62 are exact in float64; nearest neighbour never mixes bits.
+                flags = reproject_interp((frame.flags.astype(np.float64), frame.wcs), grid.wcs, shape_out=grid.shape,
+                                         order='nearest-neighbor', return_footprint=False)
+                flags = np.where(np.isfinite(flags), flags, 0).astype(np.int64)
         valid = (footprint > 0) & np.isfinite(data) & (np.nan_to_num(coverage) >= 1 - 1e-6)
-        aligned.append(AlignedFrame(frame=frame, data=np.where(valid, data, np.nan), valid=valid))
+        aligned.append(AlignedFrame(frame=frame, data=np.where(valid, data, np.nan), valid=valid, flags=flags))
     return aligned
 
 

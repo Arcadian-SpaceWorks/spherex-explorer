@@ -14,6 +14,7 @@ from .compare import (
 )
 
 PREVIEWS = {'a': 'a.png', 'b': 'b.png', 'difference': 'difference.png'}
+GRID_ARRAYS = 'grid.npz'  # Aligned pixels, validity and FLAGS of A and B, for motion measurements.
 
 
 def _save(rgba, path):
@@ -61,6 +62,11 @@ def compare_files(path_a, path_b, ra, dec, size_deg, mode, out_dir, source_a='fi
             raise ImageError(f'Image {role.upper()} has no valid pixels on the comparison grid.', 422, 'no_valid_pixels')
         rgba, scalings[role] = stretch_pixels(item.data, ~item.valid, limits=limits)
         _save(rgba, out / PREVIEWS[role])
+
+    empty = np.zeros(grid.shape, dtype=np.int64)
+    np.savez_compressed(out / GRID_ARRAYS, data_a=a.data.astype(np.float32), data_b=b.data.astype(np.float32),
+                        valid_a=a.valid, valid_b=b.valid,
+                        flags_a=a.flags if a.flags is not None else empty, flags_b=b.flags if b.flags is not None else empty)
 
     diff_summary = None
     if check.difference_allowed:

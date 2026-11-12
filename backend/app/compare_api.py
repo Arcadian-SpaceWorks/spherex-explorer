@@ -63,6 +63,25 @@ def compare(request: CompareRequest, service=Depends(get_compare_service)):
                            request.size_deg, request.mode, request.match_scale)
 
 
+class Click(BaseModel):
+    """A click on a comparison preview, in preview pixels (origin top-left, pixel centres at integers)."""
+    model_config = ConfigDict(extra='forbid')
+    x: float = Field(ge=-0.5, le=4096, allow_inf_nan=False)
+    y: float = Field(ge=-0.5, le=4096, allow_inf_nan=False)
+
+
+class MeasureRequest(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    a: Click
+    b: Click
+
+
+@router.post('/{compare_id}/measure')
+def measure(compare_id: CompareId, request: MeasureRequest, service=Depends(get_compare_service)):
+    """Centroid the clicked object in A and B and measure its shift and apparent motion."""
+    return service.measure(compare_id, request.model_dump())
+
+
 @router.get('/{compare_id}/{role}.png')
 def preview(compare_id: CompareId, role: Literal['a', 'b', 'difference'], service=Depends(get_compare_service)):
     handle = service.open_preview(compare_id, role)

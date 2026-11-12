@@ -65,3 +65,41 @@ test('3I/ATLAS: two bands of one exposure side by side; hours apart is blink onl
   await expect(compare.getByTestId('compare-slot-a')).toContainText('Not chosen');
   expect(forbidden).toEqual([]);
 });
+
+test('Barnard’s Star: clicking the star in A and B measures its motion against Gaia', async ({page}) => {
+  const {forbidden} = await demo(page, 'barnard');
+  const a = row(barnard, '2025W33_2C_0321_1', 3), b = row(barnard, '2026W34_1A_0176_2', 3);
+  await pickButton(page, a, 'A').click();
+  await pickButton(page, b, 'B').click();
+  const compare = panel(page);
+  await compare.getByRole('button', {name: 'Compare A and B'}).click();
+  await expect(compare.getByTestId('compare-verdict')).toContainText('ACCEPT', {timeout: 60000});
+  const measure = compare.getByTestId('motion-measure');
+  await expect(measure.getByTestId('measure-instruction')).toContainText('Click the object in image A');
+  // The star sits at the centre of the grid; click a little off it, as a person would.
+  for (const role of ['a', 'b']) {
+    const image = measure.getByTestId(`measure-image-${role}`);
+    await expect.poll(() => image.evaluate(img => img.complete && img.naturalWidth)).toBe(176);
+    const box = await image.boundingBox();
+    await image.click({position: {x: box.width * 0.51, y: box.height * 0.49}});
+  }
+  const result = measure.getByTestId('measure-result');
+  await expect(result).toBeVisible({timeout: 30000});
+  await expect(result.getByTestId('measure-rate')).toContainText('″ per year');
+  await expect(result.getByTestId('measure-shift')).toContainText('toward the north');
+  await expect(result.getByTestId('measure-summary')).toContainText('agrees with the prediction');
+  await expect(result.getByTestId('measure-prediction')).toContainText('10.4″ per year');
+  await expect(result.getByTestId('measure-warnings')).toContainText('Saturated object');
+  await expect(result.getByTestId('candidate-id')).toHaveText(/^SKT-\d{8}-[0-9A-F]{8}$/);
+  await expect(result).toContainText('not an official designation');
+  const download = page.waitForEvent('download');
+  await result.getByRole('button', {name: 'Download candidate record (JSON)'}).click();
+  const file = await download;
+  expect(file.suggestedFilename()).toMatch(/^SKT-\d{8}-[0-9A-F]{8}\.json$/);
+  const record = JSON.parse(fs.readFileSync(await file.path(), 'utf8'));
+  expect(record.prediction.rate_arcsec_per_year).toBeCloseTo(10.39, 1);
+  expect(record.claim).toContain('Not a confirmed detection');
+  await measure.getByRole('button', {name: 'Clear points'}).click();
+  await expect(measure.getByTestId('measure-result')).toHaveCount(0);
+  expect(forbidden).toEqual([]);
+});

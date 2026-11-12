@@ -71,3 +71,21 @@ test('demo rows are sent as preloaded image IDs and leave the wavelength store a
   await requestComparison({a: demoA, b: demoB, target: {ra: 269.44623, dec: 4.76867}, mode: 'time', fetchImpl});
   assert.deepEqual([sent.a, sent.b], [{demo_image_id: 'a'.repeat(64)}, {demo_image_id: 'b'.repeat(64)}]);
 });
+
+test('requestMeasurement posts both clicks and checks the reply', async () => {
+  const {requestMeasurement, previewPixel} = await import('../src/compareAdapter.js');
+  const id = 'c'.repeat(64);
+  let sent;
+  const reply = {positions: {a: {}, b: {}}, motion: {}, candidate: {id: 'SKT-20261108-ABCDEF12'}};
+  const fetchImpl = async (url, options) => {sent = {url, body: JSON.parse(options.body)}; return {ok: true, json: async () => reply};};
+  const data = await requestMeasurement({compareId: id, clicks: {a: {x: 87, y: 88}, b: {x: 88, y: 86}}, fetchImpl});
+  assert.equal(data.candidate.id, 'SKT-20261108-ABCDEF12');
+  assert.equal(sent.url, `/api/compare/${id}/measure`);
+  assert.deepEqual(sent.body, {a: {x: 87, y: 88}, b: {x: 88, y: 86}});
+  await assert.rejects(requestMeasurement({compareId: 'bad', clicks: {}, fetchImpl}), /Run the comparison first/);
+  const refuse = async () => ({ok: false, status: 422, json: async () => ({message: 'Image A: No clear object within 25" of the click.'})});
+  await assert.rejects(requestMeasurement({compareId: id, clicks: {a: {}, b: {}}, fetchImpl: refuse}), /No clear object/);
+  // A click at the centre of a 176-pixel preview shown 352 pixels wide is pixel 87.5 (centres at integers).
+  const image = {naturalWidth: 176, naturalHeight: 176, getBoundingClientRect: () => ({left: 10, top: 20, width: 352, height: 352})};
+  assert.deepEqual(previewPixel({clientX: 10 + 176, clientY: 20 + 176}, image), {x: 87.5, y: 87.5});
+});

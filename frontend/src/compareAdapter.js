@@ -106,3 +106,32 @@ export async function requestComparison({a, b, target, mode, signal, fetchImpl =
   }
   return data;
 }
+
+/** Preview pixel (origin top-left, pixel centres at integers) under a click on a displayed preview. */
+export function previewPixel(event, image) {
+  const box = image.getBoundingClientRect();
+  return {x: (event.clientX - box.left) / box.width * image.naturalWidth - 0.5,
+    y: (event.clientY - box.top) / box.height * image.naturalHeight - 0.5};
+}
+
+/** Centroid both clicks and measure the shift between them (POST /api/compare/{id}/measure). */
+export async function requestMeasurement({compareId, clicks, signal, fetchImpl = fetch}) {
+  if (!/^[a-f0-9]{64}$/.test(compareId || '')) throw new Error('Run the comparison first.');
+  let response;
+  try {
+    response = await fetchImpl(`/api/compare/${compareId}/measure`, {method: 'POST', signal,
+      headers: {'Content-Type': 'application/json'}, body: JSON.stringify({a: clicks.a, b: clicks.b})});
+  } catch (err) {
+    if (err?.name === 'AbortError') throw err;
+    throw new Error('The measurement service could not be reached.');
+  }
+  let data = {};
+  try {data = await response.json();} catch {data = {};}
+  if (!response.ok) throw new Error(errorMessage(data, response.status).replace('comparison', 'measurement'));
+  if (!data.positions?.a || !data.positions?.b || !data.motion || !data.candidate?.id) throw new Error('The measurement service returned an incomplete result.');
+  return data;
+}
+
+export function candidateFilename(candidate) {
+  return `${candidate.id}.json`;
+}

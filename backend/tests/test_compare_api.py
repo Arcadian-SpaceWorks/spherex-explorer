@@ -260,3 +260,60 @@ def test_a_corrupted_demo_fits_is_refused(tmp_path):
     service = CompareService(images=None, settings=CompareCacheSettings(cache_dir=tmp_path / 'compare', entries=3, ttl=600), demo_root=root)
     with pytest.raises(ImageError, match='Preloaded science data unavailable'):
         service.compare({'demo_image_id': image_id}, {'demo_image_id': image_id}, target['ra'], target['dec'], 0.3, 'time')
+
+
+def predicted_click(target_id, obs_id, detector, jitter=(1.3, -0.8)):
+    """Where a person would click: the predicted position on the preview, a little off."""
+    from astropy.coordinates import SkyCoord
+    from astropy import units as u
+    from backend.app.analysis.compare import common_grid
+    manifest = json.loads((DEMO_ROOT / 'manifest.json').read_text())
+    target = next(t for t in manifest['targets'] if t['id'] == target_id)
+    row = next(o for o in target['observations'] if o['obs_id'] == obs_id and o['detector'] == detector)
+    grid = common_grid(target['ra'], target['dec'], 0.3)
+    x, y = grid.wcs.world_to_pixel(SkyCoord(row['acquisition']['predicted_ra'] * u.deg, row['acquisition']['predicted_dec'] * u.deg))
+    return {'x': float(x) + jitter[0], 'y': float(grid.shape[0] - 1 - y) + jitter[1]}
+
+
+def compare_and_measure(client, target_id, a, b, mode='time'):
+    result = client.post('/api/compare', json=demo_body(target_id, a, b, mode)).json()
+    response = client.post(f'/api/compare/{result["compare_id"]}/measure',
+                           json={'a': predicted_click(target_id, *a), 'b': predicted_click(target_id, *b)})
+    assert response.status_code == 200, response.text
+    return response.json()
+
+
+def test_barnard_moves_north_at_its_gaia_rate_across_one_year(demo_client):
+    m = compare_and_measure(demo_client, 'barnard', ('2025W33_2C_0321_1', 3), ('2026W34_1A_0176_2', 3))
+    motion, prediction = m['motion'], m['prediction']
+    assert motion['direction'] in ('north', 'north-west', 'north-east') and motion['significance'] > 2
+    assert abs(motion['rate_arcsec_per_year'] - 10.39) < 2 * motion['rate_sigma_arcsec_per_year']
+    assert prediction['rate_arcsec_per_year'] == pytest.approx(10.39, abs=0.01) and prediction['residual_sigma'] < 3
+    # Saturated core: measured on the wings with the larger floor, and said so.
+    assert all(p['floor_arcsec'] == 2.6 and 'saturated' in p['method'] for p in m['positions'].values())
+    assert any(w.startswith('Image A: Saturated object') for w in m['warnings'])
+    c = m['candidate']
+    assert c['id'].startswith('SKT-') and 'not an official designation' in c['id_note'] and 'Not a confirmed detection' in c['claim']
+    assert [f['obs_id'] for f in c['frames']] == ['2025W33_2C_0321_1', '2026W34_1A_0176_2'] and all(f['demo'] for f in c['frames'])
+
+
+def test_comet_motion_over_three_hours_matches_irsa_prediction(demo_client):
+    m = compare_and_measure(demo_client, '3i-atlas', ('2025W50_2A_0685_1', 5), ('2025W50_2A_0712_4', 5))
+    assert m['motion']['rate_arcsec_per_hour'] == pytest.approx(m['prediction']['rate_arcsec_per_hour'], rel=0.02)
+    assert m['prediction']['residual_sigma'] < 3 and m['positions']['a']['floor_arcsec'] == 1.0
+    assert 'WARN' in m['warnings'][-1]  # Different wavelengths: aligned, but the comet can look different.
+
+
+def test_two_bands_of_one_exposure_give_no_rate(demo_client):
+    m = compare_and_measure(demo_client, '3i-atlas', ('2025W50_2A_0698_1', 2), ('2025W50_2A_0698_1', 5), mode='wavelength')
+    assert m['motion']['rate_arcsec_per_hour'] is None and 'same moment' in m['summary']
+
+
+def test_measuring_needs_a_cached_comparison_and_a_real_object(demo_client):
+    assert demo_client.post(f'/api/compare/{"0" * 64}/measure', json={'a': {'x': 1, 'y': 1}, 'b': {'x': 1, 'y': 1}}).status_code == 404
+    result = demo_client.post('/api/compare', json=demo_body('barnard', ('2025W33_2C_0321_1', 3), ('2026W34_1A_0176_2', 3))).json()
+    url = f'/api/compare/{result["compare_id"]}/measure'
+    assert demo_client.post(url, json={'a': {'x': 1, 'y': 1}}).status_code == 422
+    assert demo_client.post(url, json={'a': {'x': 'nan', 'y': 1}, 'b': {'x': 1, 'y': 1}}).status_code == 422
+    empty = demo_client.post(url, json={'a': {'x': 400, 'y': 400}, 'b': {'x': 20, 'y': 20}})
+    assert empty.status_code == 422 and empty.json()['code'] in ('click_outside', 'no_source', 'no_background')

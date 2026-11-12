@@ -16,6 +16,8 @@ import tempfile
 import threading
 import time
 
+from datetime import datetime, timezone
+
 from .analysis.compare import cutout_size_for_grid
 from .fits_worker import process_fits
 from .image_download import ImageError
@@ -80,8 +82,14 @@ class CompareService:
             metadata = json.loads(demo.asset_path(root, observation.metadata_path).read_text())
         except (OSError, ValueError) as exc:
             raise ImageError('Preloaded science data unavailable. Validate or prepare the demo bundle.', 503, 'demo_missing') from exc
+        acquisition = metadata.get('acquisition') or {}
+        predicted = None
+        if acquisition.get('predicted_ra') is not None:
+            predicted = {'ra': acquisition['predicted_ra'], 'dec': acquisition['predicted_dec'],
+                         'source': acquisition.get('position_source'), 'note': acquisition.get('position_note')}
         return {'image_id': image_id, 'sha256': observation.fits_sha256, 'cutout': metadata.get('cutout'),
-                'access_url': observation.access_url, 'fits_url': observation.source_url, 'demo': True, 'path': path}
+                'access_url': observation.access_url, 'fits_url': observation.source_url, 'demo': True, 'path': path,
+                'predicted': predicted}
 
     def _resolve(self, ref, ra, dec, size_deg):
         if ref.get('demo_image_id'):
@@ -119,7 +127,7 @@ class CompareService:
         try:
             inputs = [self._resolve(ref, ra, dec, size_deg) for ref in (a, b)]
             demo = all(meta.get('demo') for meta in inputs)
-            key = json.dumps({'v': 'compare-v1', 'a': inputs[0]['sha256'], 'b': inputs[1]['sha256'], 'demo': demo,
+            key = json.dumps({'v': 'compare-v2', 'a': inputs[0]['sha256'], 'b': inputs[1]['sha256'], 'demo': demo,
                               'ra': round(ra, 6), 'dec': round(dec, 6), 'size': round(size_deg, 4),
                               'mode': mode, 'match_scale': bool(match_scale)}, sort_keys=True)
             compare_id = hashlib.sha256(key.encode()).hexdigest()
@@ -147,7 +155,7 @@ class CompareService:
                 for frame, meta in zip(result['frames'], inputs):
                     frames.append({**frame, 'image_id': meta['image_id'], 'access_url': meta.get('access_url'),
                                    'fits_url': meta.get('fits_url'), 'cutout': meta.get('cutout'),
-                                   'sha256': meta['sha256'], 'demo': bool(meta.get('demo'))})
+                                   'sha256': meta['sha256'], 'demo': bool(meta.get('demo')), 'predicted': meta.get('predicted')})
                 previews = {role: (f'/api/compare/{compare_id}/{role}.png' if role in result['previews'] else None)
                             for role in PREVIEW_ROLES}
                 metadata = {**result, 'compare_id': compare_id, 'frames': frames, 'previews': previews,
@@ -171,3 +179,98 @@ class CompareService:
             if not metadata['previews'].get(role):
                 raise ImageError('No difference image exists for this pair; it was not allowed.', 404, 'difference_not_allowed')
             return (self.settings.cache_dir / compare_id / f'{role}.png').open('rb')
+
+    def measure(self, compare_id, clicks):
+        """Refine one click per image to a centroid and measure the shift between them.
+
+        clicks: {'a': {'x', 'y'}, 'b': {...}} in preview pixels (origin top-left, north up, pixel
+        centres at integers), as the user clicked them on a.png and b.png.
+        """
+        import math
+        import numpy as np
+        from astropy.coordinates import SkyCoord
+        from astropy import units as u
+        from .analysis import astrometry
+        from .analysis.compare import common_grid
+        from .analysis.pipeline import GRID_ARRAYS
+        if not TOKEN.fullmatch(compare_id):
+            raise ImageError('Unknown comparison.', 404, 'compare_missing')
+        with self.lock:
+            metadata = self._cached(compare_id)
+            path = self.settings.cache_dir / compare_id / GRID_ARRAYS
+            if metadata is None or not path.is_file() or path.is_symlink():
+                raise ImageError('This comparison is no longer cached. Run it again, then measure.', 404, 'compare_missing')
+            with np.load(path, allow_pickle=False) as stored:
+                arrays = {key: stored[key] for key in stored.files}
+        if metadata['decision'] == 'REJECT':
+            raise ImageError('This pair was rejected, so its images are not aligned well enough to measure.', 422, 'measure_not_allowed')
+        g = metadata['grid']
+        grid = common_grid(g['ra'], g['dec'], g['size_deg'], g['pixel_scale_arcsec'])
+        n = grid.shape[0]
+        scale = g['pixel_scale_arcsec']
+        positions, warnings = {}, []
+        for index, role in enumerate('ab'):
+            frame = metadata['frames'][index]
+            x, y = float(clicks[role]['x']), n - 1 - float(clicks[role]['y'])
+            try:
+                c, floor, method, names, flag_warnings = astrometry.measure_position(
+                    arrays[f'data_{role}'], arrays[f'valid_{role}'], arrays[f'flags_{role}'],
+                    {int(bit): name for bit, name in (frame.get('flag_names') or {}).items()}, x, y)
+            except astrometry.MeasureError as exc:
+                raise ImageError(f'Image {role.upper()}: {exc}', 422, exc.code) from exc
+            sky = grid.wcs.pixel_to_world(c.x, c.y)
+            statistical = c.sigma_px * scale
+            sigma = math.hypot(statistical, floor)
+            if c.masked_in_box:
+                flag_warnings.append(f'{c.masked_in_box} masked pixel(s) inside the centroid box')
+            warnings += [f'Image {role.upper()}: {text}' for text in flag_warnings]
+            position = {'ra': float(sky.ra.deg), 'dec': float(sky.dec.deg), 'sigma_arcsec': sigma,
+                        'sigma_statistical_arcsec': statistical, 'floor_arcsec': floor, 'method': method, 'peak_snr': c.peak_snr,
+                        'click_shift_arcsec': c.shift_px * scale, 'flags': names,
+                        'preview': {'x': c.x, 'y': n - 1 - c.y}, 'predicted': None}
+            predicted = frame.get('predicted')
+            if predicted:
+                target = SkyCoord(predicted['ra'] * u.deg, predicted['dec'] * u.deg)
+                px, py = (float(v) for v in grid.wcs.world_to_pixel(target))
+                position['predicted'] = {**predicted, 'preview': {'x': px, 'y': n - 1 - py},
+                                         'offset_arcsec': float(sky.separation(target).to_value(u.arcsec))}
+            positions[role] = position
+        a, b = positions['a'], positions['b']
+        result = astrometry.motion((a['ra'], a['dec']), (b['ra'], b['dec']), a['sigma_arcsec'], b['sigma_arcsec'],
+                                   metadata['frames'][0].get('mjd'), metadata['frames'][1].get('mjd'))
+        prediction = None
+        if a['predicted'] and b['predicted']:
+            prediction = astrometry.compare_with_prediction(
+                result, (a['predicted']['ra'], a['predicted']['dec']), (b['predicted']['ra'], b['predicted']['dec']),
+                a['sigma_arcsec'], b['sigma_arcsec'], a['predicted'].get('source'))
+        summary = astrometry.summary_text(result, prediction)
+        if metadata['decision'] == 'WARN':
+            warnings.append('The comparison was a WARN (the images differ in wavelength); positions are still aligned, '
+                            'but the object can look different in A and B.')
+        created = datetime.now(timezone.utc)
+        fingerprint = json.dumps([compare_id, [round(p['preview'][k], 2) for p in (a, b) for k in ('x', 'y')]])
+        candidate = {
+            'id': f'SKT-{created:%Y%m%d}-{hashlib.sha256(fingerprint.encode()).hexdigest()[:8].upper()}',
+            'id_note': 'App-local identifier from Arcadian SkyTracker, not an official designation. '
+                       'Not submitted to any archive or to the Minor Planet Center.',
+            'kind': 'motion measurement between two SPHEREx images',
+            'created_utc': created.isoformat(timespec='seconds').replace('+00:00', 'Z'),
+            'target': {'ra': g['ra'], 'dec': g['dec']},
+            'comparison': {'compare_id': compare_id, 'mode': metadata['validation']['mode'], 'decision': metadata['decision'],
+                           'overlap_fraction': metadata['overlap_fraction'],
+                           'wavelength_delta_um': metadata['validation']['wavelength_delta_um'], 'grid': g},
+            'frames': [{key: frame.get(key) for key in ('role', 'obs_id', 'band', 'observed_at_utc', 'mjd', 'wavelength_um',
+                                                         'image_id', 'sha256', 'demo', 'access_url', 'fits_url')}
+                       for frame in metadata['frames']],
+            'positions': positions, 'motion': result, 'prediction': prediction, 'summary': summary, 'warnings': warnings,
+            'method': {'centroid': f'intensity-weighted, {2 * astrometry.CENTROID_HALF_PX + 1}x{2 * astrometry.CENTROID_HALF_PX + 1} '
+                                   f'pixels, local background from a {astrometry.BACKGROUND_PX[0]}-{astrometry.BACKGROUND_PX[1]} pixel annulus',
+                       'registration_floor_arcsec': astrometry.REGISTRATION_FLOOR_ARCSEC,
+                       'saturated_floor_arcsec': astrometry.SATURATED_FLOOR_ARCSEC,
+                       'saturated_method': f'{2 * astrometry.SATURATED_HALF_PX + 1}x{2 * astrometry.SATURATED_HALF_PX + 1} pixel centroid without OVERFLOW pixels',
+                       'uncertainties': '1 sigma; statistical (pixel noise) and the floor added in quadrature',
+                       'coordinates': 'ICRS through the comparison grid WCS (north-up TAN)'},
+            'claim': 'A measurement from two images. Not a confirmed detection, discovery or orbit.',
+        }
+        return {'compare_id': compare_id, 'positions': positions, 'motion': result, 'prediction': prediction,
+                'summary': summary, 'warnings': warnings, 'candidate': candidate}

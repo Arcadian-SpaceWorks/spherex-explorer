@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { MODES, detectorOf, formatSeparation, hoursApart, pairHints, requestComparison, suggestMode } from '../compareAdapter';
 import { formatUtcLabel, wavelengthLabel } from '../timeline';
 import DownloadProgress, { useElapsed } from './DownloadProgress';
+import MotionMeasure from './MotionMeasure';
 
 const VERDICTS = {
   ACCEPT: {time: 'Directly comparable', wavelength: 'Side by side'},
@@ -98,6 +99,7 @@ function Result({result}) {
     </tbody></table></div>
     <p className="result-note" data-testid="compare-summary">Overlap {Math.round(result.overlap_fraction * 100)}% · wavelength difference {number(result.validation.wavelength_delta_um, 4)} µm · {formatSeparation(result.validation.time_separation_hours)} apart{result.cache_hit ? ' · from the comparison cache' : ''}</p>
     {result.notes.map(note => <p key={note} className="image-science-note">{note}</p>)}
+    {result.decision !== 'REJECT' && <MotionMeasure result={result}/>}
   </div>;
 }
 

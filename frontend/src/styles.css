@@ -107,3 +107,24 @@
 .timelapse-export{margin:14px 0 6px;padding:12px 14px;border:1px solid #263143;border-radius:9px;background:#0c1420}
 .timelapse-export>button,.timelapse-export [role=status] button{width:auto;margin:0;padding:9px 14px;font-size:12px;text-align:center}
 .timelapse-export [role=status]{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:12px;color:#becce0}
+
+.motion-measure{margin-top:20px;border-top:1px solid #263143;padding-top:16px}
+.motion-measure h3{margin:0 0 6px;font-size:16px}
+.measure-image{position:relative;line-height:0}
+.measure-image img{cursor:crosshair}
+.measure-marker{position:absolute;transform:translate(-50%,-50%);pointer-events:none;box-sizing:border-box}
+.measure-marker.click{width:16px;height:16px;border:2px solid #f5d48f;border-radius:50%}
+.measure-marker.predicted{width:26px;height:26px;border:2px dashed #8fb8ff;border-radius:50%}
+.measure-marker.centroid{width:20px;height:20px}
+.measure-marker.centroid::before,.measure-marker.centroid::after{content:'';position:absolute;background:#80e7ce}
+.measure-marker.centroid::before{left:9px;top:0;width:2px;height:20px}
+.measure-marker.centroid::after{top:9px;left:0;height:2px;width:20px}
+.measure-legend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.measure-key{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle}
+.measure-key.click{border:2px solid #f5d48f}.measure-key.predicted{border:2px dashed #8fb8ff}
+.measure-key.centroid{border-radius:2px;background:linear-gradient(#80e7ce,#80e7ce) center/2px 100% no-repeat,linear-gradient(#80e7ce,#80e7ce) center/100% 2px no-repeat}
+.measure-summary{font-size:15px;color:#eef4fa;line-height:1.5}
+.measure-result td small{display:block;color:#94a3b9;margin-top:3px}
+.measure-warnings{color:#f5d48f;font-size:13px;padding-left:18px}
+.measure-candidate{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:#101825;border:1px solid #263143;border-radius:10px;padding:10px 12px;margin:10px 0}
+.measure-candidate small{display:block;color:#94a3b9;font-size:11px;max-width:52ch}
