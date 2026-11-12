@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { chronologicalFrames, formatUtcLabel, isSyntheticObservation, parseUtc, usableAccessUrl, wavelengthLabel } from '../src/timeline.js';
-import { loadObservationImage } from '../src/imageAdapter.js';
+import { loadObservationImage, warmObservationImage } from '../src/imageAdapter.js';
 
 const url = id => `https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=${id}`;
 const row = (id, time, extra = {}) => ({obs_id: id, observed_at_utc: time, access_url: url(id), energy_bandpassname: 'SPHEREx-D1', obs_collection: 'spherex', em_min: 1e-6, em_max: 2e-6, ...extra});
@@ -70,4 +70,18 @@ test('posts the existing image endpoint and refuses a missing preview', async ()
     () => loadObservationImage(observation, {ra: 1, dec: 2}, {fetchImpl: async () => ({ok: false, json: async () => ({message: 'IRSA preview unavailable'})})}),
     /IRSA preview unavailable/,
   );
+});
+
+test('warms the next live frame on the server and never for preloaded frames', async () => {
+  const calls = [];
+  const fetchImpl = async (url, init) => {calls.push([url, init]); return {ok: true};};
+  const live = {access_url: 'https://irsa.ipac.caltech.edu/datalink/links/spherex?ID=x'};
+  assert.equal(await warmObservationImage(live, {ra: 10, dec: 41}, {fetchImpl}), true);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0][0], '/api/images');
+  assert.equal(calls[0][1].headers['X-SkyTracker-Client'], 'prefetch');
+  assert.deepEqual(JSON.parse(calls[0][1].body), {access_url: live.access_url, ra: 10, dec: 41, cutout_deg: 0.3});
+  assert.equal(await warmObservationImage({...live, demo: true}, {ra: 10, dec: 41}, {fetchImpl}), false);
+  assert.equal(await warmObservationImage(live, {ra: 10, dec: 41}, {fetchImpl: async () => {throw new Error('offline');}}), false);
+  assert.equal(calls.length, 1);
 });

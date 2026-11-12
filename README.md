@@ -141,11 +141,13 @@ Configure these environment variables **before starting the backend**:
 | `SKYTRACKER_FITS_DOWNLOAD_SECONDS` | `600` | Overall remote-download deadline, seconds |
 | `SKYTRACKER_FITS_CACHE_DIR` | repository `.cache/arcadian-fits-v1` | Cache directory; an absolute override is recommended |
 | `SKYTRACKER_FITS_CACHE_ENTRIES` | `3` | Maximum completed full-detector originals/previews |
-| `SKYTRACKER_CUTOUT_CACHE_ENTRIES` | `3` | Maximum completed cutout originals/previews |
-| `SKYTRACKER_FITS_CACHE_TTL` | `3600` | Idle expiry, seconds |
+| `SKYTRACKER_CUTOUT_CACHE_ENTRIES` | `48` | Maximum completed cutout originals/previews |
+| `SKYTRACKER_FITS_CACHE_TTL` | `21600` | Idle expiry, seconds |
+| `SKYTRACKER_S3_MIRROR` | `1` | Fetch products from the AWS mirror and cut them locally (`0`: IRSA only) |
+| `SKYTRACKER_SOURCE_CACHE_ENTRIES` | `4` | Full mirrored products kept for further cutouts (about 72 MB each) |
 | `SKYTRACKER_FITS_MAX_PIXELS` | `8000000` | Maximum science-image pixels before loading its array |
 
-All numeric limits must be positive. Retained FITS occupy at most (full entry count + cutout entry count) × maximum file bytes, plus previews/metadata and one temporary preparation. Cache pruning occurs on access; expired entries and stale partial directories are removed. Thread and file locks serialize download/decoding work; ordinary concurrent requests use a bounded waiting queue and reuse completed results; queue saturation or wait timeout returns a retryable 503. Open file downloads remain valid even if their cache entry is subsequently evicted. Cache files are ignored by Git.
+All numeric limits must be positive. Retained FITS occupy at most (full entry count + cutout entry count) × maximum file bytes, plus previews/metadata and one temporary preparation. Cache pruning occurs on access; expired entries and stale partial directories are removed. Downloads and decoding run outside the cache lock, so one slow image does not block other previews or pixel readouts; requests for the same image share one download, at most three preparations run at once, and queue saturation or wait timeout returns a retryable 503. Live Mode fetches each product from the AWS Open Data mirror of IRSA and makes a byte-identical copy of IRSA's cutout locally, falling back to IRSA's own cutout service on any mirror problem; see [Live Mode speed](docs/live-mode-speed.md). Open file downloads remain valid even if their cache entry is subsequently evicted. Cache files are ignored by Git.
 
 FITS/WCS processing runs in a child process with a 60-second wall limit, 55-second CPU limit, 3 GiB address-space limit and no core dumps, so malformed native-decoder input does not terminate the API. The default scripts target Linux/Fedora. The API returns explicit errors: 400 unsafe URL; 413 file/pixel limit; 422 unsupported/invalid/all-masked FITS; 404 cache miss; 502 upstream/decoder failure; 503 busy; 504 timeout; 507 cache unavailable.
 

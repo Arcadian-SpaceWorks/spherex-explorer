@@ -48,7 +48,8 @@ test('select observation, inspect science image, pan/zoom, read pixel and downlo
 test('loading and size-limit errors are explicit, retry works, selection clears with target',async ({page}) => {
   let incoming;
   const received=new Promise(resolve => {incoming=resolve;});
-  await page.route('**/api/images',route => {if (route.request().headers()['x-skytracker-client'] === 'time-slider') return route.fulfill({json:fixture});incoming(route);});
+  // Only the inspector's request is held; slider frames and next-frame warm-ups get the fixture.
+  await page.route('**/api/images',route => {if (route.request().headers()['x-skytracker-client'] !== 'inspector') return route.fulfill({json:fixture});incoming(route);});
   await setup(page);
   await page.getByRole('button',{name:'View Image'}).first().click();
   const route=await received;
@@ -88,13 +89,14 @@ test('viewer and slider request matching cutouts; full mode is explicit and reve
   const inspector = page.getByRole('region', {name: 'FITS image inspector'});
   await expect(inspector.getByRole('link', {name: /Download FITS cutout/})).toBeVisible();
   const slider = requests.find(item => item.client === 'time-slider');
-  const viewer = requests.find(item => item.client !== 'time-slider');
+  const viewer = requests.find(item => item.client === 'inspector');
+  const inspectorRequests = () => requests.filter(item => item.client === 'inspector');
   expect(slider.body).toEqual(viewer.body);
   expect(viewer.body.cutout_deg).toBe(0.3);
   await inspector.getByRole('button', {name: 'Full detector image (slow)', exact: true}).click();
   await expect(inspector.getByRole('link', {name: /Download original FITS/})).toBeVisible();
-  expect(requests.at(-1).body).not.toHaveProperty('cutout_deg');
+  expect(inspectorRequests().at(-1).body).not.toHaveProperty('cutout_deg');
   await inspector.getByRole('button', {name: /Quick cutout/}).click();
   await expect(inspector.getByRole('link', {name: /Download FITS cutout/})).toBeVisible();
-  expect(requests.at(-1).body.cutout_deg).toBe(0.3);
+  expect(inspectorRequests().at(-1).body.cutout_deg).toBe(0.3);
 });

@@ -69,6 +69,14 @@ def main():
                 # Imported only here: reproject/scipy are not needed for the other operations.
                 from .analysis.pipeline import compare_files
                 result = compare_files(**arguments)
+            elif operation == 'cutout':
+                from .local_cutout import irsa_cutout
+                result = irsa_cutout(**arguments)
+            elif operation == 'render_target':
+                # One decoder start for a new image: preview plus target readout.
+                target = {key: arguments.pop(key) for key in ('ra', 'dec')}
+                result = render_fits(**arguments)
+                result['target'] = target_info(arguments['path'], target['ra'], target['dec'], arguments['max_pixels'])
             else:
                 result = {'render': render_fits, 'target': target_info, 'pixel': read_pixel}[operation](**arguments)
         output = {'result': result}

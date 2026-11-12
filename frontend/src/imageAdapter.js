@@ -38,6 +38,20 @@ export async function loadObservationImage(observation, target, options = {}) {
   return data;
 }
 
+/**
+ * Ask the server to prepare a live observation in the background, so it is cached when shown.
+ * The response is ignored: the later real request joins or reuses the same server-side work.
+ */
+export function warmObservationImage(observation, target, {signal, fetchImpl = fetch} = {}) {
+  if (!observation?.access_url || observation.demo) return Promise.resolve(false);
+  return fetchImpl('/api/images', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json', 'X-SkyTracker-Client': 'prefetch'},
+    signal,
+    body: JSON.stringify({access_url: observation.access_url, ra: target.ra, dec: target.dec, cutout_deg: CUTOUT_DEG}),
+  }).then(response => response.ok, () => false);
+}
+
 async function prepareObservationImage(observation, target, {signal, fetchImpl = fetch, full = false, client = 'time-slider', trackingView} = {}) {
   if (observation.demo) {
     const base=await loadDemoImage(observation,{signal,fetchImpl});

@@ -8,6 +8,7 @@ overlap is checked when the pair is actually compared. It is not evidence of mot
 object. SPHEREx uses linear variable filters, so pairs are judged on the wavelength measured at the
 target pixel, never on the band name alone. If that wavelength cannot be read, it stays unknown.
 """
+from concurrent.futures import ThreadPoolExecutor
 import math
 from types import SimpleNamespace
 
@@ -16,6 +17,7 @@ from .image_download import ImageError
 
 VISIT_GAP_DAYS = 20.0   # observations further apart than this start a new visit
 MAX_CANDIDATES = 12     # bounds the number of cutouts one request may download
+PARALLEL_FETCHES = 3    # candidates prepared at once (the image service bounds total work as well)
 NOTE = ('Suggestions only. ACCEPT means the detector, time and wavelength-at-target rules are met; '
         'overlap is checked when you compare the pair. It is not evidence of motion or of any new object.')
 
@@ -106,8 +108,7 @@ def build_pair_report(data_client, service, ra, dec, band='SPHEREx-D1', per_visi
     result = data_client.observations(ra, dec, band=band)
     observations = result['observations']
     visits = group_visits(observations)
-    candidates = []
-    for row in shortlist(observations, ra, dec, per_visit):
+    def prepare(row):
         item = {key: row.get(key) for key in ('obs_id', 'energy_bandpassname', 'observed_at_utc', 't_min',
                                               'access_url', 'visit', 'center_distance_deg')}
         try:
@@ -120,7 +121,11 @@ def build_pair_report(data_client, service, ra, dec, band='SPHEREx-D1', per_visi
                         bandwidth_um=spectral['bandwidth_um'] if spectral else None)
         except ImageError as exc:
             item.update(error={'code': exc.code, 'status': exc.status, 'message': str(exc)})
-        candidates.append(item)
+        return item
+
+    rows = shortlist(observations, ra, dec, per_visit)
+    with ThreadPoolExecutor(max_workers=max(1, min(PARALLEL_FETCHES, len(rows)))) as pool:
+        candidates = list(pool.map(prepare, rows))  # Same order as the shortlist.
     return {
         'status': 'live', 'ra': ra, 'dec': dec, 'band': band, 'source': result.get('source'),
         'observations_considered': len(observations), 'truncated': result.get('truncated', False),

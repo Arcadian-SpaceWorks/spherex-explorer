@@ -10,6 +10,8 @@ import requests
 from astropy.io.votable import parse_single_table
 from astropy.time import Time
 
+from .progress import BOARD
+
 TAP_URL = 'https://irsa.ipac.caltech.edu/TAP/sync'
 TABLE = 'spherex.obscore'
 COLUMNS = ('obs_id', 's_ra', 's_dec', 't_min', 't_max', 't_exptime',
@@ -119,8 +121,10 @@ def parse_observations(payload):
 class IRSAClient:
     def observations(self, ra, dec, band=None, wavelength_um=None):
         query = build_query(ra, dec, band, wavelength_um)
-        verify_schema()
-        rows, truncated = parse_observations(tap(query, 'votable'))
+        with BOARD.job('search', 'Observation search') as job:
+            job.stage('searching', source='IRSA')
+            verify_schema()
+            rows, truncated = parse_observations(tap(query, 'votable'))
         if wavelength_um is not None:
             for row in rows:
                 row['wavelength_coverage'] = wavelength_coverage(row, wavelength_um)

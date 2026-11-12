@@ -23,7 +23,7 @@ test('progress reports elapsed wait without invented stages; stop/retry ignores 
   await expect(inspector.getByTestId('download-progress')).toContainText('Downloading and inspecting');
   await expect(inspector.getByRole('progressbar')).not.toHaveAttribute('aria-valuenow');
   await expect(inspector.getByTestId('download-elapsed')).toContainText('0:01');
-  await expect(inspector.getByTestId('download-progress')).toContainText('Byte progress and completion time are unavailable');
+  await expect(inspector.getByTestId('download-progress')).toContainText('Exact download progress is in the Downloads panel');
   await inspector.getByRole('button',{name:'Stop waiting',exact:true}).click();
   await expect(inspector).toContainText('Stopped waiting for this image');
   await expect(inspector.getByRole('progressbar')).toHaveCount(0);

@@ -238,3 +238,22 @@ test('zero observations and a single observation have explicit slider states', a
   await expect(explorer.getByTestId('time-slider-image')).toHaveAttribute('src', /synthetic-time-early\/preview$/);
   await expect(explorer).toContainText('Step 1 of 1');
 });
+
+test('live slider warms the next observation on the server once the current one is shown', async ({page}) => {
+  const warmed = [];
+  page.on('request', request => {
+    if (request.url().endsWith('/api/images') && request.headers()['x-skytracker-client'] === 'prefetch')
+      warmed.push(new URL(request.postDataJSON().access_url).searchParams.get('ID'));
+  });
+  await search(page, sequence);
+  const explorer = page.getByRole('region', {name: 'Astronomical time explorer'});
+  await displayedPixel(explorer);
+  await expect.poll(() => warmed).toEqual(['synthetic-time-mid']);  // Next in time, not in arrival order.
+  await explorer.getByRole('button', {name: 'Next observation'}).click();
+  await displayedPixel(explorer);
+  await expect.poll(() => warmed).toEqual(['synthetic-time-mid', 'synthetic-time-late']);
+  await explorer.getByRole('button', {name: 'Next observation'}).click();
+  await displayedPixel(explorer);
+  await page.waitForTimeout(300);
+  expect(warmed).toHaveLength(2);  // The last observation has nothing after it.
+});

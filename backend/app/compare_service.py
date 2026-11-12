@@ -5,6 +5,7 @@ locks. The comparison itself runs in the isolated FITS worker. Results (metadata
 FITS copies) live in a small separate cache keyed by the input checksums and parameters.
 """
 from dataclasses import dataclass
+from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
 import os
@@ -115,7 +116,8 @@ class CompareService:
         if not self.slots.acquire(blocking=False):
             raise ImageError('The comparison service is busy. Please retry shortly.', 503, 'compare_busy')
         try:
-            inputs = [self._resolve(ref, ra, dec, size_deg) for ref in (a, b)]
+            with ThreadPoolExecutor(max_workers=2) as pool:  # Fetch A and B at the same time.
+                inputs = list(pool.map(lambda ref: self._resolve(ref, ra, dec, size_deg), (a, b)))
             moving=[meta.get('_moving') for meta in inputs]
             if any(moving) and not all(moving):
                 raise ImageError('Choose two observations of the same moving target.',422,'moving_pair_required')

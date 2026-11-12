@@ -2,7 +2,7 @@ import ComparePanel, {ComparisonResult} from './ComparePanel';
 import {previousEpoch} from '../compareAdapter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { chronologicalFrames, parseUtc, formatUtcLabel, isSyntheticObservation, wavelengthLabel } from '../timeline';
-import { loadObservationImage } from '../imageAdapter';
+import { loadObservationImage, warmObservationImage } from '../imageAdapter';
 import TimeSlider from './TimeSlider';
 import { CAVEATS, exportProblem, recordTimelapse, timelapseFilename } from '../timelapse';
 import DownloadProgress, { useElapsed } from './DownloadProgress';
@@ -99,6 +99,14 @@ export default function TemporalImageExplorer({result, loading, error, target}) 
   const last = sequence.frames.length - 1;
   const frameKey = frame ? `${frame.access_url}|${retry}|${moving?trackingView:'native'}` : null;
   const settled = Boolean(frameKey) && settledKey === frameKey;
+  const upcoming = settled && displayIndex < last ? sequence.frames[displayIndex + 1] : null;
+  useEffect(() => {
+    // Live Mode: once this frame is shown, prepare the next one on the server in the background.
+    if (!upcoming || upcoming.demo || result?.mode === 'demo') return undefined;
+    const controller = new AbortController();
+    warmObservationImage(upcoming, target, {signal: controller.signal});
+    return () => controller.abort();  // The server keeps and caches work it already started.
+  }, [upcoming, target, result?.mode]);
   useEffect(() => {
     // Advance only after the current frame has loaded (or failed), then show it for PLAY_DWELL_MS.
     if (!playing || !frame || !settled) return undefined;

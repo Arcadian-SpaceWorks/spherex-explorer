@@ -1,6 +1,7 @@
 import DetectionLab from './components/DetectionLab';
 import DemoTargetSummary from './components/DemoTargetSummary';
 import { useRef, useState, useEffect } from 'react';
+import DownloadTray from './components/DownloadTray';
 import SkyMap from './components/SkyMap';
 import CoordinatePanel from './components/CoordinatePanel';
 import ObservationsTable from './components/ObservationsTable';
@@ -130,5 +131,5 @@ export default function App() {
       onSwap={() => setPicks(current => ({a: current.b, b: current.a}))}/>}
     {import.meta.env.VITE_ENABLE_DETECTION_LAB === 'true' && <DetectionLab/>}
     <TemporalImageExplorer result={result} loading={loading} error={error} target={selected}/>
-    <ImageInspector observation={imageObservation} target={selected}/></main><footer><span>Arcadian SkyTracker · Milestone 02</span><span>Sky atlas by <a href="https://aladin.cds.unistra.fr/AladinLite/">Aladin Lite / CDS</a> · DSS2 imagery · Observations from <a href="https://irsa.ipac.caltech.edu/Missions/spherex.html">NASA/IPAC IRSA</a></span></footer></div>;
+    <ImageInspector observation={imageObservation} target={selected}/></main><footer><span>Arcadian SkyTracker · Milestone 02</span><span>Sky atlas by <a href="https://aladin.cds.unistra.fr/AladinLite/">Aladin Lite / CDS</a> · DSS2 imagery · Observations from <a href="https://irsa.ipac.caltech.edu/Missions/spherex.html">NASA/IPAC IRSA</a></span></footer><DownloadTray enabled={mode === 'live'}/></div>;
 }

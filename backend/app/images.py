@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field, model_validator
 from starlette.background import BackgroundTask
 
 from .image_service import ImageService
+from .progress import BOARD
 
 router = APIRouter(prefix='/api/images', tags=['FITS images'])
 ImageId = Annotated[str, Path(pattern=r'^[a-f0-9]{64}$')]
@@ -32,6 +33,12 @@ class ImageRequest(BaseModel):
 @lru_cache(maxsize=1)
 def get_image_service():
     return ImageService()
+
+
+@router.get('/progress')
+def download_progress():
+    """Searches and image preparations in progress, with measured bytes. Observation names only."""
+    return {'jobs': BOARD.snapshot()}
 
 
 @router.post('')
